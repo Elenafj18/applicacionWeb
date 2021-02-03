@@ -1,0 +1,245 @@
+html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        #timeSliderBrotes {
+            opacity: 0.9;
+            position: absolute;
+            left: 100px;
+            right: 100px;
+            bottom: 125px;
+        }
+
+        #timeSliderAlertas {
+            opacity: 0.9;
+            position: absolute;
+            left: 100px;
+            right: 100px;
+            bottom: 30px;
+        }
+
+        #infoDiv {
+            opacity: 0.8;
+            height: 200px;
+            padding: 10px;
+            width: 280px;
+        }
+
+        #infoDiv span {
+            color: #f9c653;
+            font-size: 12pt;
+            font-weight: bolder;
+        }
+
+        #info {
+            opacity: 0.9;
+            height: 400px;
+            padding: 20px;
+            width: 480px;
+        }
+
+        #myButtonAlerta {
+            font-size: medium;
+            color: #d8c8c8;
+            margin-top: -80px;
+            display: flex;
+            overflow: visible;
+            position: relative;
+            z-index: 200;
+            background-color: #303030;
+            opacity: 0.8;
+            left: 21px;
+
+        }
+
+        #myButtonBrotes {
+            font-size: medium;
+            color: #d8c8c8;
+            margin-top: -120px;
+            display: flex;
+            overflow: visible;
+            position: absolute;
+            z-index: 3;
+            background-color: #303030;
+            opacity: 0.8;
+            left: 21px;
+
+        }
+
+        .esri-icon-non-visible {
+            color: #fcf9f9;
+            font-size: medium;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .flex-container {
+            height: 100%;
+            display: flex;
+            z-index: 1;
+            background-color: #fcf9f9;
+
+        }
+
+        #viewDiv {
+            flex: 2;
+            padding: 0;
+            margin: 0;
+            z-index: 2;
+        }
+
+        .side-panel {
+            flex: 1;
+            padding: 1em;
+
+            height: 50%;
+            width: 50%;
+        }
+
+        .container {
+            border-bottom: solid 1px rgb(209, 99, 99);
+        }
+
+        h3 {
+            color: #ffa500;
+        }
+
+        .esri-feature__title {
+            background-color: #aa1a1a;
+            padding: 0.25em;
+        }
+
+        .esri-feature__size-container {
+            background: #3a3838;
+        }
+
+
+        #rutaDiv {
+
+            position: absolute;
+            bottom: 240px;
+            width: 50px;
+            margin: 10px;
+            z-index: 3;
+            font-family: 'Arial';
+            text-align: center;
+            background-color: transparent;
+        }
+
+        .ruta {
+            z-index: 4;
+            margin-top: -255px;
+            margin-right: -1910px;
+            right: 2750px;
+            background-color: #242424;
+            color: #adadad;
+            position: absolute;
+            border: 1px solid #242424;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            height: 40px;
+            width: 50px;
+
+        }
+
+        #ruta:hover {
+            background-color: #303030;
+            border-color: #303030;
+            color: #ededed
+        }
+
+        #broteDiv {
+            position: absolute;
+            bottom: 360px;
+            width: 50px;
+            margin: 10px;
+            z-index: 3;
+            font-family: 'Arial';
+            text-align: center;
+            background-color: transparent;
+        }
+
+        #alertasDiv {
+            position: absolute;
+            bottom: 300px;
+            width: 50px;
+            margin: 10px;
+            z-index: 3;
+            font-family: 'Arial';
+            text-align: center;
+            background-color: transparent;
+        }
+
+        .logoINIA {
+            width: 135px;
+        }
+
+        .logoMinisterio {
+            width: 224px;
+        }
+
+
+        /* BROTES */
+
+        .esri-icon-radio-checked {
+            height: 40px;
+            background-color: #242424;
+            color: #adadad;
+            cursor: pointer;
+            border: 1px solid #242424;
+            width: 32px;
+            height: 32px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
+        }
+
+        .esri-icon-radio-checked:hover {
+            background-color: #303030;
+            border-color: #303030;
+            color: #ededed
+        }
+
+        /* ALERTAS */
+
+        .esri-icon-notice-triangle {
+            height: 40px;
+            background-color: #242424;
+            color: #adadad;
+            cursor: pointer;
+            border: 1px solid #242424;
+            width: 32px;
+            height: 32px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
+        }
+
+        .esri-icon-notice-triangle:hover {
+            background-color: #303030;
+            border-color: #303030;
+            color: #ededed
+        }
+
+        /* RUTAS */
+        .esri-icon-polyline {
+            height: 40px;
+            background-color: #242424;
+            color: #adadad;
+            cursor: pointer;
+            border: 1px solid #242424;
+            width: 32px;
+            height: 32px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
+        }
+
+        .esri-icon-polyline:hover {
+            background-color: #303030;
+            border-color: #303030;
+            color: #ededed
+        }
