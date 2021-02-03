@@ -142,9 +142,6 @@
            });
 
 
-
-
-
            /// DEFINICIÓN DEL LOS ALERTAS
            let layerViewAlertas;
 
