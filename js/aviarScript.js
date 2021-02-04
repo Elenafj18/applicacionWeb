@@ -332,7 +332,7 @@
                    type: "simple",
                    symbol: {
                        type: "simple-fill",
-                       color: [51, 51, 51],
+                       color: [51, 51, 51, 0.01],
                        outline: {
                            color: [51, 200, 200],
                            width: 0.1
