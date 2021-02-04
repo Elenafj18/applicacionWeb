@@ -142,9 +142,6 @@
            });
 
 
-
-
-
            /// DEFINICIÓN DEL LOS ALERTAS
            let layerViewAlertas;
 
@@ -335,9 +332,9 @@
                    type: "simple",
                    symbol: {
                        type: "simple-fill",
-                       color: [51, 51, 51, 0.01],
+                       color: [51, 51, 51],
                        outline: {
-                           color: [51, 200, 200, 0.5],
+                           color: [51, 200, 200],
                            width: 0.1
                        }
                    }
@@ -410,7 +407,7 @@
 
            const map = new Map({
                basemap: "dark-gray-vector",
-               layers: [layerBrotes, layerAlertas, layerRutaM, layerComarcas]
+               layers: [layerComarcas, layerBrotes, layerAlertas, layerRutaM ]
            });
 
            const view = new MapView({
@@ -681,7 +678,7 @@
            // los datos caen dentro del rango de tiempo
            let timeSliderAlertas = new TimeSlider({
                container: "timeSliderAlertas",
-               playRate: 50,
+               playRate: 7,
                stops: {
                    interval: {
                        value: 7,
