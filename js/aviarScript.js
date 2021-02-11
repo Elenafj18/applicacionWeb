@@ -380,7 +380,7 @@
 
                        var lineSymbol = {
                            type: "simple-line", // autocasts as new SimpleLineSymbol()
-                           color: [51, 200, 200, 0.5], // RGB color values as an array
+                           color: [200, 51, 51, 0.5], // RGB color values as an array
                            width: 3
                        };
 
