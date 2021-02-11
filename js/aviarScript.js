@@ -597,7 +597,7 @@
                                    statsDiv.innerHTML = yearHtml;
                                } else {
                                    statsDiv.innerHTML =
-                                       yearHtml + htmls[0] + htmls[1] + htmls[2] + htmls[3];
+                                       yearHtml + htmls[0] + htmls[1] + htmls[2];
                                }
                            }
                        }
