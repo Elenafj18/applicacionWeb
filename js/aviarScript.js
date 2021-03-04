@@ -38,7 +38,7 @@
 
            const layerBrotes = new GeoJSONLayer({
                url:
-                   "https://raw.githubusercontent.com/influenzaAviar/GeoJSON/master/brotes.geojson",
+                   "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/develop/GeoJSON/brotes.geojson",
 
                copyright: "Influenza Aviar",
                title: "Brotes",
@@ -142,15 +142,12 @@
            });
 
 
-
-
-
            /// DEFINICIÓN DEL LOS ALERTAS
            let layerViewAlertas;
 
            var layerAlertas = new GeoJSONLayer({
                url:
-                   "https://raw.githubusercontent.com/influenzaAviar/GeoJSON/master/alertas.geojson",
+                   "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/develop/GeoJSON/alertas.geojson",
                copyright: "Influenza Aviar",
                title: "Alertas",
                timeInfo: {
@@ -262,7 +259,7 @@
            /// DEFINICIÓN DEL LOS RUTA MIGRATORIA
            const layerRutaM = new GeoJSONLayer({
                url:
-                   "https://raw.githubusercontent.com/influenzaAviar/GeoJSON/master/rutas.geojson",
+                   "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/develop/GeoJSON/rutas.geojson",
                copyright: "Influenza Aviar",
                title: "Rutas migratodias",
                timeInfo: {
@@ -326,7 +323,7 @@
 
            const layerComarcas = new GeoJSONLayer({
                url:
-                   "https://raw.githubusercontent.com/influenzaAviar/GeoJSON/master/comarcas.geojson",
+                   "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/develop/GeoJSON/comarcas.geojson",
                copyright: "Influenza Aviar",
                title: "Comarcas",
                outFields: ['*'],
@@ -337,7 +334,7 @@
                        type: "simple-fill",
                        color: [51, 51, 51, 0.01],
                        outline: {
-                           color: [51, 200, 200, 0.5],
+                           color: [51, 200, 200],
                            width: 0.1
                        }
                    }
@@ -362,7 +359,7 @@
                graphic = feature.graphic;
                attributes = graphic.attributes;
 
-               var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/GeoJSON/master/rutas.geojson';
+               var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/develop/GeoJSON/rutas.geojson';
                // Se inicia la peticion ajax a la url ruta
                var request = new XMLHttpRequest();
                request.open("GET", urlRutas, false); // false for synchronous request
@@ -383,7 +380,7 @@
 
                        var lineSymbol = {
                            type: "simple-line", // autocasts as new SimpleLineSymbol()
-                           color: [51, 200, 200, 0.5], // RGB color values as an array
+                           color: [200, 51, 51, 0.5], // RGB color values as an array
                            width: 3
                        };
 
@@ -410,7 +407,7 @@
 
            const map = new Map({
                basemap: "dark-gray-vector",
-               layers: [layerBrotes, layerAlertas, layerRutaM, layerComarcas]
+               layers: [layerComarcas, layerBrotes, layerAlertas, layerRutaM ]
            });
 
            const view = new MapView({
@@ -600,7 +597,7 @@
                                    statsDiv.innerHTML = yearHtml;
                                } else {
                                    statsDiv.innerHTML =
-                                       yearHtml + htmls[0] + htmls[1] + htmls[2] + htmls[3];
+                                       yearHtml + htmls[0] + htmls[1] + htmls[2];
                                }
                            }
                        }
@@ -681,7 +678,7 @@
            // los datos caen dentro del rango de tiempo
            let timeSliderAlertas = new TimeSlider({
                container: "timeSliderAlertas",
-               playRate: 50,
+               playRate: 7,
                stops: {
                    interval: {
                        value: 7,
