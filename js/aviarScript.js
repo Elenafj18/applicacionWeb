@@ -38,7 +38,7 @@
 
            const layerBrotes = new GeoJSONLayer({
                url:
-                   "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/develop/GeoJSON/brotes.geojson",
+                   "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/brotes.geojson",
 
                copyright: "Influenza Aviar",
                title: "Brotes",
@@ -147,7 +147,7 @@
 
            var layerAlertas = new GeoJSONLayer({
                url:
-                   "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/develop/GeoJSON/alertas.geojson",
+                   "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson",
                copyright: "Influenza Aviar",
                title: "Alertas",
                timeInfo: {
@@ -259,7 +259,7 @@
            /// DEFINICIÓN DEL LOS RUTA MIGRATORIA
            const layerRutaM = new GeoJSONLayer({
                url:
-                   "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/develop/GeoJSON/rutas.geojson",
+                   "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson",
                copyright: "Influenza Aviar",
                title: "Rutas migratodias",
                timeInfo: {
@@ -323,7 +323,7 @@
 
            const layerComarcas = new GeoJSONLayer({
                url:
-                   "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/develop/GeoJSON/comarcas.geojson",
+                   "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/comarcas.geojson",
                copyright: "Influenza Aviar",
                title: "Comarcas",
                outFields: ['*'],
@@ -359,7 +359,7 @@
                graphic = feature.graphic;
                attributes = graphic.attributes;
 
-               var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/develop/GeoJSON/rutas.geojson';
+               var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson';
                // Se inicia la peticion ajax a la url ruta
                var request = new XMLHttpRequest();
                request.open("GET", urlRutas, false); // false for synchronous request
