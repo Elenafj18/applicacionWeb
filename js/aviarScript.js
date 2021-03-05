@@ -51,7 +51,7 @@
                },
                renderer: {
                    type: "simple",
-                   field: "cases",
+                   field: "serotipo",
                    symbol: {
                        type: "simple-marker",
                        color: "red",
@@ -78,7 +78,7 @@
                        },
                        {
                            type: "color",
-                           field: "at_risk",
+                           field: "serotipo",
                            stops: [
                                {
                                    value: 600,
@@ -163,7 +163,7 @@
                    symbol: {
                        type: "simple-marker",
                        color: "red",
-                       /* outline: null */
+                       outline: null
                    },
                    visualVariables: [
                        {
