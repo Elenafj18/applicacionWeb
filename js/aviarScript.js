@@ -152,7 +152,7 @@ require([
 
     var layerAlertas = new GeoJSONLayer({
         url:
-            "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson",
+            "https://raw.githubusercontent.com/influenzaAviar/GeoJSON/master/alertas.geojson",
         copyright: "Influenza Aviar",
         title: "Alertas",
         timeInfo: {
@@ -164,10 +164,10 @@ require([
         },
         renderer: {
             type: "simple",
-            field: "cases",
+            field: "riskLevel",
             symbol: {
                 type: "simple-marker",
-                color: "red",
+                color: "blue",
                 outline: null
             },
             visualVariables: [
@@ -180,26 +180,26 @@ require([
                         label: "0"
                     }, {
                         value: 1,
-                        color: "#f5b8b8",
+                        color: "#9ddbfc",
                         label: "1"
                     }, {
                         value: 2,
-                        color: "#fc9292",
+                        color: "#73cbfa",
                         label: "2"
                     },
                     {
                         value: 3,
-                        color: "#fc6262",
+                        color: "#4cbffc",
                         label: "3"
                     },
                     {
                         value: 4,
-                        color: "#f73131",
+                        color: "#23b0fc",
                         label: "4"
                     },
                     {
                         value: 5,
-                        color: "#990000",
+                        color: "#009ff5",
                         label: "5"
                     }
                     ]
@@ -555,7 +555,7 @@ require([
                 timeExtent: timeSliderBrotes.timeExtent,
                 geometry: view.extent
             },
-            excludedEffect: "grayscale(40%) opacity(20%)"
+            excludedEffect: "grayscale(40%) opacity(15%)"
         };
 
         /// ESTADISTICAS DE LOS BROTES
