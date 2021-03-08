@@ -152,7 +152,7 @@ require([
 
     var layerAlertas = new GeoJSONLayer({
         url:
-            "https://raw.githubusercontent.com/influenzaAviar/GeoJSON/master/alertas.geojson",
+            "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson",
         copyright: "Influenza Aviar",
         title: "Alertas",
         timeInfo: {
