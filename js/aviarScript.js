@@ -401,7 +401,7 @@ require([
         }
 
         view.on("click", function (e) {
-            view.graphics.remove(polylineGraphic);
+            view.graphics.removeAll(polylineGraphic);
             console.log("Remove")
 
         });
