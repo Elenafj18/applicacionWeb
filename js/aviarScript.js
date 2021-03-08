@@ -156,7 +156,7 @@ require([
         copyright: "Influenza Aviar",
         title: "Alertas",
         timeInfo: {
-            startField: "reportDate",
+            startField: "startDate",
             interval: {
                 unit: "days",
                 value: 7
@@ -229,7 +229,7 @@ require([
                              visible: true
                          }, */
                         {
-                            fieldName: "reportDate",
+                            fieldName: "startDate",
                             label: "Fecha del informe",
                             visible: true
                         },
@@ -400,8 +400,10 @@ require([
 
         }
 
-        view.on("click", function (event) {
+        view.on("click", function (e) {
             view.graphics.remove(polylineGraphic);
+            console.log("Remove")
+
         });
 
         content = "Código: " + attributes.comarca_sg;
@@ -717,7 +719,7 @@ require([
     timeSliderAlertas.watch("timeExtent", function () {
 
         layerAlertas.definitionExpression =
-            "reportDate <= " + timeSliderAlertas.timeExtent.end.getTime();
+            "startDate <= " + timeSliderAlertas.timeExtent.end.getTime();
         layerViewAlertas.effect = {
             filter: {
                 timeExtent: timeSliderAlertas.timeExtent,
