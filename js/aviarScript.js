@@ -54,7 +54,7 @@ require([
             field: "serotipo",
             symbol: {
                 type: "simple-marker",
-                color: "red",
+                color: "blue",
                 outline: null
             },
             visualVariables: [
@@ -76,27 +76,27 @@ require([
                         }
                     ]
                 },
-                {
+                /* {
                     type: "color",
-                    field: "serotipo",
+                    field: "cases",
                     stops: [
                         {
-                            value: "H5N1",
-                            color: "#963838",
-                            label: "H5N1"
+                            value: "60",
+                            color: [202, 202, 255],
+                            label: "60"
                         },
                         {
-                            value: "H5N8",
-                            color: "#990000",
-                            label: "H5N8"
+                            value: "600",
+                            color: [85, 85, 255],
+                            label: "600"
                         },
                         {
-                            value: "H5",
-                            color: "#990022",
-                            label: "H5"
+                            value: "6000",
+                            color: [0, 0, 255],
+                            label: "6000"
                         }
                     ]
-                }
+                } */
             ]
         },
         popupTemplate: {
@@ -176,30 +176,30 @@ require([
                     field: "riskLevel",
                     stops: [{
                         value: 0,
-                        color: [51, 200, 200, 0.00],
+                        color: [255, 255, 255, 0.00],
                         label: "0"
                     }, {
                         value: 1,
-                        color: "#9ddbfc",
+                        color: "#FF8888",
                         label: "1"
                     }, {
                         value: 2,
-                        color: "#73cbfa",
+                        color: "#FF6666",
                         label: "2"
                     },
                     {
                         value: 3,
-                        color: "#4cbffc",
+                        color: "#ff4545",
                         label: "3"
                     },
                     {
                         value: 4,
-                        color: "#23b0fc",
+                        color: "#FF3333",
                         label: "4"
                     },
                     {
                         value: 5,
-                        color: "#009ff5",
+                        color: "#FF0000",
                         label: "5"
                     }
                     ]
@@ -385,7 +385,7 @@ require([
 
                 var lineSymbol = {
                     type: "simple-line", // autocasts as new SimpleLineSymbol()
-                    color: [200, 51, 51, 0.5], // RGB color values as an array
+                    color: [255, 51, 51, 0.2], // RGB color values as an array
                     width: 3
                 };
 
@@ -557,7 +557,7 @@ require([
                 timeExtent: timeSliderBrotes.timeExtent,
                 geometry: view.extent
             },
-            excludedEffect: "grayscale(40%) opacity(15%)"
+            excludedEffect: "grayscale(20%) opacity(12%)"
         };
 
         /// ESTADISTICAS DE LOS BROTES
@@ -725,7 +725,7 @@ require([
                 timeExtent: timeSliderAlertas.timeExtent,
                 geometry: view.extent
             },
-            excludedEffect: "grayscale(40%) opacity(20%)"
+            excludedEffect: "grayscale(20%) opacity(50%)"
         };
 
     });
