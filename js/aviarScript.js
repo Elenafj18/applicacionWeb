@@ -266,7 +266,7 @@ require([
         url:
             "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson",
         copyright: "Influenza Aviar",
-        title: "Rutas migratodias",
+        title: "Rutas migratorias",
         timeInfo: {
             interval: {
                 unit: "days",
