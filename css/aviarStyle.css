@@ -188,16 +188,18 @@ html,
         }
 
 
-        /* BROTES */
+        /* ZOOM BROTES */
 
         .esri-icon-radio-checked {
-            height: 40px;
+            
             background-color: #242424;
             color: #adadad;
             cursor: pointer;
             border: 1px solid #242424;
             width: 32px;
             height: 32px;
+            margin-bottom: -5px;
+            margin-right: 9px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
         }
 
@@ -207,16 +209,18 @@ html,
             color: #ededed
         }
 
-        /* ALERTAS */
+        /* ZOOM ALERTAS */
 
         .esri-icon-notice-triangle {
-            height: 40px;
+            
             background-color: #242424;
             color: #adadad;
             cursor: pointer;
             border: 1px solid #242424;
             width: 32px;
             height: 32px;
+            margin-bottom: -5px;
+            margin-right: 9px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
         }
 
@@ -226,15 +230,17 @@ html,
             color: #ededed
         }
 
-        /* RUTAS */
+        /* ACTIVAR RUTAS */
         .esri-icon-polyline {
-            height: 40px;
+            
             background-color: #242424;
             color: #adadad;
             cursor: pointer;
             border: 1px solid #242424;
             width: 32px;
             height: 32px;
+            margin-bottom: -5px;
+            margin-right: 9px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
         }
 
