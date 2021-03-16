@@ -156,7 +156,7 @@ require([
         copyright: "Influenza Aviar",
         title: "Alertas",
         timeInfo: {
-            startField: "startDate",
+            startField: "reportDate",
             interval: {
                 unit: "days",
                 value: 7
@@ -229,7 +229,7 @@ require([
                              visible: true
                          }, */
                         {
-                            fieldName: "startDate",
+                            fieldName: "reportDate",
                             label: "Fecha del informe",
                             visible: true
                         },
@@ -719,7 +719,7 @@ require([
     timeSliderAlertas.watch("timeExtent", function () {
 
         layerAlertas.definitionExpression =
-            "startDate <= " + timeSliderAlertas.timeExtent.end.getTime();
+            "reportDate <= " + timeSliderAlertas.timeExtent.end.getTime();
         layerViewAlertas.effect = {
             filter: {
                 timeExtent: timeSliderAlertas.timeExtent,
