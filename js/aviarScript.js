@@ -233,11 +233,11 @@ require([
                             label: "Fecha del informe",
                             visible: true
                         },
-                        {
+                        /* {
                             fieldName: "species",
                             label: "Especie del brote",
                             visible: true
-                        },
+                        }, */
                         {
                             fieldName: "commonName",
                             label: "Especie ruta migratoria",
@@ -294,12 +294,12 @@ require([
                             fieldName: "species",
                             label: "Especie",
                             visible: true
-                        },
+                        }/* ,
                         {
                             fieldName: "idAlerta",
                             label: "Codigo",
                             visible: true
-                        },
+                        }, */
                     ]
                 }
             ]
@@ -406,8 +406,8 @@ require([
 
         });
 
-        content = "Código: " + attributes.comarca_sg;
-        return content;
+        /* content = "Código: " + attributes.comarca_sg;
+        return content; */
     }
 
     /// INICIALIZACIÓN DEL MAPA
