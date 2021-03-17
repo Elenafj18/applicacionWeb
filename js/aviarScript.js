@@ -703,7 +703,7 @@ require([
         const startAlerta = new Date();
         startAlerta.setHours(0, 0, 0, 0);
         startAlerta.setDate(startAlerta.getDate() + (7 - startAlerta.getDay()) % 7 + 1);
-        startAlerta.setDate(startAlerta.getDate() - 84);
+        startAlerta.setDate(startAlerta.getDate() - 365);
         const nextMonday = new Date();
         nextMonday.setHours(0, 0, 0, 0);
         nextMonday.setDate(nextMonday.getDate() + (7 - nextMonday.getDay()) % 7 + 1);
@@ -713,7 +713,7 @@ require([
             end: nextMonday
         };
         const endAlerta = nextMonday;
-        startAlerta.setDate(startAlerta.getDate() + 77);
+        startAlerta.setDate(startAlerta.getDate() + 358);
         timeSliderAlertas.values = [startAlerta, endAlerta];
     });
     timeSliderAlertas.watch("timeExtent", function () {
@@ -725,7 +725,7 @@ require([
                 timeExtent: timeSliderAlertas.timeExtent,
                 geometry: view.extent
             },
-            excludedEffect: "grayscale(20%) opacity(50%)"
+            excludedEffect: "grayscale(20%) opacity(6%)"
         };
 
     });
