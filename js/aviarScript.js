@@ -427,14 +427,31 @@ require([
         }
     });
 
-    /// SEARCH WIDGET
-    var searchWidget = new Search({
-        view: view
+     // Agregar la leyenda
+     const legendExpand = new Expand({
+        collapsedIconClass: "esri-icon-legend",
+        expandIconClass: "esri-icon-legend",
+        expandTooltip: "Legend",
+        view: view,
+        content: new Legend({
+            view: view
+        }),
+        expanded: false
     });
-    // Add the search widget to the top right corner of the view
-    view.ui.add(searchWidget, {
-        position: "top-right"
+    view.ui.add(legendExpand, "top-left");
+
+    /// WIDGET DE HOME PARA LA VISTA INICIAL
+    var homeBtn = new Home({
+        view: view,
+
     });
+
+    // Add the home button to the top left corner of the view
+    view.ui.add(homeBtn, "top-left");
+
+
+
+    
 
     //// ZOOM TO BROTES
 
@@ -497,6 +514,14 @@ require([
         });
 
     });
+    /// SEARCH WIDGET
+    var searchWidget = new Search({
+        view: view
+    });
+    // Add the search widget to the top right corner of the view
+    view.ui.add(searchWidget, {
+        position: "top-right"
+    });
 
     /// WIDGET DE MAPAS BASES
 
@@ -505,15 +530,7 @@ require([
         container: document.createElement("div")
     });
 
-    /// WIDGET DE HOME PARA LA VISTA INICIAL
-    var homeBtn = new Home({
-        view: view,
-
-    });
-
-    // Add the home button to the top left corner of the view
-    view.ui.add(homeBtn, "top-left");
-
+    
     ///TIMESLIDER DE BROTES
 
     const timeSliderBrotes = new TimeSlider({
@@ -651,19 +668,7 @@ require([
         /* Average_depth: "Deaths" */
     };
 
-    // Agregar la leyenda
-    const legendExpand = new Expand({
-        collapsedIconClass: "esri-icon-legend",
-        expandIconClass: "esri-icon-legend",
-        expandTooltip: "Legend",
-        view: view,
-        content: new Legend({
-            view: view
-        }),
-        expanded: false
-    });
-    view.ui.add(legendExpand, "top-left");
-
+   
     /// BOTON EXPANDIBLE DE INFO BROTES
 
     const statsDiv = document.getElementById("statsDiv");
