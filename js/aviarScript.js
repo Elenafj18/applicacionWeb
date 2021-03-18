@@ -337,9 +337,9 @@ require([
             type: "simple",
             symbol: {
                 type: "simple-fill",
-                color: [51, 51, 51, 0.01],
+                color: [92, 92, 92, 0.3],
                 outline: {
-                    color: [51, 200, 200],
+                    color: "#adadad",
                     width: 0.1
                 }
             }
