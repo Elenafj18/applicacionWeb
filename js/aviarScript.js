@@ -279,7 +279,7 @@ require([
                 type: "simple-fill",
                 supportsQuery: true,
                 outline: {
-                    color: [51, 200, 200, 0.08],
+                    color: [51, 200, 200, 0.01],
                     width: 0.5
                 }
             }
