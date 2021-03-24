@@ -279,8 +279,8 @@ require([
                 type: "simple-fill",
                 supportsQuery: true,
                 outline: {
-                    color: [51, 200, 200, 0.01],
-                    width: 0.5
+                    color: [51, 200, 200, 0.03],
+                    width: 0.3
                 }
             }
         },
