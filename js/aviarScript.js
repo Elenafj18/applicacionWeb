@@ -54,7 +54,7 @@ require([
             field: "serotipo",
             symbol: {
                 type: "simple-marker",
-                color: "red",
+                color: [255, 0, 0, 0.6],
                 outline: null
             },
             visualVariables: [
@@ -339,8 +339,8 @@ require([
                 type: "simple-fill",
                 color: [92, 92, 92, 0.3],
                 outline: {
-                    color: "#adadad",
-                    width: 0.1
+                    color: [255, 255, 255, 0.5],
+                    width: 0.3
                 }
             }
         },
@@ -379,14 +379,14 @@ require([
             console.log('element', element)
             if (element.properties.idAlerta == attributes.comarca_sg) {
                 var polyline = {
-                    type: "polyline", // autocasts as new Polyline()
+                    type: "polyline", // new Polyline()
                     paths: element.geometry.coordinates
                 };
 
                 var lineSymbol = {
-                    type: "simple-line", // autocasts as new SimpleLineSymbol()
-                    color: [255, 51, 51, 0.2], // RGB color values as an array
-                    width: 3
+                    type: "simple-line", // new SimpleLineSymbol()
+                    color: [255, 51, 51, 0.3], // RGB color values as an array
+                    width: 0.1
                 };
 
                 var polylineGraphic = new Graphic({
@@ -535,11 +535,12 @@ require([
 
     const timeSliderBrotes = new TimeSlider({
         container: "timeSliderBrotes",
-        playRate: 50,
+        // la propiedad "playRate" del widgetb es el tiempo (en milisegundos) entre los pasos de la animación. Este valor predeterminado es 1000. 
+        playRate: 1000,
         stops: {
             interval: {
-                value: 7,
-                unit: "days"
+                value: 1,
+                unit: "weeks"
             }
         }
     });
@@ -690,11 +691,11 @@ require([
     // los datos caen dentro del rango de tiempo
     let timeSliderAlertas = new TimeSlider({
         container: "timeSliderAlertas",
-        playRate: 7,
+        playRate: 1000,
         stops: {
             interval: {
-                value: 7,
-                unit: "days"
+                value: 1,
+                unit: "weeks"
             }
         }
     });
@@ -718,7 +719,7 @@ require([
             end: nextMonday
         };
         const endAlerta = nextMonday;
-        startAlerta.setDate(startAlerta.getDate() + 358);
+        startAlerta.setDate(startAlerta.getDate() + 359);
         timeSliderAlertas.values = [startAlerta, endAlerta];
     });
     timeSliderAlertas.watch("timeExtent", function () {
@@ -730,7 +731,7 @@ require([
                 timeExtent: timeSliderAlertas.timeExtent,
                 geometry: view.extent
             },
-            excludedEffect: "grayscale(20%) opacity(6%)"
+            excludedEffect: "grayscale(20%) opacity(20%)"
         };
 
     });
