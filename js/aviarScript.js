@@ -42,6 +42,8 @@ require([
 
         copyright: "Influenza Aviar",
         title: "Brotes",
+        outFields: ['*'],
+        visible: true,
         timeInfo: {
             startField: "start",
             interval: {
@@ -99,52 +101,122 @@ require([
                 } */
             ]
         },
+        /*  popupTemplate: {
+             title: "Brote",
+             content: [
+                 {
+                     type: "fields",
+                     fieldInfos: [
+                         {
+                             fieldName: "country",
+                             label: "Pais",
+                             visible: true
+                         },
+                         {
+                             fieldName: "city",
+                             label: "Localización",
+                             visible: true
+                         },
+                         {
+                             fieldName: "start",
+                             label: "Fecha del informe",
+                             visible: true
+                         },
+                         {
+                             fieldName: "species",
+                             label: "Especie",
+                             visible: true
+                         },
+                         {
+                             fieldName: "cases",
+                             label: "Cases",
+                             visible: true
+                         },
+                         {
+                             fieldName: "Serotipo",
+                             label: "Serotipo",
+                             visible: true
+                         },
+                         {
+                             fieldName: "moreInfo",
+                             label: "More info",
+                             visible: true
+                         }
+                     ]
+                 }
+             ]
+         } */
+
+        supportsQuery: true,
         popupTemplate: {
-            title: "Brote",
-            content: [
-                {
-                    type: "fields",
-                    fieldInfos: [
-                        {
-                            fieldName: "country",
-                            label: "Pais",
-                            visible: true
-                        },
-                        {
-                            fieldName: "city",
-                            label: "Localización",
-                            visible: true
-                        },
-                        {
-                            fieldName: "start",
-                            label: "Fecha del informe",
-                            visible: true
-                        },
-                        {
-                            fieldName: "species",
-                            label: "Especie",
-                            visible: true
-                        },
-                        {
-                            fieldName: "cases",
-                            label: "Cases",
-                            visible: true
-                        },
-                        {
-                            fieldName: "Serotipo",
-                            label: "Serotipo",
-                            visible: true
-                        },
-                        {
-                            fieldName: "moreInfo",
-                            label: "More info",
-                            visible: true
-                        }
-                    ]
-                }
-            ]
-        }
+            title: "Pais: {country}",
+            content: getInfo,
+            visible: false,
+            returnGeometry: true,
+        },
     });
+
+    /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
+    function getInfo(feature) {
+        view.graphics.removeAll()
+
+        var graphic, attributes, content;
+
+        graphic = feature.graphic;
+        attributes = graphic.attributes;
+
+        var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson';
+        // Se inicia la peticion ajax a la url ruta
+        var request = new XMLHttpRequest();
+        request.open("GET", urlRutas, false); // false for synchronous request
+        request.send(null);
+
+        let rutas = JSON.parse(request.responseText)
+
+        console.log('obj ruta', rutas)
+
+        for (let index = 0; index < rutas.features.length; index++) {
+            const element = rutas.features[index];
+            console.log('element', element)
+            if (element.properties.idBrote == attributes.id) {
+                var polyline = {
+                    type: "polyline", // new Polyline()
+                    paths: element.geometry.coordinates
+                };
+
+                var lineSymbol = {
+                    type: "simple-line", // new SimpleLineSymbol()
+                    color: [255, 51, 51, 0.3], // RGB color values as an array
+                    width: 0.1
+                };
+
+                var polylineGraphic = new Graphic({
+                    geometry: polyline, // Add the geometry created in step 4
+                    symbol: lineSymbol, // Add the symbol created in step 5
+                });
+
+                view.graphics.add(polylineGraphic);
+
+            }
+
+        }
+
+        view.on("click", function (e) {
+            view.graphics.removeAll(polylineGraphic);
+            console.log("Remove")
+
+        });
+
+        content = "<p>Número de casos: <b>{cases}</b> " +
+            "<ul><li>Localización: {city}</li>" +
+            "<li>Fecha del informe: {reportDate}</li>" +
+            "<li>Especie: {species}</li>"+
+            "<li>Serotipo: {serotipo}</li>" +
+            "<li>Mas info: {moreInfo}</li>";
+
+        return content;
+
+    }
 
 
     /// DEFINICIÓN DEL LOS ALERTAS
@@ -347,15 +419,15 @@ require([
         supportsQuery: true,
         popupTemplate: {
             title: "Comarca: {comarca}",
-            content: getInfo,
+            /* content: getInfo,
             visible: false,
-            returnGeometry: true,
+            returnGeometry: true, */
         },
 
     });
 
 
-    /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
+    /* /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfo(feature) {
         view.graphics.removeAll()
 
@@ -404,11 +476,11 @@ require([
             view.graphics.removeAll(polylineGraphic);
             console.log("Remove")
 
-        });
+        }); */
 
-        /* content = "Código: " + attributes.comarca_sg;
-        return content; */
-    }
+    /* content = "Código: " + attributes.comarca_sg;
+    return content; */
+    /*  } */
 
     /// INICIALIZACIÓN DEL MAPA
 
@@ -427,8 +499,8 @@ require([
         }
     });
 
-     // Agregar la leyenda
-     const legendExpand = new Expand({
+    // Agregar la leyenda
+    const legendExpand = new Expand({
         collapsedIconClass: "esri-icon-legend",
         expandIconClass: "esri-icon-legend",
         expandTooltip: "Legend",
@@ -451,7 +523,7 @@ require([
 
 
 
-    
+
 
     //// ZOOM TO BROTES
 
@@ -481,7 +553,7 @@ require([
         });
     });
 
-    /// ACTIVAR RUTAS POR MEDIO DEL HOLD EN LOS BROTES
+/*     /// ACTIVAR RUTAS POR MEDIO DEL HOLD EN LOS BROTES
     var highlightRutas;
 
     view.whenLayerView(layerRutaM).then(function (layerView) {
@@ -513,7 +585,7 @@ require([
 
         });
 
-    });
+    }); */
     /// SEARCH WIDGET
     var searchWidget = new Search({
         view: view
@@ -530,7 +602,7 @@ require([
         container: document.createElement("div")
     });
 
-    
+
     ///TIMESLIDER DE BROTES
 
     const timeSliderBrotes = new TimeSlider({
@@ -669,7 +741,7 @@ require([
         /* Average_depth: "Deaths" */
     };
 
-   
+
     /// BOTON EXPANDIBLE DE INFO BROTES
 
     const statsDiv = document.getElementById("statsDiv");
