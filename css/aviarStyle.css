@@ -68,7 +68,7 @@ html,
             z-index: 200;
             background-color: #303030;
             opacity: 0.8;
-            left: 21px;
+            left: 15px;
 
         }
 
@@ -82,7 +82,7 @@ html,
             z-index: 3;
             background-color: #303030;
             opacity: 0.8;
-            left: 21px;
+            left: 15px;
 
         }
 
@@ -151,6 +151,8 @@ html,
             background-color: transparent;
         }
 
+        
+
         .ruta {
             z-index: 4;
             margin-top: -255px;
@@ -167,6 +169,39 @@ html,
         }
 
         #ruta:hover {
+            background-color: #303030;
+            border-color: #303030;
+            color: #ededed
+        }
+
+        #rutaDiv2 {
+
+            position: absolute;
+            bottom: 190px;
+            width: 50px;
+            margin: 10px;
+            z-index: 3;
+            font-family: 'Arial';
+            text-align: center;
+            background-color: transparent;
+        }
+
+        .ruta2 {
+            z-index: 4;
+            margin-top: -180px;
+            margin-right: -1910px;
+            right: 2750px;
+            background-color: #242424;
+            color: #adadad;
+            position: absolute;
+            border: 1px solid #242424;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            height: 40px;
+            width: 50px;
+
+        }
+
+        #ruta2:hover {
             background-color: #303030;
             border-color: #303030;
             color: #ededed
@@ -254,12 +289,32 @@ html,
             border: 1px solid #242424;
             width: 32px;
             height: 32px;
-            margin-bottom: -5px;
+            margin-bottom: 160px;
             margin-right: 9px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
         }
 
         .esri-icon-polyline:hover {
+            background-color: #303030;
+            border-color: #303030;
+            color: #ededed
+        }
+
+        /* ACTIVAR RUTAS europa */
+        .esri-icon-down{
+            
+            background-color: #242424;
+            color: #adadad;
+            cursor: pointer;
+            border: 1px solid #242424;
+            width: 32px;
+            height: 32px;
+            margin-bottom: 50px;
+            margin-right: 9px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
+        }
+
+        .esri-icon-down:hover {
             background-color: #303030;
             border-color: #303030;
             color: #ededed
