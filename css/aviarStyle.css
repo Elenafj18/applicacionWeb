@@ -174,10 +174,10 @@ html,
             color: #ededed
         }
 
-        #rutaDiv2 {
+        #rutaDivMigrations {
 
             position: absolute;
-            bottom: 190px;
+            bottom: 198px;
             width: 50px;
             margin: 10px;
             z-index: 3;
@@ -186,7 +186,7 @@ html,
             background-color: transparent;
         }
 
-        .ruta2 {
+        .migrations {
             z-index: 4;
             margin-top: -180px;
             margin-right: -1910px;
@@ -201,7 +201,7 @@ html,
 
         }
 
-        #ruta2:hover {
+        #migrations:hover {
             background-color: #303030;
             border-color: #303030;
             color: #ededed
@@ -243,7 +243,7 @@ html,
         .esri-icon-radio-checked {
             
             background-color: #242424;
-            color: #adadad;
+            color: #ff0000;
             cursor: pointer;
             border: 1px solid #242424;
             width: 32px;
@@ -264,7 +264,7 @@ html,
         .esri-icon-notice-triangle {
             
             background-color: #242424;
-            color: #adadad;
+            color: #ff4545;
             cursor: pointer;
             border: 1px solid #242424;
             width: 32px;
@@ -284,7 +284,7 @@ html,
         .esri-icon-up {
             
             background-color: #242424;
-            color: #adadad;
+            color: #33c8c8;
             cursor: pointer;
             border: 1px solid #242424;
             width: 32px;
@@ -300,11 +300,13 @@ html,
             color: #ededed
         }
 
+        
+
         /* ACTIVAR RUTAS europa */
         .esri-icon-down{
             
             background-color: #242424;
-            color: #adadad;
+            color: #33c8c8;
             cursor: pointer;
             border: 1px solid #242424;
             width: 32px;

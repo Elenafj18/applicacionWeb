@@ -101,63 +101,63 @@ require([
                 } */
             ]
         },
-        /*  popupTemplate: {
-             title: "Brote",
-             content: [
-                 {
-                     type: "fields",
-                     fieldInfos: [
-                         {
-                             fieldName: "country",
-                             label: "Pais",
-                             visible: true
-                         },
-                         {
-                             fieldName: "city",
-                             label: "Localización",
-                             visible: true
-                         },
-                         {
-                             fieldName: "start",
-                             label: "Fecha del informe",
-                             visible: true
-                         },
-                         {
-                             fieldName: "species",
-                             label: "Especie",
-                             visible: true
-                         },
-                         {
-                             fieldName: "cases",
-                             label: "Cases",
-                             visible: true
-                         },
-                         {
-                             fieldName: "Serotipo",
-                             label: "Serotipo",
-                             visible: true
-                         },
-                         {
-                             fieldName: "moreInfo",
-                             label: "More info",
-                             visible: true
-                         }
-                     ]
-                 }
-             ]
-         } */
+        /*   popupTemplate: {
+              title: "Brote",
+              content: [
+                  {
+                      type: "fields",
+                      fieldInfos: [
+                          {
+                              fieldName: "country",
+                              label: "Pais",
+                              visible: true
+                          },
+                          {
+                              fieldName: "city",
+                              label: "Localización",
+                              visible: true
+                          },
+                          {
+                              fieldName: "start",
+                              label: "Fecha del informe",
+                              visible: true
+                          },
+                          {
+                              fieldName: "species",
+                              label: "Especie",
+                              visible: true
+                          },
+                          {
+                              fieldName: "cases",
+                              label: "Cases",
+                              visible: true
+                          },
+                          {
+                              fieldName: "Serotipo",
+                              label: "Serotipo",
+                              visible: true
+                          },
+                          {
+                              fieldName: "moreInfo",
+                              label: "More info",
+                              visible: true
+                          }
+                      ]
+                  }
+              ]
+          }, */
 
         supportsQuery: true,
         popupTemplate: {
             title: "Pais: {country}",
-            content: getInfo,
-            visible: false,
-            returnGeometry: true,
+             content: getInfoBrotes,
+             visible: false,
+             returnGeometry: true,
         },
-    });
+    })
 
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
-    function getInfo(feature) {
+    function getInfoBrotes(feature) {
         view.graphics.removeAll()
 
         var graphic, attributes, content;
@@ -394,6 +394,66 @@ require([
 
     }
 
+    /// DEFINICIÓN DEL LOS RUTA MIGRATORIA
+    const layermigrations = new GeoJSONLayer({
+        url:
+            "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson",
+        copyright: "Influenza Aviar",
+        title: "migrations",
+        timeInfo: {
+            interval: {
+                unit: "days",
+                value: 7
+            }
+        },
+        renderer: {
+            type: "simple",
+            symbol: {
+                type: "simple-fill",
+                supportsQuery: true,
+                outline: {
+                    color: [51, 200, 200, 0.03],
+                    width: 0.3
+                }
+            }
+        },
+        popupTemplate: {
+            title: "Ruta migratoria",
+            content: [
+                {
+                    type: "fields",
+                    fieldInfos: [
+                        {
+                            fieldName: "species",
+                            label: "Especie",
+                            visible: true
+                        }/* ,
+                    {
+                        fieldName: "idAlerta",
+                        label: "Codigo",
+                        visible: true
+                    }, */
+                    ]
+                }
+            ]
+        },
+        visible: false,
+        availableFields: true,
+    });
+
+    window.onload = function () {
+        document.getElementById("migrations").addEventListener("click", cambiarM);
+
+    }
+
+    function cambiarM(feature) {
+        if (layermigrations.visible === false) {
+            return layermigrations.visible = true;
+        } else {
+            return layermigrations.visible = false;
+        }
+
+    }
 
     /// DEFINICIÓN DEL LOS COMARCAS GANADERAS
     let layerViewComarcas;
@@ -419,74 +479,58 @@ require([
         supportsQuery: true,
         popupTemplate: {
             title: "Comarca: {comarca}",
-            /* content: getInfo,
+            content: getInfoComarcas,
             visible: false,
-            returnGeometry: true, */
+            returnGeometry: true,
         },
 
     });
 
 
-    /* /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
-    function getInfo(feature) {
+    /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
+    function getInfoComarcas(feature) {
         view.graphics.removeAll()
-
         var graphic, attributes, content;
-
         graphic = feature.graphic;
         attributes = graphic.attributes;
-
-        var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson';
+        var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson';
         // Se inicia la peticion ajax a la url ruta
         var request = new XMLHttpRequest();
         request.open("GET", urlRutas, false); // false for synchronous request
         request.send(null);
-
         let rutas = JSON.parse(request.responseText)
-
         console.log('obj ruta', rutas)
-
         for (let index = 0; index < rutas.features.length; index++) {
             const element = rutas.features[index];
             console.log('element', element)
-            if (element.properties.idAlerta == attributes.comarca_sg) {
+            if (element.properties.idComarca == attributes.comarca_sg) {
                 var polyline = {
                     type: "polyline", // new Polyline()
                     paths: element.geometry.coordinates
                 };
-
                 var lineSymbol = {
                     type: "simple-line", // new SimpleLineSymbol()
-                    color: [255, 51, 51, 0.3], // RGB color values as an array
+                    color: [255, 51, 51, 0.6], // RGB color values as an array
                     width: 0.1
                 };
-
                 var polylineGraphic = new Graphic({
                     geometry: polyline, // Add the geometry created in step 4
                     symbol: lineSymbol, // Add the symbol created in step 5
                 });
-
                 view.graphics.add(polylineGraphic);
-
             }
-
         }
-
         view.on("click", function (e) {
             view.graphics.removeAll(polylineGraphic);
             console.log("Remove")
+        });
 
-        }); */
-
-    /* content = "Código: " + attributes.comarca_sg;
-    return content; */
-    /*  } */
-
+    }
     /// INICIALIZACIÓN DEL MAPA
 
     const map = new Map({
         basemap: "dark-gray-vector",
-        layers: [layerComarcas, layerBrotes, layerAlertas, layerRutaM]
+        layers: [layerComarcas, layerBrotes, layerAlertas, layerRutaM, layermigrations]
     });
 
     const view = new MapView({
@@ -553,39 +597,39 @@ require([
         });
     });
 
-/*     /// ACTIVAR RUTAS POR MEDIO DEL HOLD EN LOS BROTES
-    var highlightRutas;
-
-    view.whenLayerView(layerRutaM).then(function (layerView) {
-
-        var queryR = new Query();
-
-
-        view.on("hold", function (event) {
-
-            view.hitTest(event).then(function (response) {
-                response.results.filter(function (result) {
-                    return result.graphic.layer === layerBrotes;
-                })[0].graphic;
-
-                queryR.geometry = event.mapPoint;
-                queryR.distance = 300;
-                queryR.units = "meters";
-                queryR.spatialRelationship = "intersects";
-                queryR.returnQueryGeometry = true;
-
-                layerRutaM.queryFeatures(queryR).then(function (result) {
-                    if (highlightRutas) {
-                        highlightRutas.remove();
-                    }
-                    highlightRutas = layerView.highlight(result.features);
+    /*     /// ACTIVAR RUTAS POR MEDIO DEL HOLD EN LOS BROTES
+        var highlightRutas;
+    
+        view.whenLayerView(layerRutaM).then(function (layerView) {
+    
+            var queryR = new Query();
+    
+    
+            view.on("hold", function (event) {
+    
+                view.hitTest(event).then(function (response) {
+                    response.results.filter(function (result) {
+                        return result.graphic.layer === layerBrotes;
+                    })[0].graphic;
+    
+                    queryR.geometry = event.mapPoint;
+                    queryR.distance = 300;
+                    queryR.units = "meters";
+                    queryR.spatialRelationship = "intersects";
+                    queryR.returnQueryGeometry = true;
+    
+                    layerRutaM.queryFeatures(queryR).then(function (result) {
+                        if (highlightRutas) {
+                            highlightRutas.remove();
+                        }
+                        highlightRutas = layerView.highlight(result.features);
+                    });
+    
                 });
-
+    
             });
-
-        });
-
-    }); */
+    
+        }); */
     /// SEARCH WIDGET
     var searchWidget = new Search({
         view: view
