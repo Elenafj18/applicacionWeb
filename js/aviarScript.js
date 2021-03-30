@@ -186,7 +186,7 @@ require([
 
                 var lineSymbol = {
                     type: "simple-line", // new SimpleLineSymbol()
-                    color: [255, 51, 51, 0.3], // RGB color values as an array
+                    color: [255, 51, 51, 0.6], // RGB color values as an array
                     width: 0.1
                 };
 
@@ -380,12 +380,13 @@ require([
         availableFields: true,
     });
 
-    window.onload = function () {
-        document.getElementById("ruta").addEventListener("click", cambiar);
+    $( document ).ready(function() {
+        $(function() {
+        document.getElementById("ruta").addEventListener("click", activarRutas);
 
-    }
+    })})
 
-    function cambiar(feature) {
+    function activarRutas(feature) {
         if (layerRutaM.visible === false) {
             return layerRutaM.visible = true;
         } else {
@@ -442,11 +443,11 @@ require([
     });
 
     window.onload = function () {
-        document.getElementById("migrations").addEventListener("click", cambiarM);
+        document.getElementById("migrations").addEventListener("click", activarMigrations);
 
     }
 
-    function cambiarM(feature) {
+    function activarMigrations(feature) {
         if (layermigrations.visible === false) {
             return layermigrations.visible = true;
         } else {
@@ -454,6 +455,8 @@ require([
         }
 
     }
+
+    
 
     /// DEFINICIÓN DEL LOS COMARCAS GANADERAS
     let layerViewComarcas;
@@ -471,8 +474,8 @@ require([
                 type: "simple-fill",
                 color: [92, 92, 92, 0.3],
                 outline: {
-                    color: [255, 255, 255, 0.5],
-                    width: 0.3
+                    color: [255, 255, 255, 0.2],
+                    width: 0.5
                 }
             }
         },
@@ -491,8 +494,10 @@ require([
     function getInfoComarcas(feature) {
         view.graphics.removeAll()
         var graphic, attributes, content;
+
         graphic = feature.graphic;
         attributes = graphic.attributes;
+
         var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson';
         // Se inicia la peticion ajax a la url ruta
         var request = new XMLHttpRequest();
@@ -500,6 +505,7 @@ require([
         request.send(null);
         let rutas = JSON.parse(request.responseText)
         console.log('obj ruta', rutas)
+
         for (let index = 0; index < rutas.features.length; index++) {
             const element = rutas.features[index];
             console.log('element', element)
