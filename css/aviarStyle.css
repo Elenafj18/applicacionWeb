@@ -21,16 +21,16 @@ html,
         #timeSliderBrotes {
             opacity: 0.9;
             position: absolute;
-            left: 100px;
-            right: 100px;
+            left: 50px;
+            right: 50px;
             bottom: 125px;
         }
 
         #timeSliderAlertas {
             opacity: 0.9;
             position: absolute;
-            left: 100px;
-            right: 100px;
+            left: 50px;
+            right: 50px;
             bottom: 30px;
         }
 
