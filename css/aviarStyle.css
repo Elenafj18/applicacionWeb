@@ -14,7 +14,7 @@ html,
 
         .esri-time-slider {
             cursor: default;
-            min-width: 100px;
+            min-width: 300px;
             box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
         }
 
