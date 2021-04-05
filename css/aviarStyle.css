@@ -322,6 +322,11 @@ html,
             color: #ededed
         }
 
+        .esri-icon-down:before {
+            content: "\e681";
+            color: inherit;
+
+        }
 
         .esri-search__input::-moz-placeholder {
             
@@ -339,7 +344,3 @@ html,
             font-size: 14px;
             opacity: 0.1;
         }
-
-        
-            
-

@@ -1,7 +1,3 @@
-
-
-
-
 require([
     "esri/Map",
     "esri/views/MapView",
@@ -492,8 +488,10 @@ require([
 
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfoComarcas(feature) {
+        view.on("hold", function(event) {
         view.graphics.removeAll()
-        var graphic, attributes, content;
+
+        var graphic, attributes;
 
         graphic = feature.graphic;
         attributes = graphic.attributes;
@@ -530,6 +528,7 @@ require([
             view.graphics.removeAll(polylineGraphic);
             console.log("Remove")
         });
+    });
 
     }
     /// INICIALIZACIÓN DEL MAPA
@@ -933,4 +932,3 @@ function ShowHideA() {
     }
     $("#myButtonAlerta").html(text);
 }
-
