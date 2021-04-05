@@ -15,7 +15,7 @@ html,
         #timeSliderBrotes {
             opacity: 0.9;
             position: absolute;
-            left: 60px;
+            left: 55px;
             right: 10px;
             bottom: 125px;
         }
@@ -23,7 +23,7 @@ html,
         #timeSliderAlertas {
             opacity: 0.9;
             position: absolute;
-            left: 60px;
+            left: 55px;
             right: 10px;
             bottom: 30px;
         }
