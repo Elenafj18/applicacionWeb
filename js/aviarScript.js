@@ -488,7 +488,7 @@ require([
 
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfoComarcas(feature) {
-        view.on("hold", function(event) {
+        /* view.on("hold", function(event) { */
         view.graphics.removeAll()
 
         var graphic, attributes;
@@ -528,7 +528,7 @@ require([
             view.graphics.removeAll(polylineGraphic);
             console.log("Remove")
         });
-    });
+    /* }); */
 
     }
     /// INICIALIZACIÓN DEL MAPA
