@@ -249,7 +249,7 @@ require([
                         {
                             value: 0,
                             color: [255, 255, 255, 0.0],
-                            label: "1"
+                            label: "0"
                         }, {
                             value: 1,
                             color: [255, 150, 150, 0.7],
