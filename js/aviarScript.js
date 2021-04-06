@@ -146,9 +146,9 @@ require([
         supportsQuery: true,
         popupTemplate: {
             title: "Pais: {country}",
-             content: getInfoBrotes,
-             visible: false,
-             returnGeometry: true,
+            content: getInfoBrotes,
+            visible: false,
+            returnGeometry: true,
         },
     })
 
@@ -206,7 +206,7 @@ require([
         content = "<p>Número de casos: <b>{cases}</b> " +
             "<ul><li>Localización: {city}</li>" +
             "<li>Fecha del informe: {reportDate}</li>" +
-            "<li>Especie: {species}</li>"+
+            "<li>Especie: {species}</li>" +
             "<li>Serotipo: {serotipo}</li>" +
             "<li>Mas info: {moreInfo}</li>";
 
@@ -230,11 +230,14 @@ require([
                 value: 7
             }
         },
+
         renderer: {
             type: "simple",
+            
             field: "riskLevel",
             symbol: {
                 type: "simple-marker",
+                style: "triangle",
                 color: "blue",
                 outline: null
             },
@@ -243,39 +246,60 @@ require([
                     type: "color",
                     field: "riskLevel",
                     stops: [
-                    {
-                        value: 0,
-                        color: [250, 255, 255, 0.0],
-                        label: "1"
-                    }, {
-                        value: 1,
-                        color: [250, 150, 0, 0.8],
-                        label: "1"
-                    }, {
-                        value: 2,
-                        color: [250, 120, 0, 0.8],
-                        label: "2"
-                    },
-                    {
-                        value: 3,
-                        color: [250, 80, 0, 0.8],
-                        label: "3"
-                    },
-                    {
-                        value: 4,
-                        color: [250, 40, 0, 0.8],
-                        label: "4"
-                    },
-                    {
-                        value: 5,
-                        color: [250, 0, 0, 0.8],
-                        label: "5"
-                    }
+                        {
+                            value: 0,
+                            color: [255, 255, 255, 0.0],
+                            label: "1"
+                        }, {
+                            value: 1,
+                            color: [186, 78, 97, 0.8],
+                            label: "1"
+                        }, {
+                            value: 2,
+                            color: [191, 57, 80, 0.8],
+                            label: "2"
+                        },
+                        {
+                            value: 3,
+                            color: [189, 38, 64, 0.8],
+                            label: "3"
+                        },
+                        {
+                            value: 4,
+                            color: [189, 26, 53, 0.8],
+                            label: "4"
+                        },
+                        {
+                            value: 5,
+                            color: [186, 6, 36, 0.8],
+                            label: "5"
+                        }
                     ]
                 }
             ],
 
         },
+
+       /*  labelingInfo: [
+            {
+              labelExpressionInfo: {
+                expression: document.getElementById("label-expression").text
+              },
+              labelPlacement: "center-right",
+              minScale: minScale,
+              symbol: {
+                type: "text", // autocasts as new TextSymbol()
+                font: {
+                  size: 9,
+                  family: "Noto Sans"
+                },
+                horizontalAlignment: "left",
+                color: "#2b2b2b"
+              }
+            }
+          ], */
+
+
         popupTemplate: {
             title: "Alerta",
             content: [
@@ -377,11 +401,12 @@ require([
         availableFields: true,
     });
 
-    $( document ).ready(function() {
-        $(function() {
-        document.getElementById("ruta").addEventListener("click", activarRutas);
+    $(document).ready(function () {
+        $(function () {
+            document.getElementById("ruta").addEventListener("click", activarRutas);
 
-    })})
+        })
+    })
 
     function activarRutas(feature) {
         if (layerRutaM.visible === false) {
@@ -453,7 +478,7 @@ require([
 
     }
 
-    
+
 
     /// DEFINICIÓN DEL LOS COMARCAS GANADERAS
     let layerViewComarcas;
@@ -489,48 +514,48 @@ require([
 
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfoComarcas(feature) {
-        view.on('hold', ["Ctrl"], function(event) {
-        view.graphics.removeAll()
+        view.on('hold', ["Ctrl"], function (event) {
+            view.graphics.removeAll()
 
-        var graphic, attributes;
+            var graphic, attributes;
 
-        graphic = feature.graphic;
-        attributes = graphic.attributes;
+            graphic = feature.graphic;
+            attributes = graphic.attributes;
 
-        var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson';
-        // Se inicia la peticion ajax a la url ruta
-        var request = new XMLHttpRequest();
-        request.open("GET", urlRutas, false); // false for synchronous request
-        request.send(null);
-        let rutas = JSON.parse(request.responseText)
-        console.log('obj ruta', rutas)
+            var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson';
+            // Se inicia la peticion ajax a la url ruta
+            var request = new XMLHttpRequest();
+            request.open("GET", urlRutas, false); // false for synchronous request
+            request.send(null);
+            let rutas = JSON.parse(request.responseText)
+            console.log('obj ruta', rutas)
 
-        for (let index = 0; index < rutas.features.length; index++) {
-            const element = rutas.features[index];
-            console.log('element', element)
-            if (element.properties.idComarca == attributes.comarca_sg) {
-                var polyline = {
-                    type: "polyline", // new Polyline()
-                    paths: element.geometry.coordinates
-                };
-                var lineSymbol = {
-                    type: "simple-line", // new SimpleLineSymbol()
-                    color: [255, 51, 51, 0.6], // RGB color values as an array
-                    width: 0.1
-                };
-                var polylineGraphic = new Graphic({
-                    geometry: polyline, // Add the geometry created in step 4
-                    symbol: lineSymbol, // Add the symbol created in step 5
-                });
-                view.graphics.add(polylineGraphic);
+            for (let index = 0; index < rutas.features.length; index++) {
+                const element = rutas.features[index];
+                console.log('element', element)
+                if (element.properties.idComarca == attributes.comarca_sg) {
+                    var polyline = {
+                        type: "polyline", // new Polyline()
+                        paths: element.geometry.coordinates
+                    };
+                    var lineSymbol = {
+                        type: "simple-line", // new SimpleLineSymbol()
+                        color: [255, 51, 51, 0.6], // RGB color values as an array
+                        width: 0.1
+                    };
+                    var polylineGraphic = new Graphic({
+                        geometry: polyline, // Add the geometry created in step 4
+                        symbol: lineSymbol, // Add the symbol created in step 5
+                    });
+                    view.graphics.add(polylineGraphic);
+                }
             }
-        }
-    
-        view.on("click", function (e) {
-            view.graphics.removeAll(polylineGraphic);
-            console.log("Remove")
-        })
-    });
+
+            view.on("click", function (e) {
+                view.graphics.removeAll(polylineGraphic);
+                console.log("Remove")
+            })
+        });
 
     }
     /// INICIALIZACIÓN DEL MAPA
