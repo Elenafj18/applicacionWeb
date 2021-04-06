@@ -149,6 +149,14 @@ require([
             content: getInfoBrotes,
             visible: false,
             returnGeometry: true,
+            fieldInfos: [
+                {
+                    fieldName: 'reportDate',
+                    format: {
+                        dateFormat: 'short-date-short-time'
+                    }
+                }
+            ],
         },
     })
 
@@ -220,8 +228,8 @@ require([
 
     var layerAlertas = new GeoJSONLayer({
         url:
-            /* "https://raw.githubusercontent.com/influenzaAviar/GeoJSON/master/alertas.geojson", */
             "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson",
+
         copyright: "Influenza Aviar",
         title: "Alertas",
         timeInfo: {
@@ -234,7 +242,7 @@ require([
 
         renderer: {
             type: "simple",
-            
+
             field: "riskLevel",
             symbol: {
                 type: "simple-marker",
@@ -249,7 +257,7 @@ require([
                         {
                             value: 0,
                             color: [255, 255, 255, 0.0],
-                            label: "0"
+                            label: "1"
                         }, {
                             value: 1,
                             color: [255, 150, 150, 0.7],
@@ -280,37 +288,41 @@ require([
 
         },
 
-       /*  labelingInfo: [
-            {
-              labelExpressionInfo: {
-                expression: document.getElementById("label-expression").text
-              },
-              labelPlacement: "center-right",
-              minScale: minScale,
-              symbol: {
-                type: "text", // autocasts as new TextSymbol()
-                font: {
-                  size: 9,
-                  family: "Noto Sans"
-                },
-                horizontalAlignment: "left",
-                color: "#2b2b2b"
-              }
-            }
-          ], */
+        /*  labelingInfo: [
+             {
+               labelExpressionInfo: {
+                 expression: document.getElementById("label-expression").text
+               },
+               labelPlacement: "center-right",
+               minScale: minScale,
+               symbol: {
+                 type: "text", // autocasts as new TextSymbol()
+                 font: {
+                   size: 9,
+                   family: "Noto Sans"
+                 },
+                 horizontalAlignment: "left",
+                 color: "#2b2b2b"
+               }
+             }
+           ], */
 
 
         popupTemplate: {
-            title: "Alerta",
+            title: "Nivel de alerta: {riskLevel}" + " Fecha: {reportDate}",
+            fieldInfos: [
+                {
+                    fieldName: 'reportDate',
+                    format: {
+                        dateFormat: 'short-date-short-time'
+                    }
+                }
+            ],
             content: [
                 {
                     type: "fields",
                     fieldInfos: [
-                        {
-                            fieldName: "riskLevel",
-                            label: "Nivel de riesgo",
-                            visible: true
-                        },
+
                         {
                             fieldName: "comarca",
                             label: "Comarca",
@@ -378,7 +390,7 @@ require([
             }
         },
         popupTemplate: {
-            title: "Ruta migratoria",
+            title: "Especie: {especie}",
             content: [
                 {
                     type: "fields",
@@ -441,7 +453,7 @@ require([
             }
         },
         popupTemplate: {
-            title: "Ruta migratoria",
+            title: "Especie: {species}",
             content: [
                 {
                     type: "fields",
@@ -503,7 +515,9 @@ require([
         },
         supportsQuery: true,
         popupTemplate: {
-            title: "Comarca: {comarca}",
+            title: "Comarca: {comarca}," +
+                "<br>Provincia: {provincia}" +
+                "<br>Comunidad Autónoma: {comAutonoma}</br>",
             content: getInfoComarcas,
             visible: false,
             returnGeometry: true,
@@ -515,46 +529,46 @@ require([
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfoComarcas(feature) {
         /* view.on('hold', ["Ctrl"],function (event) { */
-            view.graphics.removeAll()
+        view.graphics.removeAll()
 
-            var graphic, attributes;
+        var graphic, attributes;
 
-            graphic = feature.graphic;
-            attributes = graphic.attributes;
+        graphic = feature.graphic;
+        attributes = graphic.attributes;
 
-            var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson';
-            // Se inicia la peticion ajax a la url ruta
-            var request = new XMLHttpRequest();
-            request.open("GET", urlRutas, false); // false for synchronous request
-            request.send(null);
-            let rutas = JSON.parse(request.responseText)
-            console.log('obj ruta', rutas)
+        var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson';
+        // Se inicia la peticion ajax a la url ruta
+        var request = new XMLHttpRequest();
+        request.open("GET", urlRutas, false); // false for synchronous request
+        request.send(null);
+        let rutas = JSON.parse(request.responseText)
+        console.log('obj ruta', rutas)
 
-            for (let index = 0; index < rutas.features.length; index++) {
-                const element = rutas.features[index];
-                console.log('element', element)
-                if (element.properties.idComarca == attributes.comarca_sg) {
-                    var polyline = {
-                        type: "polyline", // new Polyline()
-                        paths: element.geometry.coordinates
-                    };
-                    var lineSymbol = {
-                        type: "simple-line", // new SimpleLineSymbol()
-                        color: [255, 51, 51, 0.6], // RGB color values as an array
-                        width: 0.1
-                    };
-                    var polylineGraphic = new Graphic({
-                        geometry: polyline, // Add the geometry created in step 4
-                        symbol: lineSymbol, // Add the symbol created in step 5
-                    });
-                    view.graphics.add(polylineGraphic);
-                }
+        for (let index = 0; index < rutas.features.length; index++) {
+            const element = rutas.features[index];
+            console.log('element', element)
+            if (element.properties.idComarca == attributes.comarca_sg) {
+                var polyline = {
+                    type: "polyline", // new Polyline()
+                    paths: element.geometry.coordinates
+                };
+                var lineSymbol = {
+                    type: "simple-line", // new SimpleLineSymbol()
+                    color: [255, 51, 51, 0.6], // RGB color values as an array
+                    width: 0.1
+                };
+                var polylineGraphic = new Graphic({
+                    geometry: polyline, // Add the geometry created in step 4
+                    symbol: lineSymbol, // Add the symbol created in step 5
+                });
+                view.graphics.add(polylineGraphic);
             }
+        }
 
-            view.on("click", function (e) {
-                view.graphics.removeAll(polylineGraphic);
-                console.log("Remove")
-            })
+        view.on("click", function (e) {
+            view.graphics.removeAll(polylineGraphic);
+            console.log("Remove")
+        })
         /* }); */
 
     }
