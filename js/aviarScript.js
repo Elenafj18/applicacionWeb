@@ -242,32 +242,33 @@ require([
                 {
                     type: "color",
                     field: "riskLevel",
-                    stops: [{
+                    stops: [
+                    {
                         value: 0,
-                        color: [255, 255, 255, 0.00],
-                        label: "0"
+                        color: [250, 255, 255, 0.0],
+                        label: "1"
                     }, {
                         value: 1,
-                        color: "#FF8888",
+                        color: [250, 150, 0, 0.8],
                         label: "1"
                     }, {
                         value: 2,
-                        color: "#FF6666",
+                        color: [250, 120, 0, 0.8],
                         label: "2"
                     },
                     {
                         value: 3,
-                        color: "#ff4545",
+                        color: [250, 80, 0, 0.8],
                         label: "3"
                     },
                     {
                         value: 4,
-                        color: "#FF3333",
+                        color: [250, 40, 0, 0.8],
                         label: "4"
                     },
                     {
                         value: 5,
-                        color: "#FF0000",
+                        color: [250, 0, 0, 0.8],
                         label: "5"
                     }
                     ]
@@ -488,7 +489,7 @@ require([
 
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfoComarcas(feature) {
-        /* view.on("hold", function(event) { */
+        view.on('hold', ["Ctrl"], function(event) {
         view.graphics.removeAll()
 
         var graphic, attributes;
@@ -524,11 +525,12 @@ require([
                 view.graphics.add(polylineGraphic);
             }
         }
+    
         view.on("click", function (e) {
             view.graphics.removeAll(polylineGraphic);
             console.log("Remove")
-        });
-    /* }); */
+        })
+    });
 
     }
     /// INICIALIZACIÓN DEL MAPA
@@ -852,7 +854,7 @@ require([
                 timeExtent: timeSliderAlertas.timeExtent,
                 geometry: view.extent
             },
-            excludedEffect: "grayscale(20%) opacity(20%)"
+            excludedEffect: "grayscale(60%) opacity(30%)"
         };
 
     });
@@ -902,7 +904,7 @@ require([
 /// BOTÓN DE BROTES
 $("#myButtonBrotes").remove();
 
-function ShowHideB() {
+function ShowHideTimeSliderBrotes() {
     let text = " ";
 
     if ($("#myButtonBrotes").text() === 'Brotes') {
@@ -919,7 +921,7 @@ function ShowHideB() {
 /// BOTÓN DE ALERTAS
 $("#timeSliderAlertas").remove();
 
-function ShowHideA() {
+function ShowHideTimeSliderAlertas() {
     let text = " ";
 
     if ($("#myButtonAlerta").text() === "Alertas") {
