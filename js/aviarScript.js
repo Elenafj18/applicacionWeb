@@ -220,6 +220,7 @@ require([
 
     var layerAlertas = new GeoJSONLayer({
         url:
+            /* "https://raw.githubusercontent.com/influenzaAviar/GeoJSON/master/alertas.geojson", */
             "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson",
         copyright: "Influenza Aviar",
         title: "Alertas",
@@ -238,7 +239,6 @@ require([
             symbol: {
                 type: "simple-marker",
                 style: "triangle",
-                color: "blue",
                 outline: null
             },
             visualVariables: [
@@ -252,26 +252,26 @@ require([
                             label: "1"
                         }, {
                             value: 1,
-                            color: [186, 78, 97, 0.8],
+                            color: [255, 150, 150, 0.7],
                             label: "1"
                         }, {
                             value: 2,
-                            color: [191, 57, 80, 0.8],
+                            color: [255, 120, 120, 0.7],
                             label: "2"
                         },
                         {
                             value: 3,
-                            color: [189, 38, 64, 0.8],
+                            color: [255, 80, 80, 0.7],
                             label: "3"
                         },
                         {
                             value: 4,
-                            color: [189, 26, 53, 0.8],
+                            color: [255, 40, 40, 0.7],
                             label: "4"
                         },
                         {
                             value: 5,
-                            color: [186, 6, 36, 0.8],
+                            color: [255, 0, 0, 0.8],
                             label: "5"
                         }
                     ]
@@ -514,7 +514,7 @@ require([
 
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfoComarcas(feature) {
-        view.on('hold', ["Ctrl"], function (event) {
+        /* view.on('hold', ["Ctrl"],function (event) { */
             view.graphics.removeAll()
 
             var graphic, attributes;
@@ -555,7 +555,7 @@ require([
                 view.graphics.removeAll(polylineGraphic);
                 console.log("Remove")
             })
-        });
+        /* }); */
 
     }
     /// INICIALIZACIÓN DEL MAPA
@@ -879,7 +879,7 @@ require([
                 timeExtent: timeSliderAlertas.timeExtent,
                 geometry: view.extent
             },
-            excludedEffect: "grayscale(60%) opacity(30%)"
+            excludedEffect: "grayscale(20%) opacity(12%)"
         };
 
     });
