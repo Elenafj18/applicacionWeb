@@ -447,14 +447,14 @@ require([
                 type: "simple-fill",
                 supportsQuery: true,
                 outline: {
-                    color: [51, 200, 200, 0.03],
+                    color: [51, 200, 200, 0.1],
                     width: 0.3
                 }
             }
         },
         popupTemplate: {
             title: "Especie: {species}",
-            content: [
+            /* content: [
                 {
                     type: "fields",
                     fieldInfos: [
@@ -462,15 +462,15 @@ require([
                             fieldName: "species",
                             label: "Especie",
                             visible: true
-                        }/* ,
+                        },
                     {
                         fieldName: "idAlerta",
                         label: "Codigo",
                         visible: true
-                    }, */
+                    },
                     ]
                 }
-            ]
+            ] */
         },
         visible: false,
         availableFields: true,
