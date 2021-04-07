@@ -19,6 +19,7 @@ html,
             left: 55px;
             right: 10px;
             bottom: 125px;
+            margin-bottom: 60px;
         }
 
         #timeSliderAlertas {
@@ -64,11 +65,27 @@ html,
             width: 480px;
         }
 
+        #myButtonBrotes {
+            font-size: medium;
+            color: #d8c8c8;
+            border: 1px solid #242424;
+            margin-top: -176px;
+            display: flex;
+            overflow: visible;
+            position: absolute;
+            z-index: 3;
+            background-color: #242424;
+            opacity: 0.8;
+            left: 15px;
+            box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
+
+        }
+
         #myButtonAlerta {
             font-size: medium;
             color: #d8c8c8;
             border: 1px solid #242424;
-            margin-top: -80px;
+            margin-top: -82px;
             display: flex;
             overflow: visible;
             position: relative;
@@ -80,21 +97,7 @@ html,
 
         }
 
-        #myButtonBrotes {
-            font-size: medium;
-            color: #d8c8c8;
-            border: 1px solid #242424;
-            margin-top: -120px;
-            display: flex;
-            overflow: visible;
-            position: absolute;
-            z-index: 3;
-            background-color: #242424;
-            opacity: 0.8;
-            left: 15px;
-            box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
-
-        }
+      
 
         .esri-icon-non-visible {
             color: #fcf9f9;            
@@ -198,8 +201,7 @@ html,
 
         .migrations {
             z-index: 4;
-            margin-top: -180px;
-            margin-right: -1910px;
+            margin-bottom: 360px;
             right: 2750px;
             background-color: #242424;
             color: #adadad;
@@ -258,8 +260,7 @@ html,
             border: 1px solid #242424;
             width: 32px;
             height: 32px;
-            margin-bottom: -4px;
-            margin-right: 9px;
+            margin-bottom: 380px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
         }
 
@@ -281,7 +282,7 @@ html,
 
         /* ZOOM ALERTAS */
 
-        .esri-icon-notice-triangle {
+        .icon-alertas {
             
             background-color: #242424;
             color: #ff4545;
@@ -289,12 +290,12 @@ html,
             border: 1px solid #242424;
             width: 32px;
             height: 32px;
-            margin-bottom: -5px;
-            margin-right: 9px;
+            margin-bottom: 338px;
+            margin-left: -42px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
         }
 
-        .esri-icon-notice-triangle:hover {
+        .icon-alertas:hover {
             background-color: #303030;
             border-color: #303030;
             color: #ededed
@@ -309,8 +310,8 @@ html,
             border: 1px solid #242424;
             width: 32px;
             height: 32px;
-            margin-bottom: 160px;
-            margin-right: 9px;
+            margin-bottom: 380px;
+            margin-right: 0px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
         }
 
@@ -340,8 +341,8 @@ html,
             border: 1px solid #242424;
             width: 32px;
             height: 32px;
-            margin-bottom: 50px;
-            margin-right: 9px;
+            margin-bottom: 338px;
+            margin-right: -42px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
         }
 
