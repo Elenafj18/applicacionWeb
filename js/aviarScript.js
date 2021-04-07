@@ -216,7 +216,7 @@ require([
             "<li>Fecha del informe: {reportDate}</li>" +
             "<li>Especie: {species}</li>" +
             "<li>Serotipo: {serotipo}</li>" +
-            "<li>Mas info: {moreInfo}</li>";
+            "<li><a href={moreInfo}> Más info </a></li>";
 
         return content;
 
@@ -416,7 +416,8 @@ require([
     $(document).ready(function () {
         $(function () {
             document.getElementById("ruta").addEventListener("click", activarRutas);
-
+            
+            view.ui.add(ruta, "bottom-right");
         })
     })
 
@@ -479,7 +480,11 @@ require([
     window.onload = function () {
         document.getElementById("migrations").addEventListener("click", activarMigrations);
 
+        view.ui.add(migrations, "bottom-right");
+
     }
+
+    
 
     function activarMigrations(feature) {
         if (layermigrations.visible === false) {
@@ -489,6 +494,8 @@ require([
         }
 
     }
+
+    
 
 
 
@@ -628,6 +635,8 @@ require([
             });
         });
     });
+    
+    view.ui.add(btnBrotes, "bottom-left");
 
     //// ZOOM TO ALERTAS
 
@@ -642,6 +651,9 @@ require([
             });
         });
     });
+
+    view.ui.add(btnAlertas, "bottom-left");
+    
 
     /*     /// ACTIVAR RUTAS POR MEDIO DEL HOLD EN LOS BROTES
         var highlightRutas;
@@ -870,11 +882,11 @@ require([
         /// hora de inicio del control deslizante de tiempo
         const startAlerta = new Date();
         startAlerta.setHours(0, 0, 0, 0);
-        startAlerta.setDate(startAlerta.getDate() + (7 - startAlerta.getDay()) % 7 + 1);
+        startAlerta.setDate(startAlerta.getDate() + (8 - startAlerta.getDay()) % 8 + 1);
         startAlerta.setDate(startAlerta.getDate() - 365);
         const nextMonday = new Date();
         nextMonday.setHours(0, 0, 0, 0);
-        nextMonday.setDate(nextMonday.getDate() + (7 - nextMonday.getDay()) % 7 + 1);
+        nextMonday.setDate(nextMonday.getDate() + (8 - nextMonday.getDay()) % 8 + 1);
 
         timeSliderAlertas.fullTimeExtent = {
             start: startAlerta,
