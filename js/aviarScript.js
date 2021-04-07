@@ -419,7 +419,7 @@ require([
         $(function () {
             document.getElementById("ruta").addEventListener("click", activarRutas);
             
-            view.ui.add(ruta, "bottom-right");
+            view.ui.add(ruta, "top-right");
         })
     })
 
@@ -482,7 +482,7 @@ require([
     window.onload = function () {
         document.getElementById("migrations").addEventListener("click", activarMigrations);
 
-        view.ui.add(migrations, "bottom-right");
+        view.ui.add(migrations, "top-right");
 
     }
 
@@ -624,7 +624,8 @@ require([
 
     var scaleBar = new ScaleBar({
         view: view,
-        unit: "metric"
+        unit: "metric",
+        estilo: "line",
       });
       // Add widget to the bottom left corner of the view
       view.ui.add(scaleBar, {
@@ -647,7 +648,7 @@ require([
         });
     });
     
-    view.ui.add(btnBrotes, "bottom-left");
+    view.ui.add(btnBrotes, "top-left");
 
     //// ZOOM TO ALERTAS
 
@@ -663,7 +664,7 @@ require([
         });
     });
 
-    view.ui.add(btnAlertas, "bottom-left");
+    view.ui.add(btnAlertas, "top-left");
     
 
     /*     /// ACTIVAR RUTAS POR MEDIO DEL HOLD EN LOS BROTES
