@@ -11,7 +11,8 @@ require([
     "esri/core/Handles",
     "esri/widgets/Feature",
     "esri/Graphic",
-    "esri/widgets/Search"
+    "esri/widgets/Search",
+    "esri/widgets/ScaleBar"
 
 ], function (
     Map,
@@ -26,7 +27,8 @@ require([
     Handles,
     Feature,
     Graphic,
-    Search) {
+    Search,
+    ScaleBar) {
 
     let layerViewBrotes;
 
@@ -618,8 +620,17 @@ require([
     // Add the home button to the top left corner of the view
     view.ui.add(homeBtn, "top-left");
 
+//// SCALEBAR 
 
-
+    var scaleBar = new ScaleBar({
+        view: view,
+        unit: "metric"
+      });
+      // Add widget to the bottom left corner of the view
+      view.ui.add(scaleBar, {
+        position: "bottom-right",
+        
+      });
 
 
     //// ZOOM TO BROTES
