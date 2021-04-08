@@ -232,7 +232,7 @@ require([
         url:
             "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson",
 
-        copyright: "Influenza Aviar",
+        copyright: "INIA",
         title: "Alertas",
         timeInfo: {
             startField: "reportDate",
@@ -373,7 +373,7 @@ require([
     const layerRutaM = new GeoJSONLayer({
         url:
             "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson",
-        copyright: "Influenza Aviar",
+        copyright: "INIA",
         title: "Rutas activadas por riesgo",
         timeInfo: {
             interval: {
@@ -437,7 +437,7 @@ require([
     const layermigrations = new GeoJSONLayer({
         url:
             "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson",
-        copyright: "Influenza Aviar",
+        copyright: "INIA",
         title: "Todas las rutas",
         timeInfo: {
             interval: {
@@ -508,7 +508,7 @@ require([
     const layerComarcas = new GeoJSONLayer({
         url:
             "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/comarcas.geojson",
-        copyright: "Influenza Aviar",
+        copyright: "INIA",
         title: "Comarcas",
         outFields: ['*'],
         visible: true,
