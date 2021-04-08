@@ -255,11 +255,12 @@ require([
                 {
                     type: "color",
                     field: "riskLevel",
+                    label: "Nivel de riesgo",
                     stops: [
                         {
                             value: 0,
                             color: [255, 255, 255, 0.0],
-                            label: "1"
+                            label: "0"
                         }, {
                             value: 1,
                             color: [255, 150, 150, 0.7],
@@ -373,7 +374,7 @@ require([
         url:
             "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson",
         copyright: "Influenza Aviar",
-        title: "Rutas migratorias",
+        title: "Rutas activadas por riesgo",
         timeInfo: {
             interval: {
                 unit: "days",
@@ -437,7 +438,7 @@ require([
         url:
             "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson",
         copyright: "Influenza Aviar",
-        title: "migrations",
+        title: "Todas las rutas",
         timeInfo: {
             interval: {
                 unit: "days",

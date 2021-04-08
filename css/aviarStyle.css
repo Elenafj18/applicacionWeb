@@ -6,6 +6,7 @@ html,
             height: 100%;
             width: 100%;
         }
+
         .esri-time-slider {
             cursor: default;
             min-width: 200px;
@@ -63,6 +64,12 @@ html,
             height: 400px;
             padding: 20px;
             width: 480px;
+        }
+
+        /* legend */
+
+        .esri-ui-corner .esri-expand .esri-widget--panel, .esri-ui-corner .esri-expand .esri-widget--panel-height-only, .esri-ui-corner .esri-component>.esri-widget--panel, .esri-ui-corner .esri-component.esri-widget--panel {
+            width: 140px;
         }
 
         #myButtonBrotes {
@@ -259,9 +266,7 @@ html,
             cursor: pointer;
             border: 1px solid #242424;
             width: 32px;
-            height: 32px;
-            margin-bottom: 380px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
+            height: 32px
         }
 
         .icon-brotes:hover {
@@ -289,9 +294,7 @@ html,
             cursor: pointer;
             border: 1px solid #242424;
             width: 32px;
-            height: 32px;
-            margin-bottom: 338px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
+            height: 32px
         }
 
         .icon-alertas:hover {
@@ -310,6 +313,15 @@ html,
             font-weight: 600;
         }
 
+        .esri-scale-bar__line--top {
+            bottom: -8px;
+            border-bottom: 2px solid #d1d1d1;
+        }
+
+        .esri-scale-bar__label-container--top {
+            bottom: -6px;
+        }
+
         /* ACTIVAR RUTAS */
         .icon-rutas {
             
@@ -319,9 +331,7 @@ html,
             border: 1px solid #242424;
             width: 32px;
             height: 32px;
-            margin-bottom: 380px;
-            margin-left: -120px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
+            margin-left: -120px
         }
 
         .icon-rutas:hover {
@@ -350,9 +360,7 @@ html,
             border: 1px solid #242424;
             width: 32px;
             height: 32px;
-            margin-bottom: 338px;
             margin-left: -42px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3)
         }
 
         .icon-migrations:hover {
