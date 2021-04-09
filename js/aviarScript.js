@@ -244,10 +244,11 @@ require([
 
         renderer: {
             type: "simple",
-
-            field: "riskLevel",
+            field: "riskLevel",            
+            
             symbol: {
                 type: "simple-marker",
+                label: "Nivel de riesgo",
                 style: "triangle",
                 outline: null
             },
@@ -255,7 +256,6 @@ require([
                 {
                     type: "color",
                     field: "riskLevel",
-                    label: "Nivel de riesgo",
                     stops: [
                         {
                             value: 0,
