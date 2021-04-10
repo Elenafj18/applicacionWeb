@@ -305,9 +305,8 @@ html,
 
         .esri-scale-bar__label {
             font-size: inherit;
-            color: #d1d1d1;
+            color: #ff0000;
             white-space: nowrap;
-            padding: 0 35px;
             font-weight: 600;
         }
 

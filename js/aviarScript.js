@@ -606,6 +606,11 @@ require([
         }
     });
 
+    view.constraints = {
+        
+        minScale: 147000000
+      };
+
     // Agregar la leyenda
     const legendExpand = new Expand({
         collapsedIconClass: "esri-icon-legend",
