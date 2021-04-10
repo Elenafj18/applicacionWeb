@@ -12,7 +12,8 @@ require([
     "esri/widgets/Feature",
     "esri/Graphic",
     "esri/widgets/Search",
-    "esri/widgets/ScaleBar"
+    "esri/widgets/ScaleBar",
+    "esri/widgets/Popup"
 
 ], function (
     Map,
@@ -28,7 +29,8 @@ require([
     Feature,
     Graphic,
     Search,
-    ScaleBar) {
+    ScaleBar,
+    Popup) {
 
     let layerViewBrotes;
 
@@ -530,15 +532,20 @@ require([
                 "<br>Comunidad Autónoma: {comAutonoma}</br>",
             content: getInfoComarcas,
             visible: false,
-            returnGeometry: true,
+            returnGeometry: true,            
         },
+        
 
     });
 
+    
 
+    
+    
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfoComarcas(feature) {
-        /* view.on('hold', ["Ctrl"],function (event) { */
+
+        view.popup.autoOpenEnabled = false;
         view.graphics.removeAll()
 
         var graphic, attributes;
@@ -579,7 +586,7 @@ require([
             view.graphics.removeAll(polylineGraphic);
             console.log("Remove")
         })
-        /* }); */
+        
 
     }
     /// INICIALIZACIÓN DEL MAPA
