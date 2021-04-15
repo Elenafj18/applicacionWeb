@@ -238,10 +238,7 @@ require([
         title: "Alertas",
         timeInfo: {
             startField: "reportDate",
-            interval: {
-                unit: "days",
-                value: 7
-            }
+            
         },
 
         renderer: {
@@ -905,20 +902,24 @@ require([
         layerViewAlertas = lv;
 
         /// hora de inicio del control deslizante de tiempo
+
         const startAlerta = new Date();
         startAlerta.setHours(0, 0, 0, 0);
-        startAlerta.setDate(startAlerta.getDate() + (8 - startAlerta.getDay()) % 8 + 2);
-        startAlerta.setDate(startAlerta.getDate() - 365);
-        const nextMonday = new Date();
-        nextMonday.setHours(0, 0, 0, 0);
-        nextMonday.setDate(nextMonday.getDate() + (8 - nextMonday.getDay()) % 8 + 1);
+        startAlerta.setDate(startAlerta.getDate() + (7 - startAlerta.getDay()-1) % 7 + 1);
+        startAlerta.setDate(startAlerta.getDate() - 364);
 
+        const nextSunday = new Date();
+        nextSunday.setHours(0, 0, 0, 0);
+        nextSunday.setDate(nextSunday.getDate() + (7 - nextSunday.getDay()-1) % 7 + 1);
+
+     
         timeSliderAlertas.fullTimeExtent = {
             start: startAlerta,
-            end: nextMonday
+            end: nextSunday
         };
-        const endAlerta = nextMonday;
-        startAlerta.setDate(startAlerta.getDate() + 359);
+        const endAlerta = nextSunday;
+        startAlerta.setDate(startAlerta.getDate() + 358);
+
         timeSliderAlertas.values = [startAlerta, endAlerta];
     });
     timeSliderAlertas.watch("timeExtent", function () {
