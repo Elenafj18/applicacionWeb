@@ -48,7 +48,7 @@ require([
             startField: "start",
             interval: {
                 unit: "days",
-                value: 7
+                value: 1
             }
         },
         renderer: {
@@ -739,7 +739,7 @@ require([
         stops: {
             interval: {
                 value: 1,
-                unit: "weeks"
+                unit: "days"
             }
         }
     });
