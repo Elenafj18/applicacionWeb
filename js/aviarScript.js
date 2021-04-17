@@ -572,7 +572,7 @@ require([
                 var lineSymbol = {
                     type: "simple-line", // new SimpleLineSymbol()
                     color: [255, 51, 51, 0.6], // RGB color values as an array
-                    width: 0.1
+                    width: 0.3
                 };
                 var polylineGraphic = new Graphic({
                     geometry: polyline, // Add the geometry created in step 4
@@ -907,7 +907,7 @@ require([
         /// hora de inicio del control deslizante de tiempo
         const startAlerta = new Date();
         startAlerta.setHours(0, 0, 0, 0);
-        startAlerta.setDate(startAlerta.getDate() + (8 - startAlerta.getDay()) % 8 + 1);
+        startAlerta.setDate(startAlerta.getDate() + (8 - startAlerta.getDay()) % 8 + 2);
         startAlerta.setDate(startAlerta.getDate() - 365);
         const nextMonday = new Date();
         nextMonday.setHours(0, 0, 0, 0);
