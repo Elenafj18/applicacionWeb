@@ -545,7 +545,7 @@ require([
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfoComarcas(feature) {
 
-        view.popup.autoOpenEnabled = false;
+    
         view.graphics.removeAll()
 
         var graphic, attributes;
@@ -680,10 +680,10 @@ require([
     view.ui.add(btnAlertas, "top-left");
     
 
-    /*     /// ACTIVAR RUTAS POR MEDIO DEL HOLD EN LOS BROTES
-        var highlightRutas;
+  /// ACTIVAR RUTAS POR MEDIO DEL HOLD EN LOS BROTES
+       /*  var highlightRutas;
     
-        view.whenLayerView(layerRutaM).then(function (layerView) {
+        view.whenLayerView(layermigrations).then(function (layerView) {
     
             var queryR = new Query();
     
@@ -692,16 +692,16 @@ require([
     
                 view.hitTest(event).then(function (response) {
                     response.results.filter(function (result) {
-                        return result.graphic.layer === layerBrotes;
+                        return result.graphic.layer === layerComarcas;
                     })[0].graphic;
     
                     queryR.geometry = event.mapPoint;
-                    queryR.distance = 300;
+                    queryR.distance = -1;
                     queryR.units = "meters";
                     queryR.spatialRelationship = "intersects";
                     queryR.returnQueryGeometry = true;
     
-                    layerRutaM.queryFeatures(queryR).then(function (result) {
+                    layermigrations.queryFeatures(queryR).then(function (result) {
                         if (highlightRutas) {
                             highlightRutas.remove();
                         }
@@ -712,7 +712,7 @@ require([
     
             });
     
-        }); */
+        }); */ 
     /// SEARCH WIDGET
     var searchWidget = new Search({
         view: view
