@@ -238,13 +238,13 @@ require([
         title: "Alertas",
         timeInfo: {
             startField: "reportDate",
-            
+
         },
 
         renderer: {
             type: "simple",
-            field: "Riesgo",            
-            
+            field: "Riesgo",
+
             symbol: {
                 type: "simple-marker",
                 label: "Nivel de riesgo",
@@ -311,7 +311,11 @@ require([
 
 
         popupTemplate: {
-            title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate}",
+            title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate},"/*  +
+            " Más info: <a href={informe}> Informe </a>" */,
+            content: getInfoAlertas,
+            visible: false,
+            returnGeometry: true,
             fieldInfos: [
                 {
                     fieldName: 'reportDate',
@@ -320,52 +324,116 @@ require([
                     }
                 }
             ],
-            content: [
-                {
-                    type: "fields",
-                    fieldInfos: [
-
-                        {
-                            fieldName: "comarca",
-                            label: "Comarca",
-                            visible: true
-                        },
-                        /*  {
-                             fieldName: "province",
-                             label: "Provincia",
-                             visible: true
-                         }, */
-                        {
-                            fieldName: "reportDate",
-                            label: "Fecha del informe",
-                            visible: true
-                        },
-                        /* {
-                            fieldName: "species",
-                            label: "Especie del brote",
-                            visible: true
-                        }, */
-                        {
-                            fieldName: "commonName",
-                            label: "Especie ruta migratoria",
-                            visible: true
-                        },
-                        {
-                            fieldName: "number_of_cases",
-                            label: "Cases",
-                            visible: true
-                        },
-                        {
-                            fieldName: "fluSubtype",
-                            label: "Flu Subtype",
-                            visible: true
-                        }
-                    ]
-                }
-            ]
-
         },
-    });
+
+        /*  [
+             {
+                 type: "fields",
+                 fieldInfos: [
+
+                     {
+                         fieldName: "comarca",
+                         label: "Comarca",
+                         visible: true
+                     },
+                      {
+                          fieldName: "province",
+                          label: "Provincia",
+                          visible: true
+                      },
+                     {
+                         fieldName: "reportDate",
+                         label: "Fecha del informe",
+                         visible: true
+                     },
+                     {
+                         fieldName: "species",
+                         label: "Especie del brote",
+                         visible: true
+                     },
+                     {
+                         fieldName: "commonName",
+                         label: "Especie ruta migratoria",
+                         visible: true
+                     },
+                     {
+                         fieldName: "number_of_cases",
+                         label: "Cases",
+                         visible: true
+                     },
+                     {
+                         fieldName: "fluSubtype",
+                         label: "Flu Subtype",
+                         visible: true
+                     }
+                 ]
+             }
+         ] */
+
+    })
+
+    ///
+
+    /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
+    function getInfoAlertas(feature) {
+        view.graphics.removeAll()
+
+        var graphic, attributes, content;
+
+        graphic = feature.graphic;
+        attributes = graphic.attributes;
+
+        var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson';
+        // Se inicia la peticion ajax a la url ruta
+        var request = new XMLHttpRequest();
+        request.open("GET", urlRutas, false); // false for synchronous request
+        request.send(null);
+
+        let rutas = JSON.parse(request.responseText)
+
+        console.log('obj ruta', rutas)
+
+        for (let index = 0; index < rutas.features.length; index++) {
+            const element = rutas.features[index];
+            console.log('element', element)
+            if (element.properties.idAlerta == attributes.idAlerta) {
+                var polyline = {
+                    type: "polyline", // new Polyline()
+                    paths: element.geometry.coordinates
+                };
+
+                var lineSymbol = {
+                    type: "simple-line", // new SimpleLineSymbol()
+                    color: [255, 51, 51, 0.6], // RGB color values as an array
+                    width: 0.1
+                };
+
+                var polylineGraphic = new Graphic({
+                    geometry: polyline, // Add the geometry created in step 4
+                    symbol: lineSymbol, // Add the symbol created in step 5
+                });
+
+                view.graphics.add(polylineGraphic);
+
+            }
+
+        }
+
+        view.on("click", function (e) {
+            view.graphics.removeAll(polylineGraphic);
+            console.log("Remove")
+
+        });
+
+        content = /* "<p>Nivel de riesgo: <b>{Riesgo}</b> " +
+            "<li>Fecha del informe: {reportDate}</li>" + */
+            "<li> Más info: <a href={informe}> Informe </a></li>";
+
+        return content;
+
+    }
+
+    ///
 
 
     /// DEFINICIÓN DEL LOS RUTA MIGRATORIA
@@ -418,7 +486,7 @@ require([
     $(document).ready(function () {
         $(function () {
             document.getElementById("ruta").addEventListener("click", activarRutas);
-            
+
             view.ui.add(ruta, "top-right");
         })
     })
@@ -486,7 +554,7 @@ require([
 
     }
 
-    
+
 
     function activarMigrations(feature) {
         if (layermigrations.visible === false) {
@@ -497,7 +565,7 @@ require([
 
     }
 
-    
+
 
 
 
@@ -529,20 +597,20 @@ require([
                 "<br>Comunidad Autónoma: {comAutonoma}</br>",
             content: getInfoComarcas,
             visible: false,
-            returnGeometry: true,            
+            returnGeometry: true,
         },
-        
+
 
     });
 
-    
 
-    
-    
+
+
+
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfoComarcas(feature) {
 
-    
+
         view.graphics.removeAll()
 
         var graphic, attributes;
@@ -583,7 +651,7 @@ require([
             view.graphics.removeAll(polylineGraphic);
             console.log("Remove")
         })
-        
+
 
     }
     /// INICIALIZACIÓN DEL MAPA
@@ -604,9 +672,9 @@ require([
     });
 
     view.constraints = {
-        
+
         minScale: 147000000
-      };
+    };
 
     // Agregar la leyenda
     const legendExpand = new Expand({
@@ -630,18 +698,18 @@ require([
     // Add the home button to the top left corner of the view
     view.ui.add(homeBtn, "top-left");
 
-//// SCALEBAR 
+    //// SCALEBAR 
 
     var scaleBar = new ScaleBar({
         view: view,
         unit: "metric",
         estilo: "line",
-      });
-      // Add widget to the bottom left corner of the view
-      view.ui.add(scaleBar, {
+    });
+    // Add widget to the bottom left corner of the view
+    view.ui.add(scaleBar, {
         position: "bottom-right",
-        
-      });
+
+    });
 
 
     //// ZOOM TO BROTES
@@ -657,7 +725,7 @@ require([
             });
         });
     });
-    
+
     view.ui.add(btnBrotes, "top-left");
 
     //// ZOOM TO ALERTAS
@@ -675,41 +743,41 @@ require([
     });
 
     view.ui.add(btnAlertas, "top-left");
-    
 
-  /// ACTIVAR RUTAS POR MEDIO DEL HOLD EN LOS BROTES
-       /*  var highlightRutas;
-    
-        view.whenLayerView(layermigrations).then(function (layerView) {
-    
-            var queryR = new Query();
-    
-    
-            view.on("hold", function (event) {
-    
-                view.hitTest(event).then(function (response) {
-                    response.results.filter(function (result) {
-                        return result.graphic.layer === layerComarcas;
-                    })[0].graphic;
-    
-                    queryR.geometry = event.mapPoint;
-                    queryR.distance = -1;
-                    queryR.units = "meters";
-                    queryR.spatialRelationship = "intersects";
-                    queryR.returnQueryGeometry = true;
-    
-                    layermigrations.queryFeatures(queryR).then(function (result) {
-                        if (highlightRutas) {
-                            highlightRutas.remove();
-                        }
-                        highlightRutas = layerView.highlight(result.features);
-                    });
-    
-                });
-    
-            });
-    
-        }); */ 
+
+    /// ACTIVAR RUTAS POR MEDIO DEL HOLD EN LOS BROTES
+    /*  var highlightRutas;
+ 
+     view.whenLayerView(layermigrations).then(function (layerView) {
+ 
+         var queryR = new Query();
+ 
+ 
+         view.on("hold", function (event) {
+ 
+             view.hitTest(event).then(function (response) {
+                 response.results.filter(function (result) {
+                     return result.graphic.layer === layerComarcas;
+                 })[0].graphic;
+ 
+                 queryR.geometry = event.mapPoint;
+                 queryR.distance = -1;
+                 queryR.units = "meters";
+                 queryR.spatialRelationship = "intersects";
+                 queryR.returnQueryGeometry = true;
+ 
+                 layermigrations.queryFeatures(queryR).then(function (result) {
+                     if (highlightRutas) {
+                         highlightRutas.remove();
+                     }
+                     highlightRutas = layerView.highlight(result.features);
+                 });
+ 
+             });
+ 
+         });
+ 
+     }); */
     /// SEARCH WIDGET
     var searchWidget = new Search({
         view: view
@@ -905,14 +973,14 @@ require([
 
         const startAlerta = new Date();
         startAlerta.setHours(0, 0, 0, 0);
-        startAlerta.setDate(startAlerta.getDate() + (7 - startAlerta.getDay()-1) % 7 + 1);
+        startAlerta.setDate(startAlerta.getDate() + (7 - startAlerta.getDay() - 1) % 7 + 1);
         startAlerta.setDate(startAlerta.getDate() - 364);
 
         const nextSunday = new Date();
         nextSunday.setHours(0, 0, 0, 0);
-        nextSunday.setDate(nextSunday.getDate() + (7 - nextSunday.getDay()-1) % 7 + 1);
+        nextSunday.setDate(nextSunday.getDate() + (7 - nextSunday.getDay() - 1) % 7 + 1);
 
-     
+
         timeSliderAlertas.fullTimeExtent = {
             start: startAlerta,
             end: nextSunday
