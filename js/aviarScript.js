@@ -45,7 +45,7 @@ require([
         outFields: ['*'],
         visible: true,
         timeInfo: {
-            startField: "start",
+            startField: "observationDate",
             interval: {
                 unit: "days",
                 value: 1
@@ -243,7 +243,7 @@ require([
 
         renderer: {
             type: "simple",
-            field: "riskLevel",            
+            field: "Riesgo",            
             
             symbol: {
                 type: "simple-marker",
@@ -254,7 +254,7 @@ require([
             visualVariables: [
                 {
                     type: "color",
-                    field: "riskLevel",
+                    field: "Riesgo",
                     stops: [
                         {
                             value: 0,
@@ -311,7 +311,7 @@ require([
 
 
         popupTemplate: {
-            title: "Nivel de alerta: {riskLevel}" + " Fecha: {reportDate}",
+            title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate}",
             fieldInfos: [
                 {
                     fieldName: 'reportDate',
@@ -765,7 +765,7 @@ require([
 
     timeSliderBrotes.watch("timeExtent", function () {
         layerBrotes.definitionExpression =
-            "start <= " + timeSliderBrotes.timeExtent.end.getTime();
+            "observationDate <= " + timeSliderBrotes.timeExtent.end.getTime();
         layerViewBrotes.effect = {
             filter: {
                 timeExtent: timeSliderBrotes.timeExtent,
