@@ -155,9 +155,9 @@ require([
             returnGeometry: true,
             fieldInfos: [
                 {
-                    fieldName: 'reportDate',
+                    fieldName: 'observationDate',
                     format: {
-                        dateFormat: 'short-date-short-time'
+                        dateFormat: 'short-date'
                     }
                 }
             ],
@@ -217,7 +217,7 @@ require([
 
         content = "<p>Número de casos: <b>{cases}</b> " +
             "<ul><li>Localización: {city}</li>" +
-            "<li>Fecha del informe: {reportDate}</li>" +
+            "<li>Fecha del informe: {observationDate}</li>" +
             "<li>Especie: {species}</li>" +
             "<li>Serotipo: {serotipo}</li>" +
             "<li><a href={moreInfo}> Más info </a></li>";
@@ -253,6 +253,32 @@ require([
             },
             visualVariables: [
                 {
+                    type: "size",
+                    field: "Riesgo",
+                    stops: [
+                        {
+                            value: 1,
+                            size: "10px",
+                        },
+                        {
+                            value: 2,
+                            size: "10px",
+                        },
+                        {
+                            value: 3,
+                            size: "10px",
+                        },
+                        {
+                            value: 4,
+                            size: "10px",
+                        },
+                        {
+                            value: 5,
+                            size: "10px",
+                        }
+                    ]},
+
+                {
                     type: "color",
                     field: "Riesgo",
                     stops: [
@@ -262,26 +288,26 @@ require([
                             label: "0"
                         }, {
                             value: 1,
-                            color: [255, 150, 150, 0.7],
+                            color: [255, 150, 150, 0.9],
                             label: "1"
                         }, {
                             value: 2,
-                            color: [255, 120, 120, 0.7],
+                            color: [255, 120, 120, 0.9],
                             label: "2"
                         },
                         {
                             value: 3,
-                            color: [255, 80, 80, 0.7],
+                            color: [255, 80, 80, 0.9],
                             label: "3"
                         },
                         {
                             value: 4,
-                            color: [255, 40, 40, 0.7],
+                            color: [255, 40, 40, 0.9],
                             label: "4"
                         },
                         {
                             value: 5,
-                            color: [255, 0, 0, 0.8],
+                            color: [255, 0, 0, 0.9],
                             label: "5"
                         }
                     ]
@@ -311,8 +337,8 @@ require([
 
 
         popupTemplate: {
-            title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate},"/*  +
-            " Más info: <a href={informe}> Informe </a>" */,
+            title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate}"+
+            " Más info: <a href='{informe}'> Informe </a>",
             content: getInfoAlertas,
             visible: false,
             returnGeometry: true,
@@ -320,7 +346,7 @@ require([
                 {
                     fieldName: 'reportDate',
                     format: {
-                        dateFormat: 'short-date-short-time'
+                        dateFormat: 'short-date'
                     }
                 }
             ],
@@ -424,12 +450,12 @@ require([
             console.log("Remove")
 
         });
+/* 
+        content =  "<p>Nivel de riesgo: <b>{Riesgo}</b> " +
+            "<li>Fecha del informe: {reportDate}</li>" + 
+            "<li><a href={informe}> Informe </a></li>";
 
-        content = /* "<p>Nivel de riesgo: <b>{Riesgo}</b> " +
-            "<li>Fecha del informe: {reportDate}</li>" + */
-            "<li> Más info: <a href={informe}> Informe </a></li>";
-
-        return content;
+        return content; */
 
     }
 
@@ -454,30 +480,13 @@ require([
                 type: "simple-fill",
                 supportsQuery: true,
                 outline: {
-                    color: [51, 200, 200, 0.03],
-                    width: 0.3
+                    color: [51, 200, 200, 0.05],
+                    width: 0.05
                 }
             }
         },
         popupTemplate: {
-            title: "Especie: {especie}",
-            content: [
-                {
-                    type: "fields",
-                    fieldInfos: [
-                        {
-                            fieldName: "species",
-                            label: "Especie",
-                            visible: true
-                        }/* ,
-                        {
-                            fieldName: "idAlerta",
-                            label: "Codigo",
-                            visible: true
-                        }, */
-                    ]
-                }
-            ]
+            title: "Id Alerta de la ruta: {idAlerta}",
         },
         visible: false,
         availableFields: true,
@@ -636,8 +645,8 @@ require([
                 };
                 var lineSymbol = {
                     type: "simple-line", // new SimpleLineSymbol()
-                    color: [255, 51, 51, 0.6], // RGB color values as an array
-                    width: 0.3
+                    color: [255, 51, 51, 0.5], // RGB color values as an array
+                    width: 1
                 };
                 var polylineGraphic = new Graphic({
                     geometry: polyline, // Add the geometry created in step 4
@@ -800,7 +809,7 @@ require([
     const timeSliderBrotes = new TimeSlider({
         container: "timeSliderBrotes",
         // la propiedad "playRate" del widgetb es el tiempo (en milisegundos) entre los pasos de la animación. Este valor predeterminado es 1000. 
-        playRate: 1000,
+        playRate: 500,
         stops: {
             interval: {
                 value: 1,
@@ -839,7 +848,7 @@ require([
                 timeExtent: timeSliderBrotes.timeExtent,
                 geometry: view.extent
             },
-            excludedEffect: "grayscale(20%) opacity(12%)"
+            excludedEffect: "grayscale(20%) opacity(2%)"
         };
 
         /// ESTADISTICAS DE LOS BROTES
@@ -999,7 +1008,7 @@ require([
                 timeExtent: timeSliderAlertas.timeExtent,
                 geometry: view.extent
             },
-            excludedEffect: "grayscale(20%) opacity(12%)"
+            excludedEffect: "grayscale(20%) opacity(1%)"
         };
 
     });
