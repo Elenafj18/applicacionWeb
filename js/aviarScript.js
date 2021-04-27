@@ -216,11 +216,11 @@ require([
         });
 
         content = "<p>Número de casos: <b>{cases}</b> " +
-            "<ul><li>Localización: {city}</li>" +
-            "<li>Fecha del informe: {observationDate}</li>" +
-            "<li>Especie: {species}</li>" +
-            "<li>Serotipo: {serotipo}</li>" +
-            "<li><a href='http://empres-i.fao.org/empres-i/2/obd?idOutbreak={id}'> Más info </a></li>";
+            "<ul><li>Localización: {city}, {country}.</li>" +
+            "<li>Fecha del informe: {observationDate}.</li>" +
+            "<li>Especie: {species}.</li>" +
+            "<li>Serotipo: {serotipo}.</li>" +
+            "<li>Más información: <a href='http://empres-i.fao.org/empres-i/2/obd?idOutbreak={id}'> Enlace</a></li>";
 
         return content;
 
@@ -338,7 +338,8 @@ require([
         supportsQuery: true,
         popupTemplate: {
             title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate}"+
-            " Más info: <a href='{informe}'> Informe </a>",
+            " Ver Informe: <a href='{informe}'>Enlace</a>",
+            content: "Ver Informe: <a href='{informe}'> Enlace </a>",
             visible: false,
             returnGeometry: true,
             fieldInfos: [
@@ -416,7 +417,7 @@ require([
                 type: "simple-fill",
                 supportsQuery: true,
                 outline: {
-                    color: [51, 200, 200, 0.05],
+                    color: [255, 51, 51, 0.6],
                     width: 0.05
                 }
             }
@@ -548,10 +549,6 @@ require([
 
     });
 
-
-
-
-
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfoComarcas(feature) {
 
@@ -581,7 +578,7 @@ require([
                 };
                 var lineSymbol = {
                     type: "simple-line", // new SimpleLineSymbol()
-                    color: [255, 51, 51, 0.5], // RGB color values as an array
+                    color: [51, 200, 200, 0.1], // RGB color values as an array
                     width: 1
                 };
                 var polylineGraphic = new Graphic({
