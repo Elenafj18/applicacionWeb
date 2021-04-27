@@ -355,6 +355,7 @@ require([
     })
 
     function getInfoAlertas(feature) {
+        view.graphics.removeAll()
         var content;
 
         content = "<ul><li><a href='{informe}'>Ver informe</a></li>";
