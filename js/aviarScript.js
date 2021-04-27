@@ -339,7 +339,7 @@ require([
         popupTemplate: {
             title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate}"+
             " Ver Informe: <a href='{informe}'>Enlace</a>",
-            content: "Ver Informe",
+            content: "Ver informe",
             visible: false,
             returnGeometry: true,
             fieldInfos: [
