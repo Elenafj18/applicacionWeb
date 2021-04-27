@@ -276,7 +276,8 @@ require([
                             value: 5,
                             size: "10px",
                         }
-                    ]},
+                    ]
+                },
 
                 {
                     type: "color",
@@ -337,8 +338,8 @@ require([
 
         supportsQuery: true,
         popupTemplate: {
-            title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate}"+ " Ver informe",
-            content: "Ver informe: <a href='{informe}'> Enlace </a>",
+            title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate}" + "  Ver informe:<a href='{informe}'></a>",
+            content: getInfoAlertas,
             visible: false,
             returnGeometry: true,
             fieldInfos: [
@@ -351,53 +352,18 @@ require([
             ],
         },
 
-        /*  [
-             {
-                 type: "fields",
-                 fieldInfos: [
-
-                     {
-                         fieldName: "comarca",
-                         label: "Comarca",
-                         visible: true
-                     },
-                      {
-                          fieldName: "province",
-                          label: "Provincia",
-                          visible: true
-                      },
-                     {
-                         fieldName: "reportDate",
-                         label: "Fecha del informe",
-                         visible: true
-                     },
-                     {
-                         fieldName: "species",
-                         label: "Especie del brote",
-                         visible: true
-                     },
-                     {
-                         fieldName: "commonName",
-                         label: "Especie ruta migratoria",
-                         visible: true
-                     },
-                     {
-                         fieldName: "number_of_cases",
-                         label: "Cases",
-                         visible: true
-                     },
-                     {
-                         fieldName: "fluSubtype",
-                         label: "Flu Subtype",
-                         visible: true
-                     }
-                 ]
-             }
-         ] */
-
     })
 
-    
+    function getInfoAlertas(feature) {
+        view.graphics.removeAll()
+        var content;
+
+        content = "<ul><li><a href='{informe}'>Ver informe</a></li>";
+        return content;
+
+    }
+
+
     /// DEFINICIÓN DEL LOS RUTA MIGRATORIA
     const layerRutaM = new GeoJSONLayer({
         url:
@@ -416,7 +382,7 @@ require([
                 type: "simple-fill",
                 supportsQuery: true,
                 outline: {
-                    color: [255, 51, 51, 0.6],
+                    color: [255, 51, 51, 0.03],
                     width: 0.05
                 }
             }
