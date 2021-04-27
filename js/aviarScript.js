@@ -220,7 +220,7 @@ require([
             "<li>Fecha del informe: {observationDate}</li>" +
             "<li>Especie: {species}</li>" +
             "<li>Serotipo: {serotipo}</li>" +
-            "<li><a href='http://empres-i.fao.org/empres-i/2/obd?idOutbreak=+{id}'> Más info </a></li>";
+            "<li><a href='http://empres-i.fao.org/empres-i/2/obd?idOutbreak={id}'> Más info </a></li>";
 
         return content;
 
