@@ -337,9 +337,8 @@ require([
 
         supportsQuery: true,
         popupTemplate: {
-            title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate}"+
-            " Ver Informe: <a href='{informe}'>Enlace</a>",
-            content: "Ver informe",
+            title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate}"+ " Ver informe",
+            content: "Ver informe: <a href='{informe}'> Enlace </a>",
             visible: false,
             returnGeometry: true,
             fieldInfos: [
