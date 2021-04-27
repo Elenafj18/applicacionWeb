@@ -732,7 +732,7 @@ require([
         };
         const endBrotes = new Date();
         // end of current time extent for time slider
-        startBrotes.setMonth(startBrotes.getMonth() + 11);
+        startBrotes.setMonth(startBrotes.getMonth() + 9);
 
         timeSliderBrotes.values = [startBrotes, endBrotes];
     });
