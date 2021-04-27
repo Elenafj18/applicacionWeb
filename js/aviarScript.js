@@ -220,7 +220,7 @@ require([
             "<li>Fecha del informe: {observationDate}</li>" +
             "<li>Especie: {species}</li>" +
             "<li>Serotipo: {serotipo}</li>" +
-            "<li><a href={moreInfo}> Más info </a></li>";
+            "<li><a href='http://empres-i.fao.org/empres-i/2/obd?idOutbreak=+{id}'> Más info </a></li>";
 
         return content;
 
@@ -335,11 +335,10 @@ require([
              }
            ], */
 
-
+        supportsQuery: true,
         popupTemplate: {
             title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate}"+
             " Más info: <a href='{informe}'> Informe </a>",
-            content: getInfoAlertas,
             visible: false,
             returnGeometry: true,
             fieldInfos: [
@@ -398,70 +397,7 @@ require([
 
     })
 
-    ///
-
-    /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
-    function getInfoAlertas(feature) {
-        view.graphics.removeAll()
-
-        var graphic, attributes, content;
-
-        graphic = feature.graphic;
-        attributes = graphic.attributes;
-
-        var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson';
-        // Se inicia la peticion ajax a la url ruta
-        var request = new XMLHttpRequest();
-        request.open("GET", urlRutas, false); // false for synchronous request
-        request.send(null);
-
-        let rutas = JSON.parse(request.responseText)
-
-        console.log('obj ruta', rutas)
-
-        for (let index = 0; index < rutas.features.length; index++) {
-            const element = rutas.features[index];
-            console.log('element', element)
-            if (element.properties.idAlerta == attributes.idAlerta) {
-                var polyline = {
-                    type: "polyline", // new Polyline()
-                    paths: element.geometry.coordinates
-                };
-
-                var lineSymbol = {
-                    type: "simple-line", // new SimpleLineSymbol()
-                    color: [255, 51, 51, 0.6], // RGB color values as an array
-                    width: 0.1
-                };
-
-                var polylineGraphic = new Graphic({
-                    geometry: polyline, // Add the geometry created in step 4
-                    symbol: lineSymbol, // Add the symbol created in step 5
-                });
-
-                view.graphics.add(polylineGraphic);
-
-            }
-
-        }
-
-        view.on("click", function (e) {
-            view.graphics.removeAll(polylineGraphic);
-            console.log("Remove")
-
-        });
-/* 
-        content =  "<p>Nivel de riesgo: <b>{Riesgo}</b> " +
-            "<li>Fecha del informe: {reportDate}</li>" + 
-            "<li><a href={informe}> Informe </a></li>";
-
-        return content; */
-
-    }
-
-    ///
-
-
+    
     /// DEFINICIÓN DEL LOS RUTA MIGRATORIA
     const layerRutaM = new GeoJSONLayer({
         url:
