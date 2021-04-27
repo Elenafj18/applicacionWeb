@@ -578,7 +578,7 @@ require([
                 };
                 var lineSymbol = {
                     type: "simple-line", // new SimpleLineSymbol()
-                    color: [51, 200, 200, 0.1], // RGB color values as an array
+                    color: [51, 200, 200, 0.5], // RGB color values as an array
                     width: 1
                 };
                 var polylineGraphic = new Graphic({
