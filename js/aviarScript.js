@@ -236,6 +236,8 @@ require([
 
         copyright: "INIA",
         title: "Alertas",
+        outFields: ['*'],
+        visible: true,
         timeInfo: {
             startField: "reportDate",
 
@@ -326,10 +328,58 @@ require([
     })
 
     function getInfoAlertas(feature) {
-        view.graphics.removeAll()
-        var content;
 
-        content = "<ul><li><a href='{informe}'>Ver informe</a></li>";
+
+        var graphic, attributes, content;
+
+        graphic = feature.graphic;
+        attributes = graphic.attributes;
+
+        var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson';
+        // Se inicia la peticion ajax a la url ruta
+        var request = new XMLHttpRequest();
+        request.open("GET", urlRutas, false); // false for synchronous request
+        request.send(null);
+
+        let rutas = JSON.parse(request.responseText)
+
+        console.log('obj ruta', rutas)
+
+        for (let index = 0; index < rutas.features.length; index++) {
+            const element = rutas.features[index];
+            console.log('element', element)
+            if (element.properties.idAlerta == attributes.idAlerta) {
+                var polyline = {
+                    type: "polyline", // new Polyline()
+                    paths: element.geometry.coordinates
+                };
+
+                var lineSymbol = {
+                    type: "simple-line", // new SimpleLineSymbol()
+                    color: [255, 51, 51, 0.8], // RGB color values as an array
+                    width: 1
+                };
+
+                var polylineGraphic = new Graphic({
+                    geometry: polyline, // Add the geometry created in step 4
+                    symbol: lineSymbol, // Add the symbol created in step 5
+                });
+
+                view.graphics.add(polylineGraphic);
+
+            }
+
+        }
+
+        view.on("click", function (alert) {
+            view.graphics.removeAll(polylineGraphic);
+            console.log("Remove")
+
+        });
+
+        content =  "{comarca}" +
+            "<li><a href={informe}> Informe </a></li>";
+
         return content;
 
     }
@@ -514,8 +564,8 @@ require([
                 };
                 var lineSymbol = {
                     type: "simple-line", // new SimpleLineSymbol()
-                    color: [51, 200, 200, 0.8], // RGB color values as an array
-                    width: 1
+                    color: [51, 200, 200, 0.5], // RGB color values as an array
+                    width: 0.5
                 };
                 var polylineGraphic = new Graphic({
                     geometry: polyline, // Add the geometry created in step 4
@@ -576,7 +626,7 @@ require([
     // Add the home button to the top left corner of the view
     view.ui.add(homeBtn, "top-left");
 
-    //// SCALEBAR 
+    //// SCALEBAR
 
     var scaleBar = new ScaleBar({
         view: view,
@@ -625,36 +675,36 @@ require([
 
     /// ACTIVAR RUTAS POR MEDIO DEL HOLD EN LOS BROTES
     /*  var highlightRutas;
- 
+
      view.whenLayerView(layermigrations).then(function (layerView) {
- 
+
          var queryR = new Query();
- 
- 
+
+
          view.on("hold", function (event) {
- 
+
              view.hitTest(event).then(function (response) {
                  response.results.filter(function (result) {
                      return result.graphic.layer === layerComarcas;
                  })[0].graphic;
- 
+
                  queryR.geometry = event.mapPoint;
                  queryR.distance = -1;
                  queryR.units = "meters";
                  queryR.spatialRelationship = "intersects";
                  queryR.returnQueryGeometry = true;
- 
+
                  layermigrations.queryFeatures(queryR).then(function (result) {
                      if (highlightRutas) {
                          highlightRutas.remove();
                      }
                      highlightRutas = layerView.highlight(result.features);
                  });
- 
+
              });
- 
+
          });
- 
+
      }); */
     /// SEARCH WIDGET
     var searchWidget = new Search({
@@ -677,7 +727,7 @@ require([
 
     const timeSliderBrotes = new TimeSlider({
         container: "timeSliderBrotes",
-        // la propiedad "playRate" del widgetb es el tiempo (en milisegundos) entre los pasos de la animación. Este valor predeterminado es 1000. 
+        // la propiedad "playRate" del widgetb es el tiempo (en milisegundos) entre los pasos de la animación. Este valor predeterminado es 1000.
         playRate: 500,
         stops: {
             interval: {
