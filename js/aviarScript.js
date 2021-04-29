@@ -877,7 +877,7 @@ require([
                 timeExtent: timeSliderAlertas.timeExtent,
                 geometry: view.extent
             },
-            excludedEffect: "grayscale(20%) opacity(1%)"
+            excludedEffect: "grayscale(20%) opacity(2%)"
         };
 
     });
