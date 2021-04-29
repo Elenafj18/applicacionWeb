@@ -249,35 +249,10 @@ require([
                 type: "simple-marker",
                 label: "Nivel de riesgo",
                 style: "triangle",
+                size: "8px",
                 outline: null
             },
             visualVariables: [
-                {
-                    type: "size",
-                    field: "Riesgo",
-                    stops: [
-                        {
-                            value: 1,
-                            size: "10px",
-                        },
-                        {
-                            value: 2,
-                            size: "10px",
-                        },
-                        {
-                            value: 3,
-                            size: "10px",
-                        },
-                        {
-                            value: 4,
-                            size: "10px",
-                        },
-                        {
-                            value: 5,
-                            size: "10px",
-                        }
-                    ]
-                },
 
                 {
                     type: "color",
