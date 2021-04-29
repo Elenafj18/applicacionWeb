@@ -564,8 +564,8 @@ require([
                 };
                 var lineSymbol = {
                     type: "simple-line", // new SimpleLineSymbol()
-                    color: [51, 200, 200, 0.5], // RGB color values as an array
-                    width: 0.5
+                    color: [51, 200, 200, 0.4], // RGB color values as an array
+                    width: 0.1
                 };
                 var polylineGraphic = new Graphic({
                     geometry: polyline, // Add the geometry created in step 4
@@ -592,7 +592,7 @@ require([
     const view = new MapView({
         map: map,
         container: "viewDiv",
-        zoom: 3.6,
+        zoom: 2.9,
         center: [40.68, 41.68],
         highlightOptions: {
             color: "cyan"
