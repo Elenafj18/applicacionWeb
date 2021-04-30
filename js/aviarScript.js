@@ -742,18 +742,31 @@ require([
     view.whenLayerView(layerBrotes).then(function (lv) {
         layerViewBrotes = lv;
 
-        // hora de inicio del control deslizante de tiempo
         const startBrotes = new Date();
-        startBrotes.setFullYear(startBrotes.getFullYear() - 1);
+        startBrotes.setHours(0, 0, 0, 0);
+        startBrotes.setDate(startBrotes.getDate() + (7 - startBrotes.getDay() - 6));
+        startBrotes.setDate(startBrotes.getDate() - 364);
+
+        const LastMonday = new Date();
+        LastMonday.setHours(0, 0, 0, 0);
+        LastMonday.setDate(LastMonday.getDate() + (7 - LastMonday.getDay() - 6));
+
+
+        // hora de inicio del control deslizante de tiempo
+        /* const startBrotes = new Date();
+        startBrotes.setFullYear(startBrotes.getFullYear() - 1); */
         // set time slider's full extent to
         // until end date of layer's fullTimeExtent
         timeSliderBrotes.fullTimeExtent = {
             start: startBrotes,
-            end: new Date()
+            end: LastMonday/* new Date() */
         };
-        const endBrotes = new Date();
+        const endBrotes = LastMonday;
+        startBrotes.setDate(startBrotes.getDate() + 280);
+
+        /* const endBrotes = new Date(); */
         // end of current time extent for time slider
-        startBrotes.setMonth(startBrotes.getMonth() + 9);
+        /* startBrotes.setMonth(startBrotes.getMonth() + 9); */
 
         timeSliderBrotes.values = [startBrotes, endBrotes];
     });
