@@ -56,7 +56,7 @@ require([
             field: "serotipo",
             symbol: {
                 type: "simple-marker",
-                color: [255, 0, 0, 0.6],
+                color: [255, 0, 0, 0.5],
                 outline: null
             },
             visualVariables: [
@@ -70,11 +70,11 @@ require([
                         },
                         {
                             value: 600,
-                            size: "30px"
+                            size: "20px"
                         },
                         {
                             value: 6000,
-                            size: "50px"
+                            size: "40px"
                         }
                     ]
                 },
