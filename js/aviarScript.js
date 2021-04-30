@@ -745,7 +745,7 @@ require([
         const startBrotes = new Date();
         startBrotes.setHours(0, 0, 0, 0);
         startBrotes.setDate(startBrotes.getDate() + (7 - startBrotes.getDay() - 6));
-        startBrotes.setDate(startBrotes.getDate() - 364);
+        startBrotes.setDate(startBrotes.getDate() - 358);
 
         const LastMonday = new Date();
         LastMonday.setHours(0, 0, 0, 0);
@@ -762,7 +762,7 @@ require([
             end: LastMonday/* new Date() */
         };
         const endBrotes = LastMonday;
-        startBrotes.setDate(startBrotes.getDate() + 280);
+        startBrotes.setDate(startBrotes.getDate() + 274);
 
         /* const endBrotes = new Date(); */
         // end of current time extent for time slider
