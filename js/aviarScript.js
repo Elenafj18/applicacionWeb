@@ -896,6 +896,7 @@ require([
     // los datos caen dentro del rango de tiempo
     let timeSliderAlertas = new TimeSlider({
         container: "timeSliderAlertas",
+        view: layerAlertas,
         playRate: 1000,
         stops: {
             interval: {
