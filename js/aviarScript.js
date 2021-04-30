@@ -166,7 +166,7 @@ require([
 
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfoBrotes(feature) {
-        view.graphics.removeAll()
+        /*  view.graphics.removeAll() */
 
         var graphic, attributes, content;
 
@@ -377,7 +377,7 @@ require([
 
         });
 
-        content =  "{comarca}" +
+        content = "{comarca}" +
             "<li><a href={informe}> Informe </a></li>";
 
         return content;
@@ -724,64 +724,67 @@ require([
 
 
     ///TIMESLIDER DE BROTES
-
-    const timeSliderBrotes = new TimeSlider({
-        container: "timeSliderBrotes",
-        // la propiedad "playRate" del widgetb es el tiempo (en milisegundos) entre los pasos de la animación. Este valor predeterminado es 1000.
-        playRate: 500,
-        stops: {
-            interval: {
-                value: 1,
-                unit: "days"
+    view.when(function () {
+        const timeSliderBrotes = new TimeSlider({
+            container: "timeSliderBrotes",
+            // la propiedad "playRate" del widgetb es el tiempo (en milisegundos) entre los pasos de la animación. Este valor predeterminado es 1000.
+            playRate: 500,
+            view: layerBrotes,
+            stops: {
+                interval: {
+                    value: 1,
+                    unit: "days"
+                }
             }
-        }
-    });
-    view.ui.add(timeSliderBrotes, "manual");
+        });
+        view.ui.add(timeSliderBrotes, "manual");
 
-    // espera hasta que se cargue la vista de capa
-    view.whenLayerView(layerBrotes).then(function (lv) {
-        layerViewBrotes = lv;
+        // espera hasta que se cargue la vista de capa
+        view.whenLayerView(layerBrotes).then(function (lv) {
+            layerViewBrotes = lv;
 
-        const startBrotes = new Date();
-        startBrotes.setHours(0, 0, 0, 0);
-        startBrotes.setDate(startBrotes.getDate() + (7 - startBrotes.getDay() - 6));
-        startBrotes.setDate(startBrotes.getDate() - 358);
+            const startBrotes = new Date();
+            startBrotes.setHours(0, 0, 0, 0);
+            startBrotes.setDate(startBrotes.getDate() + (7 - startBrotes.getDay() - 6));
+            startBrotes.setDate(startBrotes.getDate() - 358);
 
-        const LastMonday = new Date();
-        LastMonday.setHours(0, 0, 0, 0);
-        LastMonday.setDate(LastMonday.getDate() + (7 - LastMonday.getDay() - 6));
-
-
-        // hora de inicio del control deslizante de tiempo
-        /* const startBrotes = new Date();
-        startBrotes.setFullYear(startBrotes.getFullYear() - 1); */
-        // set time slider's full extent to
-        // until end date of layer's fullTimeExtent
-        timeSliderBrotes.fullTimeExtent = {
-            start: startBrotes,
-            end: LastMonday/* new Date() */
-        };
-        const endBrotes = LastMonday;
-        startBrotes.setDate(startBrotes.getDate() + 274);
-
-        /* const endBrotes = new Date(); */
-        // end of current time extent for time slider
-        /* startBrotes.setMonth(startBrotes.getMonth() + 9); */
-
-        timeSliderBrotes.values = [startBrotes, endBrotes];
-    });
+            const LastMonday = new Date();
+            LastMonday.setHours(0, 0, 0, 0);
+            LastMonday.setDate(LastMonday.getDate() + (7 - LastMonday.getDay() - 6));
 
 
-    timeSliderBrotes.watch("timeExtent", function () {
-        layerBrotes.definitionExpression =
-            "observationDate <= " + timeSliderBrotes.timeExtent.end.getTime();
-        layerViewBrotes.effect = {
-            filter: {
-                timeExtent: timeSliderBrotes.timeExtent,
-                geometry: view.extent
-            },
-            excludedEffect: "grayscale(20%) opacity(2%)"
-        };
+            // hora de inicio del control deslizante de tiempo
+            /* const startBrotes = new Date();
+            startBrotes.setFullYear(startBrotes.getFullYear() - 1); */
+            // set time slider's full extent to
+            // until end date of layer's fullTimeExtent
+            timeSliderBrotes.fullTimeExtent = {
+                start: startBrotes,
+                end: LastMonday/* new Date() */
+            };
+            const endBrotes = LastMonday;
+            startBrotes.setDate(startBrotes.getDate() + 274);
+
+            /* const endBrotes = new Date(); */
+            // end of current time extent for time slider
+            /* startBrotes.setMonth(startBrotes.getMonth() + 9); */
+
+            timeSliderBrotes.values = [startBrotes, endBrotes];
+        });
+
+
+        timeSliderBrotes.watch("timeExtent", function () {
+            layerBrotes.definitionExpression =
+                "observationDate <= " + timeSliderBrotes.timeExtent.end.getTime();
+            /* layerViewBrotes.effect = {
+                filter: {
+                    timeExtent: timeSliderBrotes.timeExtent,
+                    geometry: view.extent
+                },
+                excludedEffect: "grayscale(20%) opacity(2%)"
+            }; */
+
+        });
 
         /// ESTADISTICAS DE LOS BROTES
         const statQuery = layerViewBrotes.effect.filter.createQuery();
@@ -894,55 +897,61 @@ require([
     //establecer otras propiedades cuando se carga la vista de capa
     // por defecto timeSlider.mode es "time-window" - muestra
     // los datos caen dentro del rango de tiempo
-    let timeSliderAlertas = new TimeSlider({
-        container: "timeSliderAlertas",
-        view: layerAlertas,
-        playRate: 1000,
-        stops: {
-            interval: {
-                value: 1,
-                unit: "weeks"
+    view.when(function () {
+        let timeSliderAlertas = new TimeSlider({
+            container: "timeSliderAlertas",
+            view: layerAlertas,
+            playRate: 1000,
+            stops: {
+                interval: {
+                    value: 1,
+                    unit: "weeks"
+                }
             }
-        }
-    });
-    view.ui.add(timeSliderAlertas, "manual");
-
-    // espera hasta que se cargue la vista de capa
-    view.whenLayerView(layerAlertas).then(function (lv) {
-        layerViewAlertas = lv;
-
-        /// hora de inicio del control deslizante de tiempo
-
-        const startAlerta = new Date();
-        startAlerta.setHours(0, 0, 0, 0);
-        startAlerta.setDate(startAlerta.getDate() + (7 - startAlerta.getDay() - 1) % 7 + 1);
-        startAlerta.setDate(startAlerta.getDate() - 364);
-
-        const nextSunday = new Date();
-        nextSunday.setHours(0, 0, 0, 0);
-        nextSunday.setDate(nextSunday.getDate() + (7 - nextSunday.getDay() - 1) % 7 + 1);
+        });
 
 
-        timeSliderAlertas.fullTimeExtent = {
-            start: startAlerta,
-            end: nextSunday
-        };
-        const endAlerta = nextSunday;
-        startAlerta.setDate(startAlerta.getDate() + 358);
 
-        timeSliderAlertas.values = [startAlerta, endAlerta];
-    });
-    timeSliderAlertas.watch("timeExtent", function () {
+        view.ui.add(timeSliderAlertas, "manual");
 
-        layerAlertas.definitionExpression =
-            "reportDate <= " + timeSliderAlertas.timeExtent.end.getTime();
-        layerViewAlertas.effect = {
-            filter: {
-                timeExtent: timeSliderAlertas.timeExtent,
-                geometry: view.extent
-            },
-            /* excludedEffect: "grayscale(20%) opacity(2%)" */
-        };
+        // espera hasta que se cargue la vista de capa
+        view.whenLayerView(layerAlertas).then(function (lv) {
+            layerViewAlertas = lv;
+
+            /// hora de inicio del control deslizante de tiempo
+
+            const startAlerta = new Date();
+            startAlerta.setHours(0, 0, 0, 0);
+            startAlerta.setDate(startAlerta.getDate() + (7 - startAlerta.getDay() - 1) % 7 + 1);
+            startAlerta.setDate(startAlerta.getDate() - 364);
+
+            const nextSunday = new Date();
+            nextSunday.setHours(0, 0, 0, 0);
+            nextSunday.setDate(nextSunday.getDate() + (7 - nextSunday.getDay() - 1) % 7 + 1);
+
+
+            timeSliderAlertas.fullTimeExtent = {
+                start: startAlerta,
+                end: nextSunday
+            };
+            const endAlerta = nextSunday;
+            startAlerta.setDate(startAlerta.getDate() + 358);
+
+            timeSliderAlertas.values = [startAlerta, endAlerta];
+        });
+        timeSliderAlertas.watch("timeExtent", function () {
+
+            layerAlertas.definitionExpression =
+                "reportDate <= " + timeSliderAlertas.timeExtent.end.getTime();
+            /*  layerViewAlertas.effect = {
+                 filter: {
+                     timeExtent: timeSliderAlertas.timeExtent,
+                     geometry: view.extent
+                 },
+                 excludedEffect: "grayscale(20%) opacity(2%)"
+             }; */
+
+        });
 
     });
 
