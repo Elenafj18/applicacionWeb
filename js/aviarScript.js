@@ -56,7 +56,7 @@ require([
             field: "serotipo",
             symbol: {
                 type: "simple-marker",
-                color: [255, 0, 0, 0.6],
+                color: [255, 0, 0, 0.5],
                 outline: null
             },
             visualVariables: [
@@ -70,11 +70,11 @@ require([
                         },
                         {
                             value: 600,
-                            size: "30px"
+                            size: "20px"
                         },
                         {
                             value: 6000,
-                            size: "50px"
+                            size: "40px"
                         }
                     ]
                 },
@@ -166,7 +166,7 @@ require([
 
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfoBrotes(feature) {
-        view.graphics.removeAll()
+        /*  view.graphics.removeAll() */
 
         var graphic, attributes, content;
 
@@ -236,6 +236,8 @@ require([
 
         copyright: "INIA",
         title: "Alertas",
+        outFields: ['*'],
+        visible: true,
         timeInfo: {
             startField: "reportDate",
 
@@ -249,45 +251,16 @@ require([
                 type: "simple-marker",
                 label: "Nivel de riesgo",
                 style: "triangle",
+                size: "8px",
                 outline: null
             },
             visualVariables: [
-                {
-                    type: "size",
-                    field: "Riesgo",
-                    stops: [
-                        {
-                            value: 1,
-                            size: "10px",
-                        },
-                        {
-                            value: 2,
-                            size: "10px",
-                        },
-                        {
-                            value: 3,
-                            size: "10px",
-                        },
-                        {
-                            value: 4,
-                            size: "10px",
-                        },
-                        {
-                            value: 5,
-                            size: "10px",
-                        }
-                    ]
-                },
 
                 {
                     type: "color",
                     field: "Riesgo",
                     stops: [
                         {
-                            value: 0,
-                            color: [255, 255, 255, 0.0],
-                            label: "0"
-                        }, {
                             value: 1,
                             color: [255, 150, 150, 0.9],
                             label: "1"
@@ -355,10 +328,58 @@ require([
     })
 
     function getInfoAlertas(feature) {
-        view.graphics.removeAll()
-        var content;
 
-        content = "<ul><li><a href='{informe}'>Ver informe</a></li>";
+
+        var graphic, attributes, content;
+
+        graphic = feature.graphic;
+        attributes = graphic.attributes;
+
+        var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson';
+        // Se inicia la peticion ajax a la url ruta
+        var request = new XMLHttpRequest();
+        request.open("GET", urlRutas, false); // false for synchronous request
+        request.send(null);
+
+        let rutas = JSON.parse(request.responseText)
+
+        console.log('obj ruta', rutas)
+
+        for (let index = 0; index < rutas.features.length; index++) {
+            const element = rutas.features[index];
+            console.log('element', element)
+            if (element.properties.idAlerta == attributes.idAlerta) {
+                var polyline = {
+                    type: "polyline", // new Polyline()
+                    paths: element.geometry.coordinates
+                };
+
+                var lineSymbol = {
+                    type: "simple-line", // new SimpleLineSymbol()
+                    color: [255, 51, 51, 0.8], // RGB color values as an array
+                    width: 1
+                };
+
+                var polylineGraphic = new Graphic({
+                    geometry: polyline, // Add the geometry created in step 4
+                    symbol: lineSymbol, // Add the symbol created in step 5
+                });
+
+                view.graphics.add(polylineGraphic);
+
+            }
+
+        }
+
+        view.on("click", function (alert) {
+            view.graphics.removeAll(polylineGraphic);
+            console.log("Remove")
+
+        });
+
+        content = "{comarca}" +
+            "<li><a href={informe}> Informe </a></li>";
+
         return content;
 
     }
@@ -543,8 +564,8 @@ require([
                 };
                 var lineSymbol = {
                     type: "simple-line", // new SimpleLineSymbol()
-                    color: [51, 200, 200, 0.8], // RGB color values as an array
-                    width: 1
+                    color: [51, 200, 200, 0.4], // RGB color values as an array
+                    width: 0.1
                 };
                 var polylineGraphic = new Graphic({
                     geometry: polyline, // Add the geometry created in step 4
@@ -571,7 +592,7 @@ require([
     const view = new MapView({
         map: map,
         container: "viewDiv",
-        zoom: 3.6,
+        zoom: 2.9,
         center: [40.68, 41.68],
         highlightOptions: {
             color: "cyan"
@@ -605,7 +626,7 @@ require([
     // Add the home button to the top left corner of the view
     view.ui.add(homeBtn, "top-left");
 
-    //// SCALEBAR 
+    //// SCALEBAR
 
     var scaleBar = new ScaleBar({
         view: view,
@@ -654,36 +675,36 @@ require([
 
     /// ACTIVAR RUTAS POR MEDIO DEL HOLD EN LOS BROTES
     /*  var highlightRutas;
- 
+
      view.whenLayerView(layermigrations).then(function (layerView) {
- 
+
          var queryR = new Query();
- 
- 
+
+
          view.on("hold", function (event) {
- 
+
              view.hitTest(event).then(function (response) {
                  response.results.filter(function (result) {
                      return result.graphic.layer === layerComarcas;
                  })[0].graphic;
- 
+
                  queryR.geometry = event.mapPoint;
                  queryR.distance = -1;
                  queryR.units = "meters";
                  queryR.spatialRelationship = "intersects";
                  queryR.returnQueryGeometry = true;
- 
+
                  layermigrations.queryFeatures(queryR).then(function (result) {
                      if (highlightRutas) {
                          highlightRutas.remove();
                      }
                      highlightRutas = layerView.highlight(result.features);
                  });
- 
+
              });
- 
+
          });
- 
+
      }); */
     /// SEARCH WIDGET
     var searchWidget = new Search({
@@ -703,51 +724,67 @@ require([
 
 
     ///TIMESLIDER DE BROTES
-
-    const timeSliderBrotes = new TimeSlider({
-        container: "timeSliderBrotes",
-        // la propiedad "playRate" del widgetb es el tiempo (en milisegundos) entre los pasos de la animación. Este valor predeterminado es 1000. 
-        playRate: 500,
-        stops: {
-            interval: {
-                value: 1,
-                unit: "days"
+    view.when(function () {
+        const timeSliderBrotes = new TimeSlider({
+            container: "timeSliderBrotes",
+            // la propiedad "playRate" del widgetb es el tiempo (en milisegundos) entre los pasos de la animación. Este valor predeterminado es 1000.
+            playRate: 500,
+            view: layerBrotes,
+            stops: {
+                interval: {
+                    value: 1,
+                    unit: "days"
+                }
             }
-        }
-    });
-    view.ui.add(timeSliderBrotes, "manual");
+        });
+        view.ui.add(timeSliderBrotes, "manual");
 
-    // espera hasta que se cargue la vista de capa
-    view.whenLayerView(layerBrotes).then(function (lv) {
-        layerViewBrotes = lv;
+        // espera hasta que se cargue la vista de capa
+        view.whenLayerView(layerBrotes).then(function (lv) {
+            layerViewBrotes = lv;
 
-        // hora de inicio del control deslizante de tiempo
-        const startBrotes = new Date();
-        startBrotes.setFullYear(startBrotes.getFullYear() - 1);
-        // set time slider's full extent to
-        // until end date of layer's fullTimeExtent
-        timeSliderBrotes.fullTimeExtent = {
-            start: startBrotes,
-            end: new Date()
-        };
-        const endBrotes = new Date();
-        // end of current time extent for time slider
-        startBrotes.setMonth(startBrotes.getMonth() + 9);
+            const startBrotes = new Date();
+            startBrotes.setHours(0, 0, 0, 0);
+            startBrotes.setDate(startBrotes.getDate() + (7 - startBrotes.getDay() - 6));
+            startBrotes.setDate(startBrotes.getDate() - 358);
 
-        timeSliderBrotes.values = [startBrotes, endBrotes];
-    });
+            const LastMonday = new Date();
+            LastMonday.setHours(0, 0, 0, 0);
+            LastMonday.setDate(LastMonday.getDate() + (7 - LastMonday.getDay() - 6));
 
 
-    timeSliderBrotes.watch("timeExtent", function () {
-        layerBrotes.definitionExpression =
-            "observationDate <= " + timeSliderBrotes.timeExtent.end.getTime();
-        layerViewBrotes.effect = {
-            filter: {
-                timeExtent: timeSliderBrotes.timeExtent,
-                geometry: view.extent
-            },
-            excludedEffect: "grayscale(20%) opacity(2%)"
-        };
+            // hora de inicio del control deslizante de tiempo
+            /* const startBrotes = new Date();
+            startBrotes.setFullYear(startBrotes.getFullYear() - 1); */
+            // set time slider's full extent to
+            // until end date of layer's fullTimeExtent
+            timeSliderBrotes.fullTimeExtent = {
+                start: startBrotes,
+                end: LastMonday/* new Date() */
+            };
+            const endBrotes = LastMonday;
+            startBrotes.setDate(startBrotes.getDate() + 274);
+
+            /* const endBrotes = new Date(); */
+            // end of current time extent for time slider
+            /* startBrotes.setMonth(startBrotes.getMonth() + 9); */
+
+            timeSliderBrotes.values = [startBrotes, endBrotes];
+        });
+
+
+        timeSliderBrotes.watch("timeExtent", function () {
+            layerBrotes.definitionExpression =
+                "observationDate <= " + timeSliderBrotes.timeExtent.end.getTime();
+            /* layerViewBrotes.effect = {
+                filter: {
+                    timeExtent: timeSliderBrotes.timeExtent,
+                    geometry: view.extent
+                },
+                excludedEffect: "grayscale(20%) opacity(2%)"
+            }; */
+
+        });
 
         /// ESTADISTICAS DE LOS BROTES
         const statQuery = layerViewBrotes.effect.filter.createQuery();
@@ -860,54 +897,61 @@ require([
     //establecer otras propiedades cuando se carga la vista de capa
     // por defecto timeSlider.mode es "time-window" - muestra
     // los datos caen dentro del rango de tiempo
-    let timeSliderAlertas = new TimeSlider({
-        container: "timeSliderAlertas",
-        playRate: 1000,
-        stops: {
-            interval: {
-                value: 1,
-                unit: "weeks"
+    view.when(function () {
+        let timeSliderAlertas = new TimeSlider({
+            container: "timeSliderAlertas",
+            view: layerAlertas,
+            playRate: 1000,
+            stops: {
+                interval: {
+                    value: 1,
+                    unit: "weeks"
+                }
             }
-        }
-    });
-    view.ui.add(timeSliderAlertas, "manual");
-
-    // espera hasta que se cargue la vista de capa
-    view.whenLayerView(layerAlertas).then(function (lv) {
-        layerViewAlertas = lv;
-
-        /// hora de inicio del control deslizante de tiempo
-
-        const startAlerta = new Date();
-        startAlerta.setHours(0, 0, 0, 0);
-        startAlerta.setDate(startAlerta.getDate() + (7 - startAlerta.getDay() - 1) % 7 + 1);
-        startAlerta.setDate(startAlerta.getDate() - 364);
-
-        const nextSunday = new Date();
-        nextSunday.setHours(0, 0, 0, 0);
-        nextSunday.setDate(nextSunday.getDate() + (7 - nextSunday.getDay() - 1) % 7 + 1);
+        });
 
 
-        timeSliderAlertas.fullTimeExtent = {
-            start: startAlerta,
-            end: nextSunday
-        };
-        const endAlerta = nextSunday;
-        startAlerta.setDate(startAlerta.getDate() + 358);
 
-        timeSliderAlertas.values = [startAlerta, endAlerta];
-    });
-    timeSliderAlertas.watch("timeExtent", function () {
+        view.ui.add(timeSliderAlertas, "manual");
 
-        layerAlertas.definitionExpression =
-            "reportDate <= " + timeSliderAlertas.timeExtent.end.getTime();
-        layerViewAlertas.effect = {
-            filter: {
-                timeExtent: timeSliderAlertas.timeExtent,
-                geometry: view.extent
-            },
-            excludedEffect: "grayscale(20%) opacity(1%)"
-        };
+        // espera hasta que se cargue la vista de capa
+        view.whenLayerView(layerAlertas).then(function (lv) {
+            layerViewAlertas = lv;
+
+            /// hora de inicio del control deslizante de tiempo
+
+            const startAlerta = new Date();
+            startAlerta.setHours(0, 0, 0, 0);
+            startAlerta.setDate(startAlerta.getDate() + (7 - startAlerta.getDay() - 1) % 7 + 1);
+            startAlerta.setDate(startAlerta.getDate() - 364);
+
+            const nextSunday = new Date();
+            nextSunday.setHours(0, 0, 0, 0);
+            nextSunday.setDate(nextSunday.getDate() + (7 - nextSunday.getDay() - 1) % 7 + 1);
+
+
+            timeSliderAlertas.fullTimeExtent = {
+                start: startAlerta,
+                end: nextSunday
+            };
+            const endAlerta = nextSunday;
+            startAlerta.setDate(startAlerta.getDate() + 358);
+
+            timeSliderAlertas.values = [startAlerta, endAlerta];
+        });
+        timeSliderAlertas.watch("timeExtent", function () {
+
+            layerAlertas.definitionExpression =
+                "reportDate <= " + timeSliderAlertas.timeExtent.end.getTime();
+            /*  layerViewAlertas.effect = {
+                 filter: {
+                     timeExtent: timeSliderAlertas.timeExtent,
+                     geometry: view.extent
+                 },
+                 excludedEffect: "grayscale(20%) opacity(2%)"
+             }; */
+
+        });
 
     });
 
