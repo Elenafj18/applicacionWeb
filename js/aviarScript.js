@@ -415,6 +415,7 @@ require([
         availableFields: true,
     });
 
+//// Activar Rutas
     $(document).ready(function () {
         $(function () {
             document.getElementById("ruta").addEventListener("click", activarRutas);
@@ -478,6 +479,8 @@ require([
         visible: false,
         availableFields: true,
     });
+
+//// Activar Migrations
 
     window.onload = function () {
         document.getElementById("migrations").addEventListener("click", activarMigrations);
