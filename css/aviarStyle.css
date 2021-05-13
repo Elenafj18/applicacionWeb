@@ -54,7 +54,7 @@ html,
         }
 
         #infoDiv span {
-            color: #ff0000;
+            color: #ff3333;
             font-size: 12pt;
             font-weight: bolder;
         }
@@ -74,7 +74,8 @@ html,
 
         #myButtonBrotes {
             font-size: medium;
-            color: #d8c8c8;
+            font-weight: bold;
+            color: #ff3333;
             border: 1px solid #242424;
             margin-top: -117px;
             display: flex;
@@ -90,7 +91,8 @@ html,
 
         #myButtonAlerta {
             font-size: medium;
-            color: #d8c8c8;
+            font-weight: bold;
+            color: #ff3333;
             border: 1px solid #242424;
             margin-top: -100px;
             display: flex;
@@ -150,7 +152,7 @@ html,
         }
 
         .esri-feature__title {
-            background-color: #aa1a1a;
+            background-color: #ff3333;
             padding: 0.25em;
         }
 
@@ -262,7 +264,7 @@ html,
         .icon-brotes {
             
             background-color: #242424;
-            color: #ff4545;
+            color: #ff3333;
             cursor: pointer;
             border: 1px solid #242424;
             width: 32px;
@@ -288,7 +290,7 @@ html,
         .icon-alertas {
             
             background-color: #242424;
-            color: #ff4545;
+            color: #ff3333;
             cursor: pointer;
             border: 1px solid #242424;
             width: 32px;
@@ -305,7 +307,7 @@ html,
 
         .esri-scale-bar__label {
             font-size: inherit;
-            color: #ff0000;
+            color: #ff3333;
             white-space: nowrap;
             font-weight: 600;
         }
@@ -389,3 +391,14 @@ html,
             font-size: 14px;
             opacity: 0.1;
         }
+
+        .esri-widget--button:hover {
+            background-color: #303030;
+            color: #ff3333;
+        }
+
+        .esri-navigation-toggle:hover .esri-navigation-toggle__button, .esri-navigation-toggle:focus .esri-navigation-toggle__button {
+            color: #ff3333;
+        }
+
+        
