@@ -415,6 +415,7 @@ require([
         availableFields: true,
     });
 
+//// Activar Rutas
     $(document).ready(function () {
         $(function () {
             document.getElementById("ruta").addEventListener("click", activarRutas);
@@ -478,6 +479,8 @@ require([
         visible: false,
         availableFields: true,
     });
+
+//// Activar Migrations
 
     window.onload = function () {
         document.getElementById("migrations").addEventListener("click", activarMigrations);
@@ -593,7 +596,7 @@ require([
         map: map,
         container: "viewDiv",
         zoom: 2.9,
-        center: [40.68, 41.68],
+        center: [40.68, 40.68],
         highlightOptions: {
             color: "cyan"
         }
@@ -724,67 +727,58 @@ require([
 
 
     ///TIMESLIDER DE BROTES
-    view.when(function () {
-        const timeSliderBrotes = new TimeSlider({
-            container: "timeSliderBrotes",
-            // la propiedad "playRate" del widgetb es el tiempo (en milisegundos) entre los pasos de la animación. Este valor predeterminado es 1000.
-            playRate: 500,
-            view: layerBrotes,
-            stops: {
-                interval: {
-                    value: 1,
-                    unit: "days"
-                }
+
+    const timeSliderBrotes = new TimeSlider({
+        container: "timeSliderBrotes",
+        // la propiedad "playRate" del widgetb es el tiempo (en milisegundos) entre los pasos de la animación. Este valor predeterminado es 1000. 
+        playRate: 100,
+        view: layerBrotes,
+        stops: {
+            interval: {
+                value: 1,
+                unit: "days"
             }
-        });
-        view.ui.add(timeSliderBrotes, "manual");
+        }
+    });
+    view.ui.add(timeSliderBrotes, "manual");
 
-        // espera hasta que se cargue la vista de capa
-        view.whenLayerView(layerBrotes).then(function (lv) {
-            layerViewBrotes = lv;
+    // espera hasta que se cargue la vista de capa
+    view.whenLayerView(layerBrotes).then(function (lv) {
+        layerViewBrotes = lv;
 
-            const startBrotes = new Date();
-            startBrotes.setHours(0, 0, 0, 0);
-            startBrotes.setDate(startBrotes.getDate() + (7 - startBrotes.getDay() - 6));
-            startBrotes.setDate(startBrotes.getDate() - 358);
+        // hora de inicio del control deslizante de tiempo
+        const startBrotes = new Date();
+        startBrotes.setHours(0, 0, 0, 0);
+        startBrotes.setDate(startBrotes.getDate() + (7 - startBrotes.getDay() - 6));
+        startBrotes.setDate(startBrotes.getDate() - 455);
 
-            const LastMonday = new Date();
-            LastMonday.setHours(0, 0, 0, 0);
-            LastMonday.setDate(LastMonday.getDate() + (7 - LastMonday.getDay() - 6));
+        const LastMonday = new Date();
+        LastMonday.setHours(0, 0, 0, 0);
+        LastMonday.setDate(LastMonday.getDate() + (7 - LastMonday.getDay() - 6));
 
+        // set time slider's full extent to
+        // until end date of layer's fullTimeExtent
+        timeSliderBrotes.fullTimeExtent = {
+            start: startBrotes,
+            end: LastMonday
+        };
+        const endBrotes = new Date(LastMonday);
+        endBrotes.setDate(endBrotes.getDate() - 91);
 
-            // hora de inicio del control deslizante de tiempo
-            /* const startBrotes = new Date();
-            startBrotes.setFullYear(startBrotes.getFullYear() - 1); */
-            // set time slider's full extent to
-            // until end date of layer's fullTimeExtent
-            timeSliderBrotes.fullTimeExtent = {
-                start: startBrotes,
-                end: LastMonday/* new Date() */
-            };
-            const endBrotes = LastMonday;
-            startBrotes.setDate(startBrotes.getDate() + 274);
-
-            /* const endBrotes = new Date(); */
-            // end of current time extent for time slider
-            /* startBrotes.setMonth(startBrotes.getMonth() + 9); */
-
-            timeSliderBrotes.values = [startBrotes, endBrotes];
-        });
+        timeSliderBrotes.values = [endBrotes, LastMonday];
+    });
 
 
-        timeSliderBrotes.watch("timeExtent", function () {
-            layerBrotes.definitionExpression =
-                "observationDate <= " + timeSliderBrotes.timeExtent.end.getTime();
-            /* layerViewBrotes.effect = {
-                filter: {
-                    timeExtent: timeSliderBrotes.timeExtent,
-                    geometry: view.extent
-                },
-                excludedEffect: "grayscale(20%) opacity(2%)"
-            }; */
-
-        });
+    timeSliderBrotes.watch("timeExtent", function () {
+        layerBrotes.definitionExpression =
+            "observationDate <= " + timeSliderBrotes.timeExtent.end.getTime();
+        layerViewBrotes.effect = {
+            filter: {
+                timeExtent: timeSliderBrotes.timeExtent,
+                geometry: view.extent
+            },
+            /* excludedEffect: "grayscale(20%) opacity(12%)" */
+        };
 
         /// ESTADISTICAS DE LOS BROTES
         const statQuery = layerViewBrotes.effect.filter.createQuery();
@@ -839,7 +833,6 @@ require([
                 console.log(error);
             });
     });
-
     /* const avgDepth = {
         onStatisticField: "deaths",
         outStatisticFieldName: "Average_depth",
