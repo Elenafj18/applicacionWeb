@@ -19,7 +19,7 @@ html,
             position: absolute;
             left: 55px;
             right: 10px;
-            bottom: 125px;
+            bottom: 95px;
             margin-bottom: 20px;
         }
 
@@ -28,7 +28,7 @@ html,
             position: absolute;
             left: 55px;
             right: 10px;
-            bottom: 50px;
+            bottom: 20px;
         }
 
         .esri-slider__thumb {
@@ -94,7 +94,7 @@ html,
             font-weight: bold;
             color: #ff0000;
             border: 1px solid #242424;
-            margin-top: -100px;
+            margin-top: -70px;
             display: flex;
             overflow: visible;
             position: relative;
