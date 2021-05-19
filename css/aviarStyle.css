@@ -54,7 +54,7 @@ html,
         }
 
         #infoDiv span {
-            color: #ff3333;
+            color: #ff0000;
             font-size: 12pt;
             font-weight: bolder;
         }
@@ -75,7 +75,7 @@ html,
         #myButtonBrotes {
             font-size: medium;
             font-weight: bold;
-            color: #ff3333;
+            color: #ff0000;
             border: 1px solid #242424;
             margin-top: -117px;
             display: flex;
@@ -92,7 +92,7 @@ html,
         #myButtonAlerta {
             font-size: medium;
             font-weight: bold;
-            color: #ff3333;
+            color: #ff0000;
             border: 1px solid #242424;
             margin-top: -100px;
             display: flex;
@@ -152,7 +152,7 @@ html,
         }
 
         .esri-feature__title {
-            background-color: #ff3333;
+            background-color: #aa1a1a;
             padding: 0.25em;
         }
 
@@ -264,7 +264,7 @@ html,
         .icon-brotes {
             
             background-color: #242424;
-            color: #ff3333;
+            color: #ff4545;
             cursor: pointer;
             border: 1px solid #242424;
             width: 32px;
@@ -290,7 +290,7 @@ html,
         .icon-alertas {
             
             background-color: #242424;
-            color: #ff3333;
+            color: #ff4545;
             cursor: pointer;
             border: 1px solid #242424;
             width: 32px;
@@ -307,7 +307,7 @@ html,
 
         .esri-scale-bar__label {
             font-size: inherit;
-            color: #ff3333;
+            color: #ff0000;
             white-space: nowrap;
             font-weight: 600;
         }
@@ -394,11 +394,9 @@ html,
 
         .esri-widget--button:hover {
             background-color: #303030;
-            color: #ff3333;
+            color: red;
         }
 
         .esri-navigation-toggle:hover .esri-navigation-toggle__button, .esri-navigation-toggle:focus .esri-navigation-toggle__button {
-            color: #ff3333;
+            color: red;
         }
-
-        
