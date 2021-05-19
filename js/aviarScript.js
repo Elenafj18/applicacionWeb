@@ -417,11 +417,7 @@ require([
     var lineSymbolMigrations = new LineSymbol3D({
         symbolLayers: [
           new LineSymbol3DLayer({
-<<<<<<< HEAD
             material: { color: [237, 237, 237, 0.3] },
-=======
-            material: { color: [173, 173, 173, 0.3] },
->>>>>>> develop
             size: 0.1
           })
         ]
@@ -583,13 +579,8 @@ require([
 
         camera: {
             position: {
-<<<<<<< HEAD
-                latitude: 10.00000,
-                longitude: 25.00000,
-=======
                 latitude: 12.00000,
                 longitude: 22.00000,
->>>>>>> develop
                 z: 7034560
             },
             tilt:16.5,
