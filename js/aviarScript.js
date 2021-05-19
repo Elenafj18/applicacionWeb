@@ -13,7 +13,13 @@ require([
     "esri/Graphic",
     "esri/widgets/Search",
     "esri/widgets/ScaleBar",
-    "esri/widgets/Popup"
+    "esri/widgets/Popup",
+    "esri/views/SceneView",
+    "esri/renderers/UniqueValueRenderer",
+    "esri/symbols/LineSymbol3DLayer",
+    "esri/symbols/LineSymbol3D",
+    "esri/renderers/SimpleRenderer",
+    "dojo/domReady!"
 
 ], function (
     Map,
@@ -30,7 +36,13 @@ require([
     Graphic,
     Search,
     ScaleBar,
-    Popup) {
+    Popup,
+    SceneView,
+    UniqueValueRenderer,
+    LineSymbol3DLayer,
+    LineSymbol3D,
+    SimpleRenderer
+) {
 
     let layerViewBrotes;
 
@@ -53,7 +65,6 @@ require([
         },
         renderer: {
             type: "simple",
-            field: "serotipo",
             symbol: {
                 type: "simple-marker",
                 color: [255, 0, 0, 0.5],
@@ -78,74 +89,9 @@ require([
                         }
                     ]
                 },
-                /* {
-                    type: "color",
-                    field: "cases",
-                    stops: [
-                        {
-                            value: "60",
-                            color: [202, 202, 255],
-                            label: "60"
-                        },
-                        {
-                            value: "600",
-                            color: [85, 85, 255],
-                            label: "600"
-                        },
-                        {
-                            value: "6000",
-                            color: [0, 0, 255],
-                            label: "6000"
-                        }
-                    ]
-                } */
             ]
         },
-        /*   popupTemplate: {
-              title: "Brote",
-              content: [
-                  {
-                      type: "fields",
-                      fieldInfos: [
-                          {
-                              fieldName: "country",
-                              label: "Pais",
-                              visible: true
-                          },
-                          {
-                              fieldName: "city",
-                              label: "Localización",
-                              visible: true
-                          },
-                          {
-                              fieldName: "start",
-                              label: "Fecha del informe",
-                              visible: true
-                          },
-                          {
-                              fieldName: "species",
-                              label: "Especie",
-                              visible: true
-                          },
-                          {
-                              fieldName: "cases",
-                              label: "Cases",
-                              visible: true
-                          },
-                          {
-                              fieldName: "Serotipo",
-                              label: "Serotipo",
-                              visible: true
-                          },
-                          {
-                              fieldName: "moreInfo",
-                              label: "More info",
-                              visible: true
-                          }
-                      ]
-                  }
-              ]
-          }, */
+
 
         supportsQuery: true,
         popupTemplate: {
@@ -194,8 +140,8 @@ require([
 
                 var lineSymbol = {
                     type: "simple-line", // new SimpleLineSymbol()
-                    color: [255, 51, 51, 0.6], // RGB color values as an array
-                    width: 0.1
+                    color: [255, 51, 51, 0.99], // RGB color values as an array
+                    width: 1
                 };
 
                 var polylineGraphic = new Graphic({
@@ -209,7 +155,7 @@ require([
 
         }
 
-        view.on("click", function (e) {
+        view.on("hold", function (e) {
             view.graphics.removeAll(polylineGraphic);
             console.log("Remove")
 
@@ -251,9 +197,30 @@ require([
                 type: "simple-marker",
                 label: "Nivel de riesgo",
                 style: "triangle",
-                size: "8px",
-                outline: null
+                size: "10px",
+                outline: null,
             },
+
+            /* symbol: {
+                type: "point-3d", // autocasts as new PointSymbol3D()
+                symbolLayers: [
+                  {
+                    type: "object", // autocasts as new ObjectSymbol3DLayer()
+                    resource: {
+                      primitive: "cone"
+                    },
+                    width: 10000 // width of the symbol in meters
+                  }
+                ],
+                verticalOffset: {
+                    screenLength: 3,
+                    maxWorldLength: 5,
+                    minWorldLength: 1
+                  },
+    
+              }, */
+
+            label: "Nivel de riesgo",
             visualVariables: [
 
                 {
@@ -262,52 +229,67 @@ require([
                     stops: [
                         {
                             value: 1,
-                            color: [255, 150, 150, 0.9],
+                            color: [255, 150, 150, 0.6],
                             label: "1"
                         }, {
                             value: 2,
-                            color: [255, 120, 120, 0.9],
+                            color: [255, 120, 120, 0.6],
                             label: "2"
                         },
                         {
                             value: 3,
-                            color: [255, 80, 80, 0.9],
+                            color: [255, 80, 80, 0.6],
                             label: "3"
                         },
                         {
                             value: 4,
-                            color: [255, 40, 40, 0.9],
+                            color: [255, 40, 40, 0.6],
                             label: "4"
                         },
                         {
                             value: 5,
-                            color: [255, 0, 0, 0.9],
+                            color: [255, 0, 0, 0.6],
                             label: "5"
                         }
                     ]
-                }
+                },
+                /*  {
+                    type: "size",
+                    field: "Riesgo",
+                    stops: [
+                      {
+                        value: 1,
+                        size: "8px"
+                      },
+                      {
+                        value: 2,
+                        size: "10px"
+                      },
+                      {
+                        value: 3,
+                        size: "12px"
+                      },
+                      {
+                        value: 4,
+                        size: "15px"
+                      },
+                      {
+                        value: 5,
+                        size: "17px"
+                      }
+                    ],
+                    axis: "height"
+                  }, */
+                /*{
+                  type: "size",
+                  axis: "width-and-depth",
+                  useSymbolValue: true // uses the width value defined in the symbol layer (50,000)
+                } */
             ],
 
         },
 
-        /*  labelingInfo: [
-             {
-               labelExpressionInfo: {
-                 expression: document.getElementById("label-expression").text
-               },
-               labelPlacement: "center-right",
-               minScale: minScale,
-               symbol: {
-                 type: "text", // autocasts as new TextSymbol()
-                 font: {
-                   size: 9,
-                   family: "Noto Sans"
-                 },
-                 horizontalAlignment: "left",
-                 color: "#2b2b2b"
-               }
-             }
-           ], */
+
 
         supportsQuery: true,
         popupTemplate: {
@@ -328,7 +310,7 @@ require([
     })
 
     function getInfoAlertas(feature) {
-
+        /*  view.graphics.removeAll() */
 
         var graphic, attributes, content;
 
@@ -371,7 +353,7 @@ require([
 
         }
 
-        view.on("click", function (alert) {
+        view.on("hold", function (alert) {
             view.graphics.removeAll(polylineGraphic);
             console.log("Remove")
 
@@ -384,30 +366,30 @@ require([
 
     }
 
+      var lineSymbolRutas = new LineSymbol3D({
+        symbolLayers: [
+          new LineSymbol3DLayer({
+            material: { color: [255, 51, 51, 0.8] },
+            size: 1
+          })
+        ]
+      });
+
+      
+    var rendererRutas = new SimpleRenderer({
+          
+          symbol: lineSymbolRutas
+        
+      });
 
     /// DEFINICIÓN DEL LOS RUTA MIGRATORIA
     const layerRutaM = new GeoJSONLayer({
-        url:
-            "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson",
+        url: "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson",
         copyright: "INIA",
         title: "Rutas activadas por riesgo",
-        timeInfo: {
-            interval: {
-                unit: "days",
-                value: 7
-            }
-        },
-        renderer: {
-            type: "simple",
-            symbol: {
-                type: "simple-fill",
-                supportsQuery: true,
-                outline: {
-                    color: [255, 51, 51, 0.03],
-                    width: 0.05
-                }
-            }
-        },
+        outFields: ["*"],
+        renderer: rendererRutas,
+
         popupTemplate: {
             title: "Id Alerta de la ruta: {idAlerta}",
         },
@@ -415,7 +397,6 @@ require([
         availableFields: true,
     });
 
-//// Activar Rutas
     $(document).ready(function () {
         $(function () {
             document.getElementById("ruta").addEventListener("click", activarRutas);
@@ -433,29 +414,29 @@ require([
 
     }
 
+    var lineSymbolMigrations = new LineSymbol3D({
+        symbolLayers: [
+          new LineSymbol3DLayer({
+            material: { color: [237, 237, 237, 0.3] },
+            size: 0.1
+          })
+        ]
+      });
+
+      
+    var rendererMigrations = new SimpleRenderer({
+          
+          symbol: lineSymbolMigrations
+        
+      });
+
     /// DEFINICIÓN DEL LOS RUTA MIGRATORIA
     const layermigrations = new GeoJSONLayer({
-        url:
-            "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson",
+        url: "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson",
         copyright: "INIA",
         title: "Todas las rutas",
-        timeInfo: {
-            interval: {
-                unit: "days",
-                value: 7
-            }
-        },
-        renderer: {
-            type: "simple",
-            symbol: {
-                type: "simple-fill",
-                supportsQuery: true,
-                outline: {
-                    color: [51, 200, 200, 0.1],
-                    width: 0.3
-                }
-            }
-        },
+        outFields: ["*"],
+        renderer: rendererMigrations,
         popupTemplate: {
             title: "Especie: {species}",
             /* content: [
@@ -479,8 +460,6 @@ require([
         visible: false,
         availableFields: true,
     });
-
-//// Activar Migrations
 
     window.onload = function () {
         document.getElementById("migrations").addEventListener("click", activarMigrations);
@@ -518,10 +497,10 @@ require([
             type: "simple",
             symbol: {
                 type: "simple-fill",
-                color: [92, 92, 92, 0.3],
+                color: [92, 92, 92, 0.01],
                 outline: {
-                    color: [255, 255, 255, 0.2],
-                    width: 0.5
+                    color: [155, 155, 155, 0.3],
+                    width: 1.25
                 }
             }
         },
@@ -541,8 +520,7 @@ require([
     /// ESTA FUNCIÓN PROGRAMA EL POPUPTEMPLATE
     function getInfoComarcas(feature) {
 
-
-        view.graphics.removeAll()
+        /* view.graphics.removeAll() */
 
         var graphic, attributes;
 
@@ -567,8 +545,8 @@ require([
                 };
                 var lineSymbol = {
                     type: "simple-line", // new SimpleLineSymbol()
-                    color: [51, 200, 200, 0.4], // RGB color values as an array
-                    width: 0.1
+                    color: [51, 200, 200/* , 0.9 */], // RGB color values as an array
+                    width: 1
                 };
                 var polylineGraphic = new Graphic({
                     geometry: polyline, // Add the geometry created in step 4
@@ -578,7 +556,7 @@ require([
             }
         }
 
-        view.on("click", function (e) {
+        view.on("hold", function (e) {
             view.graphics.removeAll(polylineGraphic);
             console.log("Remove")
         })
@@ -589,17 +567,31 @@ require([
 
     const map = new Map({
         basemap: "dark-gray-vector",
+        /* ground: "world-elevation", */
         layers: [layerComarcas, layerBrotes, layerAlertas, layerRutaM, layermigrations]
     });
 
-    const view = new MapView({
+    const view = new SceneView({
         map: map,
         container: "viewDiv",
-        zoom: 2.9,
-        center: [40.68, 40.68],
+        /* zoom: 3.5,
+        center: [20.68, 41.68], */
+
+        camera: {
+            position: {
+                latitude: 10.00000,
+                longitude: 25.00000,
+                z: 7034560
+            },
+            tilt:16.5,
+            heading: 1
+        },
+
+
         highlightOptions: {
             color: "cyan"
         }
+
     });
 
     view.constraints = {
@@ -620,14 +612,6 @@ require([
     });
     view.ui.add(legendExpand, "top-left");
 
-    /// WIDGET DE HOME PARA LA VISTA INICIAL
-    var homeBtn = new Home({
-        view: view,
-
-    });
-
-    // Add the home button to the top left corner of the view
-    view.ui.add(homeBtn, "top-left");
 
     //// SCALEBAR
 
@@ -642,73 +626,6 @@ require([
 
     });
 
-
-    //// ZOOM TO BROTES
-
-    layerBrotes.when(function () {
-
-        var queryBrotes = layerBrotes.createQuery();
-
-        document.getElementById("btnBrotes").addEventListener("click", function () {
-
-            layerBrotes.queryExtent(queryBrotes).then(function (results) {
-                view.goTo(results.extent);
-            });
-        });
-    });
-
-    view.ui.add(btnBrotes, "top-left");
-
-    //// ZOOM TO ALERTAS
-
-    layerAlertas.when(function () {
-
-        var queryAlertas = layerAlertas.createQuery();
-
-        document.getElementById("btnAlertas").addEventListener("click", function () {
-
-            layerAlertas.queryExtent(queryAlertas).then(function (results) {
-                view.goTo(results.extent);
-            });
-        });
-    });
-
-    view.ui.add(btnAlertas, "top-left");
-
-
-    /// ACTIVAR RUTAS POR MEDIO DEL HOLD EN LOS BROTES
-    /*  var highlightRutas;
-
-     view.whenLayerView(layermigrations).then(function (layerView) {
-
-         var queryR = new Query();
-
-
-         view.on("hold", function (event) {
-
-             view.hitTest(event).then(function (response) {
-                 response.results.filter(function (result) {
-                     return result.graphic.layer === layerComarcas;
-                 })[0].graphic;
-
-                 queryR.geometry = event.mapPoint;
-                 queryR.distance = -1;
-                 queryR.units = "meters";
-                 queryR.spatialRelationship = "intersects";
-                 queryR.returnQueryGeometry = true;
-
-                 layermigrations.queryFeatures(queryR).then(function (result) {
-                     if (highlightRutas) {
-                         highlightRutas.remove();
-                     }
-                     highlightRutas = layerView.highlight(result.features);
-                 });
-
-             });
-
-         });
-
-     }); */
     /// SEARCH WIDGET
     var searchWidget = new Search({
         view: view
@@ -724,6 +641,8 @@ require([
         view: view,
         container: document.createElement("div")
     });
+
+
 
 
     ///TIMESLIDER DE BROTES
@@ -833,6 +752,7 @@ require([
                 console.log(error);
             });
     });
+
     /* const avgDepth = {
         onStatisticField: "deaths",
         outStatisticFieldName: "Average_depth",
@@ -883,7 +803,7 @@ require([
         content: infoDiv,
         expanded: false
     });
-    view.ui.add(infoDivExpand, "top-right");
+    view.ui.add(infoDivExpand, "top-left");
 
     ///TIMESLIDER DE ALERTAS
     // crea un nuevo widget de control deslizante de tiempo
@@ -936,18 +856,20 @@ require([
 
             layerAlertas.definitionExpression =
                 "reportDate <= " + timeSliderAlertas.timeExtent.end.getTime();
-            /*  layerViewAlertas.effect = {
-                 filter: {
-                     timeExtent: timeSliderAlertas.timeExtent,
-                     geometry: view.extent
-                 },
-                 excludedEffect: "grayscale(20%) opacity(2%)"
-             }; */
+            layerViewAlertas.effect = {
+                filter: {
+                    timeExtent: timeSliderAlertas.timeExtent,
+                    geometry: view.extent
+                },
+                /* excludedEffect: "grayscale(20%) opacity(2%)" */
+            };
 
         });
 
     });
 
+    /// BASEMAP GALLERY
+    
     // Create an Expand instance and set the content
     // property to the DOM node of the basemap gallery widget
     // Use an Esri icon font to represent the content inside
@@ -975,6 +897,15 @@ require([
 
     view.ui.add(bgExpand, "top-right");
 
+        /// WIDGET DE HOME PARA LA VISTA INICIAL
+        var homeBtn = new Home({
+            view: view,
+    
+        });
+    
+        // Add the home button to the top left corner of the view
+        view.ui.add(homeBtn, "top-right");
+
 
     /// Info App Web
 
@@ -986,7 +917,39 @@ require([
         content: info,
         expanded: false
     });
-    view.ui.add(infoExpand, "top-right" /* "top-left" */);
+    view.ui.add(infoExpand, "top-left" /* "top-left" */);
+
+    //// ZOOM TO BROTES
+
+    layerBrotes.when(function () {
+
+        var queryBrotes = layerBrotes.createQuery();
+
+        document.getElementById("btnBrotes").addEventListener("click", function () {
+
+            layerBrotes.queryExtent(queryBrotes).then(function (results) {
+                view.goTo(results.extent);
+            });
+        });
+    });
+
+    view.ui.add(btnBrotes, "top-right");
+
+    //// ZOOM TO ALERTAS
+
+    layerAlertas.when(function () {
+
+        var queryAlertas = layerAlertas.createQuery();
+
+        document.getElementById("btnAlertas").addEventListener("click", function () {
+
+            layerAlertas.queryExtent(queryAlertas).then(function (results) {
+                view.goTo(results.extent);
+            });
+        });
+    });
+
+    view.ui.add(btnAlertas, "top-right");
 
 });
 
