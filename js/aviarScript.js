@@ -579,7 +579,7 @@ require([
 
         camera: {
             position: {
-                latitude: 12.00000,
+                latitude: 7.00000,
                 longitude: 22.00000,
                 z: 7034560
             },
