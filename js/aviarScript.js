@@ -369,8 +369,8 @@ require([
       var lineSymbolRutas = new LineSymbol3D({
         symbolLayers: [
           new LineSymbol3DLayer({
-            material: { color: [255, 51, 51, 0.8] },
-            size: 1
+            material: { color: [255, 51, 51, 0.1] },
+            size: 0.1
           })
         ]
       });
