@@ -293,7 +293,7 @@ require([
 
         supportsQuery: true,
         popupTemplate: {
-            title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate}" + "  Ver informe:<a href='{informe}'></a>",
+            title: "Nivel de alerta: {Riesgo}" + " Fecha: {reportDate}" + "<a href='{informe}'></a>",
             content: getInfoAlertas,
             visible: false,
             returnGeometry: true,
@@ -359,7 +359,7 @@ require([
 
         });
 
-        content = "{comarca}" +
+        content = "Comarca: {comarca}" +
             "<li><a href={informe}> Informe </a></li>";
 
         return content;
