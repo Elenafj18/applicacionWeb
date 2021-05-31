@@ -366,21 +366,21 @@ require([
 
     }
 
-      var lineSymbolRutas = new LineSymbol3D({
+    var lineSymbolRutas = new LineSymbol3D({
         symbolLayers: [
-          new LineSymbol3DLayer({
-            material: { color: [255, 51, 51, 0.3] },
-            size: 0.1
-          })
+            new LineSymbol3DLayer({
+                material: { color: [255, 51, 51, 0.3] },
+                size: 0.1
+            })
         ]
-      });
+    });
 
-      
+
     var rendererRutas = new SimpleRenderer({
-          
-          symbol: lineSymbolRutas
-        
-      });
+
+        symbol: lineSymbolRutas
+
+    });
 
     /// DEFINICIÓN DEL LOS RUTA MIGRATORIA
     const layerRutaM = new GeoJSONLayer({
@@ -416,19 +416,19 @@ require([
 
     var lineSymbolMigrations = new LineSymbol3D({
         symbolLayers: [
-          new LineSymbol3DLayer({
-            material: { color: [237, 237, 237, 0.3] },
-            size: 0.1
-          })
+            new LineSymbol3DLayer({
+                material: { color: [237, 237, 237, 0.3] },
+                size: 0.1
+            })
         ]
-      });
+    });
 
-      
+
     var rendererMigrations = new SimpleRenderer({
-          
-          symbol: lineSymbolMigrations
-        
-      });
+
+        symbol: lineSymbolMigrations
+
+    });
 
     /// DEFINICIÓN DEL LOS RUTA MIGRATORIA
     const layermigrations = new GeoJSONLayer({
@@ -583,7 +583,7 @@ require([
                 longitude: 22.00000,
                 z: 7034560
             },
-            tilt:16.5,
+            tilt: 16.5,
             heading: 1
         },
 
@@ -642,6 +642,8 @@ require([
         container: document.createElement("div")
     });
 
+
+   
 
 
 
@@ -868,8 +870,20 @@ require([
 
     });
 
+     /// Info App Web
+
+     const infoExpand = new Expand({
+        collapsedIconClass: "esri-icon-description",
+        expandIconClass: "esri-icon-description",
+        expandTooltip: "Info App Web",
+        view: view,
+        content: info,
+        expanded: false
+    });
+    view.ui.add(infoExpand, "top-left" /* "top-left" */);
+
     /// BASEMAP GALLERY
-    
+
     // Create an Expand instance and set the content
     // property to the DOM node of the basemap gallery widget
     // Use an Esri icon font to represent the content inside
@@ -897,27 +911,17 @@ require([
 
     view.ui.add(bgExpand, "top-right");
 
-        /// WIDGET DE HOME PARA LA VISTA INICIAL
-        var homeBtn = new Home({
-            view: view,
-    
-        });
-    
-        // Add the home button to the top left corner of the view
-        view.ui.add(homeBtn, "top-right");
-
-
-    /// Info App Web
-
-    const infoExpand = new Expand({
-        collapsedIconClass: "esri-icon-description",
-        expandIconClass: "esri-icon-description",
-        expandTooltip: "Info App Web",
+    /// WIDGET DE HOME PARA LA VISTA INICIAL
+    var homeBtn = new Home({
         view: view,
-        content: info,
-        expanded: false
+
     });
-    view.ui.add(infoExpand, "top-left" /* "top-left" */);
+
+    // Add the home button to the top left corner of the view
+    view.ui.add(homeBtn, "top-right");
+
+
+
 
     //// ZOOM TO BROTES
 
