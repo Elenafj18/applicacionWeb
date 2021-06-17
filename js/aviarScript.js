@@ -52,7 +52,7 @@ require([
         url:
             "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/brotes.geojson",
 
-        copyright: "INIA",
+        copyright: "INIA-CSIC",
         title: "Brotes",
         outFields: ['*'],
         visible: true,
