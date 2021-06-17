@@ -52,7 +52,7 @@ require([
         url:
             "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/brotes.geojson",
 
-        copyright: "Influenza Aviar",
+        copyright: "INIA",
         title: "Brotes",
         outFields: ['*'],
         visible: true,
@@ -180,7 +180,7 @@ require([
         url:
             "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson",
 
-        copyright: "INIA",
+        copyright: "UCM",
         title: "Alertas",
         outFields: ['*'],
         visible: true,
@@ -385,7 +385,7 @@ require([
     /// DEFINICIÓN DEL LOS RUTA MIGRATORIA
     const layerRutaM = new GeoJSONLayer({
         url: "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson",
-        copyright: "INIA",
+        copyright: "Influenza Aviar",
         title: "Rutas activadas por riesgo",
         outFields: ["*"],
         renderer: rendererRutas,
@@ -433,7 +433,7 @@ require([
     /// DEFINICIÓN DEL LOS RUTA MIGRATORIA
     const layermigrations = new GeoJSONLayer({
         url: "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson",
-        copyright: "INIA",
+        copyright: "UCM",
         title: "Todas las rutas",
         outFields: ["*"],
         renderer: rendererMigrations,
@@ -489,7 +489,7 @@ require([
     const layerComarcas = new GeoJSONLayer({
         url:
             "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/comarcas.geojson",
-        copyright: "INIA",
+        copyright: "CERBU",
         title: "Comarcas",
         outFields: ['*'],
         visible: true,
