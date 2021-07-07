@@ -599,6 +599,57 @@ require([
         minScale: 147000000
     };
 
+    /// filtro de alertas por riesgo
+
+
+    const RiesgosNodes = document.querySelectorAll(`.Riesgo-item`);
+            const RiesgosElement = document.getElementById("Riesgos-filter");
+
+            console.log(RiesgosNodes);
+            console.log(RiesgosElement);
+
+            // click event handler for Riesgos choices
+            RiesgosElement.addEventListener("click", filterByRiesgo);
+
+            // User clicked on Winter, Spring, Summer or Fall
+            // set an attribute filter on flood warnings layer view
+            // to display the warnings issued in that Riesgo
+            function filterByRiesgo(event) {
+                const selectedRiesgo = event.target.getAttribute("data-Riesgo");
+                layerViewAlertas.filter = {
+                    where: "Riesgo = " + selectedRiesgo + ""
+                };
+
+                console.log(selectedRiesgo);
+                console.log(layerViewAlertas.filter);
+
+            }
+
+            view.whenLayerView(layerAlertas).then((layerView) => {
+                // flash flood warnings layer loaded
+                // get a reference to the flood warnings layerview
+                layerViewAlertas = layerView;
+
+                // set up UI items
+                RiesgosElement.style.visibility = "visible";
+                const RiesgosExpand = new Expand({
+                    view: view,
+                    expandTooltip: "Nivel de riesgo",
+                    content: RiesgosElement,
+                    expandIconClass: "esri-icon-filter",
+                    group: "top-right"
+                });
+                //clear the filters when user closes the expand widget
+                RiesgosExpand.watch("expanded", () => {
+                    if (!RiesgosExpand.expanded) {
+                        layerViewAlertas.filter = null;
+                    }
+                });
+                view.ui.add(RiesgosExpand, "top-right");
+            });
+
+
+
     // Agregar la leyenda
     const legendExpand = new Expand({
         collapsedIconClass: "esri-icon-legend",
