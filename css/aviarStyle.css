@@ -397,3 +397,31 @@ html,
         .esri-navigation-toggle:hover .esri-navigation-toggle__button, .esri-navigation-toggle:focus .esri-navigation-toggle__button {
             color: red;
         }
+
+
+        /* filtro de alertas por riesgo */
+        
+        #Riesgos-filter {
+            height: 180px;
+            width: 100%;
+            visibility: hidden;
+        }
+
+        .Riesgo-item {
+            width: 100%;
+            padding: 12px;
+            text-align: center;
+            vertical-align: baseline;
+            cursor: pointer;
+            height: 35px;
+            width: 100px;
+        }
+
+        .Riesgo-item:focus {
+            background-color: dimgrey;
+        }
+
+        .Riesgo-item:hover {
+            background-color: dimgrey;
+        }
+
