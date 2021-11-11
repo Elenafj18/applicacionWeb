@@ -166,7 +166,7 @@ require([
             "<li>Fecha del informe: {observationDate}.</li>" +
             "<li>Especie: {species}.</li>" +
             "<li>Serotipo: {serotipo}.</li>" +
-            "<li>Más información: <a href='http://empres-i.fao.org/empres-i/2/obd?idOutbreak={id}'> Enlace</a></li>";
+            "<li>Más información: <a href='http://empres-i.fao.org/eipws3g/2/obd?idOutbreak={id}'> Enlace</a></li>";
 
         return content;
 
