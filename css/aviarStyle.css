@@ -7,7 +7,7 @@ html,
             width: 100%;
         }
 
-        .esri-time-slider {
+        .influenza-time-slider {
             cursor: default;
             min-width: 200px;
             box-shadow: 0 1px 2px rgb(0 0 0 / 30%);
@@ -31,7 +31,7 @@ html,
             bottom: 20px;
         }
 
-        .esri-slider__thumb {
+        .influenza-slider__thumb {
             background-color: #242424;
             border: 1px solid #adadad;
             border-radius: 5px;
@@ -69,7 +69,7 @@ html,
 
         /* legend */
 
-        .esri-ui-corner .esri-expand .esri-widget--panel, .esri-ui-corner .esri-expand .esri-widget--panel-height-only, .esri-ui-corner .esri-component>.esri-widget--panel, .esri-ui-corner .esri-component.esri-widget--panel {
+        .influenza-ui-corner .influenza-expand .influenza-widget--panel, .influenza-ui-corner .influenza-expand .influenza-widget--panel-height-only, .influenza-ui-corner .influenza-component>.influenza-widget--panel, .influenza-ui-corner .influenza-component.influenza-widget--panel {
             width: 150px;
         }
 
@@ -109,7 +109,7 @@ html,
 
       
 
-        .esri-icon-non-visible {
+        .influenza-icon-non-visible {
             color: #fcf9f9;            
             font-size: medium;
         }
@@ -152,12 +152,12 @@ html,
             color: #ffa500;
         }
 
-        .esri-feature__title {
+        .influenza-feature__title {
             background-color: #aa1a1a;
             padding: 0.25em;
         }
 
-        .esri-feature__size-container {
+        .influenza-feature__size-container {
             background: #3a3838;
         }
 
@@ -302,19 +302,19 @@ html,
 
         /* SCALE BAR */
 
-        .esri-scale-bar__label {
+        .influenza-scale-bar__label {
             font-size: inherit;
             color: #ff0000;
             white-space: nowrap;
             font-weight: 600;
         }
 
-        .esri-scale-bar__line--top {
+        .influenza-scale-bar__line--top {
             bottom: -8px;
             border-bottom: 2px solid #d1d1d1;
         }
 
-        .esri-scale-bar__label-container--top {
+        .influenza-scale-bar__label-container--top {
             bottom: -6px;
         }
 
@@ -366,35 +366,35 @@ html,
             color: #ededed
         }
 
-        .esri-icon-down:before {
+        .influenza-icon-down:before {
             content: "\e681";
             color: inherit;
 
         }
 
-        .esri-search__input::-moz-placeholder {
+        .influenza-search__input::-moz-placeholder {
             
             opacity: 0.1;
           }
-        .esri-search--warning .esri-search__warning-menu {
+        .influenza-search--warning .influenza-search__warning-menu {
             transition: opacity 125ms ease-in-out;
             visibility: visible;
             opacity: 0.1;
             max-height: inherit;
           }
 
-        .esri-search__warning-menu {
+        .influenza-search__warning-menu {
             z-index: 1;
             font-size: 14px;
             opacity: 0.1;
         }
 
-        .esri-widget--button:hover {
+        .influenza-widget--button:hover {
             background-color: #303030;
             color: red;
         }
 
-        .esri-navigation-toggle:hover .esri-navigation-toggle__button, .esri-navigation-toggle:focus .esri-navigation-toggle__button {
+        .influenza-navigation-toggle:hover .influenza-navigation-toggle__button, .influenza-navigation-toggle:focus .influenza-navigation-toggle__button {
             color: red;
         }
 
