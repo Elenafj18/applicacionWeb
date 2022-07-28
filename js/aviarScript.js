@@ -7,10 +7,10 @@ var map = L.map('map').
     }).addTo(map);
 L.control.scale().addTo(map);
 
-L.marker([41.66, -4.71],{draggable: true}).addTo(map);
+//L.marker([41.66, -4.71],{draggable: true}).addTo(map);
 
 
-
+/// DEFINICIÓN DEL LAS COMARCAS GANADERAS
 let layerViewComarcas;
 
     const layerComarcas = $.ajax({
@@ -43,7 +43,7 @@ let layerViewComarcas;
         returnGeometry: true,
     },
     success: function(response) {
-        visualizer.sendDataToMap(response);
+        visualizer.sendDataToMap(response, styleComarcas);
     },
     error:function(error) {
     }
@@ -52,19 +52,28 @@ let layerViewComarcas;
     
     var visualizer = {};
 
-//make geojson object and add to map  
-visualizer.sendDataToMap = function(jsonData) {
-    L.geoJson(jsonData, {style: style}).addTo(map);;
-        };
+
+    var styleComarcas = {
+        fillColor: '#FF0000',
+        weight: 0.6,
+        opacity: 1,
+        color: '#737373',
+        dashArray: '2',
+        fillOpacity: 0.4
+    }
+    
+//Annadir comarcas al mapa
+visualizer.sendDataToMap = function(jsonData, style) {
+    L.geoJson(jsonData, {style: style}).addTo(map);
+};
 
 
 function getInfoComarcas(feature) {
 
 /* view.graphics.removeAll() */
 
-    var graphic, attributes;
-
-    graphic = feature.graphic;
+    var features, attributes;
+    features = feature.features;
     attributes = graphic.attributes;
 
     var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson';
@@ -78,7 +87,8 @@ function getInfoComarcas(feature) {
     for (let index = 0; index < rutas.features.length; index++) {
         const element = rutas.features[index];
         console.log('element', element)
-        if (element.properties.idComarca == attributes.comarca_sg) {
+        if (element.properties.idComarca == feature.comarca_sg) {
+            
             var polyline = {
                 type: "polyline", // new Polyline()
                 paths: element.geometry.coordinates
@@ -88,18 +98,19 @@ function getInfoComarcas(feature) {
                 color: [51, 200, 200/* , 0.9 */], // RGB color values as an array
                 width: 1
             };
-            var polylineGraphic = new Graphic({
+             var polylineGraphic = new Graphic({
                 geometry: polyline, // Add the geometry created in step 4
                 symbol: lineSymbol, // Add the symbol created in step 5
             });
             view.graphics.add(polylineGraphic);
+            view.on("hold", function (e) {
+                view.graphics.removeAll(polylineGraphic);
+                console.log("Remove");
+            });
         }
     }
 
-    view.on("hold", function (e) {
-        view.graphics.removeAll(polylineGraphic);
-        console.log("Remove")
-    })
+    
 }
 
 function getColor(d) {
@@ -113,13 +124,87 @@ function getColor(d) {
                       '#FFEDA0';
 }
 
-function style(feature) {
-    return {
-        fillColor: '#95FF90',
-        weight: 0.6,
-        opacity: 1,
-        color: '#737373',
-        dashArray: '2',
-        fillOpacity: 0.4
-    };
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [0, 10, 20, 50, 100, 200, 500, 1000]
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+};
+
+legend.addTo(map);
+
+
+//DEFINICIÓN RUTAS
+$(document).ready(function () {
+    $(function () {
+        document.getElementById("migrations").addEventListener("click", activarRutas);
+
+        //view.ui.add(ruta, "top-right");
+    })
+})
+let layerRutas;
+let visibleRutas = false;
+
+function activarRutas(feature) {
+
+    if(!visibleRutas){
+        map.removeLayer(layerRutas);
+        visibleRutas=true;
+    }
+    else{ 
+        layerRutas = $.ajax({
+            type: 'GET',
+            dataType:"json",
+            url: "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson",
+            style:{},
+            method: 'GET',
+            copyright: "CERBU",
+            outFields: ['*'],
+            renderer: {
+                type: "simple",
+                symbol: {
+                    type: "simple-fill",
+                    color: [92, 92, 92, 0.01],
+                    outline: {
+                        color: [155, 155, 155, 0.3],
+                        width: 1.25
+                    }
+                }
+            },
+            visible: visibleRutas,
+            supportsQuery: false,
+            popupTemplate: {
+                title:"",
+                content: getInfoComarcas,
+                visible: false,
+                returnGeometry: true,
+            },
+            success: function(response) {
+                visualizer.sendDataToMap(response, styleRutas);
+            },
+            error:function(error) {
+            }    
+            });
+
+            var styleRutas = {
+                fillColor: '#95FF90',
+                weight: 0.6,
+                opacity: 0.05,
+                color: '#FFFFFF',
+                dashArray: '1',
+                fillOpacity: 0.05
+        }
+        visibleRutas=false;
+    }
+    
 }
