@@ -15,9 +15,9 @@
 
   <link rel="stylesheet" href="css/aviarStyle.css">
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+  
 
-  <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
 
@@ -25,30 +25,74 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anek+Kannada:wght@100" rel="stylesheet">ç
+  <link href="https://fonts.googleapis.com/css2?family=Anek+Kannada:wght@100" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Prosto+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
 
 </head>
 
   <body>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+
     <div class="row influenza-header justify-content-center align-items-center">
       
         <h2 style="font-family: 'Prosto One', cursive; font-size: 45px; margin-top: 1rem; margin-bottom: 2px;">
-          <img class="icon-brotes-Logo"style="height: 45px; width: 45px;" href="img/appLogo.png">
+          <img class="icon-brotes-Logo"style="height: 45px; width: 45px;" src="./img/appLogo.png">
           <b>DiFLUsion</b></h2>
       
     </div>
     <div class = "container-fluid influenza-container">
+      
       <div class="row-1"><br></div>
+
       <div class="row" >
-        <div class="col"></div>
+
+        <div class="col">
+
+          <div class="row justify-content-center align-items-center">
+            <div id="broteDiv"><button id="btnBrotes" title="Zoom to brotes" class="icon-brotes"> <img class="icon-brotes-Logo"
+              src="img/brote.svg" /></button></div>
+          </div>
+
+          <div class="row"><br></div>
+
+          <div class="row justify-content-center align-items-center">
+            <div id="alertasDiv"><button id="btnAlertas" title="Zoom to alertas" class="icon-alertas"><img
+              class="icon-brotes-Logo" src="img/alerta.svg" /></button></div>
+          </div>
+          
+          <div class="row"><br></div>
+
+          <div class="row justify-content-center align-items-center">
+            <div id="rutaDiv"><button type='button' id="ruta" onclick=showRutas() title="Rutas activadas por riesgo" class="icon-rutas"><img
+            class="icon-rutas-Logo" src="img/ruta.svg" /></button></div>
+          </div>
+
+          <div class="row"><br></div>
+
+          <div class="row justify-content-center align-items-center">
+            <div id="rutaDivMigrations"><button type='button' id="migrations" title="Todas las rutas"
+              class="icon-migrations"><img class="icon-rutas-Logo" src="img/migrations.svg" /></button></div>
+          </div>
+
+          <div class="row"><br></div>
+
+          
+          
+        </div>
+        
         <div class="col-10" id="map"><script src="js/aviarScript.js"></script></div>
         <div class="col"></div>
       </div>
+      
     
-      <div id="timeSliderBrotes"></div>
-      <div id="timeSliderAlertas"></div>
+      <!-- <div id="timeSliderBrotes"></div>
+      <div id="timeSliderAlertas"></div> -->
 
       <!-- <div id="infoDiv" class="influenza-widget">
         <div><b>Info brotes</b></div>
@@ -56,16 +100,16 @@
         <div id="statsDiv" class="influenza-widget"></div>
       </div> -->
 
-      <div id="rutaDiv"><button type='button' style="height:20" id="ruta" onclick=showRutas() title="Rutas activadas por riesgo" class="icon-rutas"><img
+      <!-- <div id="rutaDiv"><button type='button' style="height:20" id="ruta" onclick=showRutas() title="Rutas activadas por riesgo" class="icon-rutas"><img
             class="icon-rutas-Logo" src="img/ruta.svg" /></button></div>
       <div id="broteDiv"><button id="btnBrotes" title="Zoom to brotes" class="icon-brotes"> <img class="icon-brotes-Logo"
             src="img/brote.svg" /></button></div>
       <div id="alertasDiv"><button id="btnAlertas" title="Zoom to alertas" class="icon-alertas"><img
             class="icon-brotes-Logo" src="img/alerta.svg" /></button></div>
       <div id="rutaDivMigrations"><button type='button' id="migrations" title="Todas las rutas"
-        class="icon-migrations"><img class="icon-rutas-Logo" src="img/migrations.svg" /></button></div>
+        class="icon-migrations"><img class="icon-rutas-Logo" src="img/migrations.svg" /></button></div> -->
       
-      <button id="myButtonAlerta" onclick="ShowHideTimeSliderAlertas()"><i class="influenza-icon-non-visible"></i></button>
+      <!-- <button id="myButtonAlerta" onclick="ShowHideTimeSliderAlertas()"><i class="influenza-icon-non-visible"></i></button>
       <button id="myButtonBrotes" onclick="ShowHideTimeSliderBrotes()"><i class="influenza-icon-non-visible"></i></button>
 
       <div id="Riesgos-filter" class="influenza-widget">
@@ -74,8 +118,8 @@
         <div class="Riesgo-item visible-Riesgo" data-Riesgo=3>Riesgo 3</div>
         <div class="Riesgo-item visible-Riesgo" data-Riesgo=2>Riesgo 2</div>
         <div class="Riesgo-item visible-Riesgo" data-Riesgo=1>Riesgo 1</div>
-      </div>
-
+      </div> -->
+      <br>
       <div id="info" class="container-fluid influenza-container">
           <div><b>Información de DiFLUsion</b></div>
           <br/>
@@ -103,6 +147,7 @@
           <br/>
           <span><img class="logo" src="img/logo.jpg" /></span>
         </div>
+      </div>
         
     </div>  
   </body>

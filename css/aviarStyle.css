@@ -161,13 +161,7 @@ html,
 
 
         #rutaDiv {
-
-            position: absolute;
-            bottom: 240px;
-            width: 50px;
-            margin: 10px;
             z-index: 3;
-            font-family: 'Arial';
             text-align: center;
             background-color: transparent;
         }
@@ -191,18 +185,11 @@ html,
 
         #ruta:hover {
             background-color: #303030;
-            border-color: #303030;
             color: #ededed
         }
 
         #rutaDivMigrations {
-
-            position: absolute;
-            bottom: 198px;
-            width: 50px;
-            margin: 10px;
             z-index: 3;
-            font-family: 'Arial';
             text-align: center;
             background-color: transparent;
         }
@@ -218,33 +205,22 @@ html,
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
             height: 40px;
             width: 50px;
-
+            box-shadow: 1px 1px 1px rgba(89, 89, 89, 0.79);
         }
 
         #migrations:hover {
             background-color: #303030;
-            border-color: #303030;
-            color: #ededed
+            color: #ededed;
         }
 
         #broteDiv {
-            position: absolute;
-            bottom: 360px;
-            width: 50px;
-            margin: 10px;
             z-index: 3;
-            font-family: 'Arial';
             text-align: center;
             background-color: transparent;
         }
 
         #alertasDiv {
-            position: absolute;
-            bottom: 300px;
-            width: 50px;
-            margin: 10px;
             z-index: 3;
-            font-family: 'Arial';
             text-align: center;
             background-color: transparent;
         }
@@ -259,17 +235,23 @@ html,
         .icon-brotes {
             
             background-color: #242424;
-            color: #ff4545;
             cursor: pointer;
-            border: 1px solid #242424;
-            width: 32px;
-            height: 32px
+            margin: 0rem;
+            height: 4rem;
+            width: 4rem;
+            background: radial-gradient(#363636, #1e1e1e);
+            border: solid #242424;
+            box-shadow: 2px 2px 2px rgba(141, 0, 0, 0.584);
+            
         }
 
         .icon-brotes:hover {
-            background-color: #303030;
-            border-color: #303030;
-            color: #ededed
+
+            transition: all 0.5s ease-in-out;
+            background: radial-gradient(#5d0000, #1e1e1e);
+            border: solid #390000;
+            color: #ededed;
+            
         }
 
         .icon-brotes-Logo {
@@ -285,17 +267,21 @@ html,
         .icon-alertas {
             
             background-color: #242424;
-            color: #ff4545;
             cursor: pointer;
-            border: 1px solid #242424;
-            width: 32px;
-            height: 32px
+            margin: 0rem;
+            height: 4rem;
+            width: 4rem;
+            background: radial-gradient(#363636, #1e1e1e);
+            border: solid #242424;
+            box-shadow: 2px 2px 2px rgba(141, 0, 0, 0.584);
+            
         }
 
         .icon-alertas:hover {
-            background-color: #303030;
-            border-color: #303030;
-            color: #ededed
+            transition: all 0.5s ease-in-out;
+            background: radial-gradient(#5d0000, #1e1e1e);
+            border: solid #390000;
+            color: #ededed;
         }
 
         /* SCALE BAR */
@@ -320,18 +306,21 @@ html,
         .icon-rutas {
             
             background-color: #242424;
-            color: #33c8c8;
             cursor: pointer;
-            border: 1px solid #242424;
-            width: 32px;
-            height: 32px;
-            margin-left: -120px
+            margin: 0rem;
+            height: 4rem;
+            width: 4rem;
+            background: radial-gradient(#363636, #1e1e1e);
+            border: solid #242424;
+            box-shadow: 2px 2px 2px rgba(141, 0, 0, 0.584);
+                        
         }
 
         .icon-rutas:hover {
-            background-color: #303030;
-            border-color: #303030;
-            color: #ededed
+            transition: all 0.5s ease-in-out;
+            background: radial-gradient(#5d0000, #1e1e1e);
+            border: solid #390000;
+            color: #ededed;
         }
 
         .icon-rutas-Logo {
@@ -339,29 +328,31 @@ html,
             background-color: #24242400;
             color: #ff454500;
             cursor: pointer;
-            width: 22px;
-            margin-left: -2px;
-            margin-top: 2px;
+            width: 2rem;
+            margin-left: auto;
+            height: auto;
+           
         }
 
         
 
         /* ACTIVAR RUTAS europa */
         .icon-migrations{
-            
             background-color: #242424;
-            color: #33c8c8;
             cursor: pointer;
-            border: 1px solid #242424;
-            width: 32px;
-            height: 32px;
-            margin-left: -42px;
+            margin: 0rem;
+            height: 4rem;
+            width: 4rem;
+            background: radial-gradient(#363636, #1e1e1e);
+            border: solid #242424;
+            box-shadow: 2px 2px 2px rgba(141, 0, 0, 0.584);
         }
 
         .icon-migrations:hover {
-            background-color: #303030;
-            border-color: #303030;
-            color: #ededed
+            transition: all 0.5s ease-in-out;
+            background: radial-gradient(#5d0000, #1e1e1e);
+            border: solid #390000;
+            color: #ededed;
         }
 
         .influenza-icon-down:before {
@@ -563,4 +554,14 @@ html,
             align-content: center;
             align-items: center;
             margin: 0 !important;
+        }
+
+        .easy-button-button{
+            color: white !important;
+            background: rgba(0, 0, 0, 0.5) !important;
+            transition: all 0.5s ease;
+        }
+        .easy-button-button:hover{
+            color: white !important;
+            background: rgba(255, 0, 0, 0.586) !important;
         }

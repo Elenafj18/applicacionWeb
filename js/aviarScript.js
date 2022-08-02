@@ -9,7 +9,27 @@ L.control.scale().addTo(map);
 
 //L.marker([41.66, -4.71],{draggable: true}).addTo(map);
 
+L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
+L.easyButton( '<img src="./img/brote.svg">', function(){
+    alert('restart-view');
+  }).addTo(map);
+
+L.easyButton( 'glyphicon-star', function(){
+  alert('zoom-brotes');
+}).addTo(map);
+
+L.easyButton( 'glyphicon-star', function(){
+    alert('zoom-spain');
+  }).addTo(map);
+
+L.easyButton( 'glyphicon-star', function(){
+alert('show-risk-routes');
+}).addTo(map);
+
+L.easyButton( 'glyphicon-star', function(){
+alert('show-all-routes');
+}).addTo(map);
 /// DEFINICIÓN DEL LAS COMARCAS GANADERAS
 let layerViewComarcas;
 
@@ -208,3 +228,6 @@ function activarRutas(feature) {
     }
     
 }
+
+
+
