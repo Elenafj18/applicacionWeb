@@ -11,25 +11,28 @@ L.control.scale().addTo(map);
 
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-L.easyButton( '<img src="./img/brote.svg">', function(){
+L.easyButton( '<img src="img/brote.svg" style="width:16px">', function(){
     alert('restart-view');
   }).addTo(map);
 
-L.easyButton( 'glyphicon-star', function(){
+L.easyButton( '<img src="img/alerta.svg" style="width:16px">', function(){
   alert('zoom-brotes');
 }).addTo(map);
 
-L.easyButton( 'glyphicon-star', function(){
+L.easyButton( '<img src="img/ruta.svg" style="width:16px">', function(){
     alert('zoom-spain');
   }).addTo(map);
 
-L.easyButton( 'glyphicon-star', function(){
+L.easyButton( '<img src="img/migrations.svg" style="width:16px">', function(){
 alert('show-risk-routes');
 }).addTo(map);
 
 L.easyButton( 'glyphicon-star', function(){
 alert('show-all-routes');
 }).addTo(map);
+
+
+
 /// DEFINICIÓN DEL LAS COMARCAS GANADERAS
 let layerViewComarcas;
 

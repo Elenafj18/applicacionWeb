@@ -451,7 +451,7 @@ html,
           
           .leaflet-control-zoom a {
             color: white !important;
-            background: rgba(0, 0, 0, 0.5) !important;
+            background: rgba(0, 0, 0, 0.70) !important;
             transition: all 0.5s ease;
           }
           
@@ -557,11 +557,10 @@ html,
         }
 
         .easy-button-button{
-            color: white !important;
-            background: rgba(0, 0, 0, 0.5) !important;
+            background: rgba(0, 0, 0, 0.70) !important;
             transition: all 0.5s ease;
         }
         .easy-button-button:hover{
             color: white !important;
-            background: rgba(255, 0, 0, 0.586) !important;
+            background: rgba(158, 0, 0, 0.586) !important;
         }
