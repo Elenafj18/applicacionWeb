@@ -1,35 +1,70 @@
-var map = L.map('map').
-     setView([41.66, -4.72],
-     4);
+var map = L.map('map').setView([44.87, 10],5);  
 
-     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+    
 L.control.scale().addTo(map);
 
 //L.marker([41.66, -4.71],{draggable: true}).addTo(map);
 
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-L.easyButton( '<img src="img/brote.svg" style="width:16px">', function(){
-    alert('restart-view');
+L.easyButton( '<img src="img/home.png" style="width:16px" title="Zoom inicial">', function(){
+    map.setView([44.87, 10],5);    
   }).addTo(map);
 
-L.easyButton( '<img src="img/alerta.svg" style="width:16px">', function(){
-  alert('zoom-brotes');
-}).addTo(map);
-
-L.easyButton( '<img src="img/ruta.svg" style="width:16px">', function(){
-    alert('zoom-spain');
+L.easyButton( '<img src="img/brote.svg" style="width:16px" title="Zoom a brotes">', function(){
+    map.setView([60, 70],3);    
   }).addTo(map);
 
-L.easyButton( '<img src="img/migrations.svg" style="width:16px">', function(){
-alert('show-risk-routes');
+L.easyButton( '<img src="img/alerta.svg" style="width:16px" title="Zoom a alertas">', function(){
+    map.setView([40, -2.72],5.5);
 }).addTo(map);
 
-L.easyButton( 'glyphicon-star', function(){
-alert('show-all-routes');
+L.easyButton( '<img src="img/ruta.svg" style="width:16px" title="Rutas activadas por riesgo">', function(){
+    alert('Rutas activadas por riesgo');
+  }).addTo(map);
+
+L.easyButton( '<img src="img/migrations.svg" style="width:16px" title="Todas las rutas">', function(){
+alert('Todas las rutas');
 }).addTo(map);
+
+var riskButton = L.easyButton( '<img src="img/filter.png" style="width:16px" title="Nivel de riesgo">', function(){
+    var risk1 = L.easyButton('<a style="width:4rem;>Riesgo 1</a>',function(){alert('Riesgo 1');}).addTo(map);
+    var risk2 = L.easyButton('<a style="width:4rem;>Riesgo 2</a>',function(){alert('Riesgo 2');}).addTo(map);
+    var risk3 =L.easyButton('<a style="width:4rem;>Riesgo 3</a>',function(){alert('Riesgo 3');}).addTo(map);
+    var risk4 =L.easyButton('<a style="width:4rem;>Riesgo 4</a>',function(){alert('Riesgo 4');}).addTo(map);
+    var risk5 =L.easyButton('<a style="width:4rem;">Riesgo 5</a>',function(){alert('Riesgo 5');}).addTo(map);
+
+
+}).addTo(map);
+
+
+//////////////////////////////////////////
+//                LEYENDA               //
+//////////////////////////////////////////
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'), grades = [1, 2, 3, 4, 5];
+
+    for (var i = 0; i < grades.length; i++) 
+        div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + "Nivel " + grades[i]+'<br>';
+    
+    return div;
+};
+
+legend.addTo(map);
+
+function getColor(level) {
+    return level > 5  ? '#000000' :
+           level > 4  ? '#ff0000' :
+           level > 3  ? '#ff6000' :
+           level > 2  ? '#ffb400' :
+                        '#fff555' ;
+}
 
 
 
@@ -136,35 +171,9 @@ function getInfoComarcas(feature) {
     
 }
 
-function getColor(d) {
-    return d > 1000 ? '#800026' :
-           d > 500  ? '#BD0026' :
-           d > 200  ? '#E31A1C' :
-           d > 100  ? '#FC4E2A' :
-           d > 50   ? '#FD8D3C' :
-           d > 20   ? '#FEB24C' :
-           d > 10   ? '#FED976' :
-                      '#FFEDA0';
-}
 
-var legend = L.control({position: 'bottomright'});
 
-legend.onAdd = function (map) {
 
-    var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 10, 20, 50, 100, 200, 500, 1000]
-
-    // loop through our density intervals and generate a label with a colored square for each interval
-    for (var i = 0; i < grades.length; i++) {
-        div.innerHTML +=
-            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-    }
-
-    return div;
-};
-
-legend.addTo(map);
 
 
 //DEFINICIÓN RUTAS

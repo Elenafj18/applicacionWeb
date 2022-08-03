@@ -450,14 +450,14 @@ html,
           /* Customise Zoom Controls */
           
           .leaflet-control-zoom a {
-            color: white !important;
+            color: red !important;
             background: rgba(0, 0, 0, 0.70) !important;
             transition: all 0.5s ease;
           }
           
           .leaflet-control-zoom a:hover {
-            color: white !important;
-            background: rgba(255, 0, 0, 0.586) !important;
+            color: black !important;
+            background: rgba(215, 0, 0, 0.878) !important;
           }
           
           /* Leaflet Layers Control */
@@ -562,5 +562,16 @@ html,
         }
         .easy-button-button:hover{
             color: white !important;
-            background: rgba(158, 0, 0, 0.586) !important;
+            background: rgba(215, 0, 0, 0.878) !important;
+        }
+
+        .leaflet-bar button {
+            height: 100px; /* easyButton's height default */
+            width: 100px;  /*  easyButton's width default */
+          }
+          
+        .legend{
+            color:rgb(162, 162, 162);
+            background: rgba(0, 0, 0, 0.70) !important;
+            transition: all 0.5s ease;
         }
