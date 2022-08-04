@@ -25,7 +25,7 @@ L.easyButton( '<img src="img/home.png" style="width:16px" title="Zoom inicial">'
   }).addTo(map);
 
 L.easyButton( '<img src="img/brote.svg" style="width:16px" title="Zoom a brotes">', function(){
-    map.setView([60, 70],3);    
+    map.setView([55, 30],4);    
   }).addTo(map);
 
 L.easyButton( '<img src="img/alerta.svg" style="width:16px" title="Zoom a alertas">', function(){
