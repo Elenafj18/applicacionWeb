@@ -153,9 +153,11 @@ function highlightFeature(e) {
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront();
     }
+    info.update(layer.feature.properties);
 }
 function resetHighlight(e) {
     comarcasLayer.resetStyle(e.target);
+    info.update();
 }
 function zoomToFeature(e) {
     map.fitBounds(e.target.getBounds());
@@ -167,7 +169,32 @@ function onEachFeature(feature, layer) {
         click: zoomToFeature
     });
 }
+var info = L.control();
 
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'infoComarcas'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+
+// method that we will use to update the control based on feature properties passed
+info.update = function (props) {
+    console.log(props);
+    if(props)
+    this._div.innerHTML = '<h4><b>'+ props.comarca +'</b></h4>'
+    + 
+    '<p>' +
+    'Provincia: '+ props.provincia +
+    '<br/>' +
+    'CA: ' + props.comAutonoma +
+    '</p>';
+       
+    else
+        this._div.innerHTML = '';
+};
+
+
+info.addTo(map);
 
 
 

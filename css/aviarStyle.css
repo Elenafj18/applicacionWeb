@@ -44,27 +44,6 @@ html,
             }
             
 
-        #infoDiv {
-            opacity: 0.8;
-            height: 150x;
-            padding: 10px;
-            width: 280px;
-        }
-
-        #infoDiv span {
-            color: #ff0000;
-            font-size: 12pt;
-            font-weight: bolder;
-        }
-
-        #info {
-            opacity: 0.9;
-            height: 375px;
-            padding: 10px;
-            width: 100%;
-            overflow: auto;
-        }
-
         /* legend */
 
         .influenza-ui-corner .influenza-expand .influenza-widget--panel, .influenza-ui-corner .influenza-expand .influenza-widget--panel-height-only, .influenza-ui-corner .influenza-component>.influenza-widget--panel, .influenza-ui-corner .influenza-component.influenza-widget--panel {
@@ -499,17 +478,24 @@ html,
             display: none;
           }
 
-          .info {
+        
+
+        .infoComarcas{
+            color: white;
             padding: 6px 8px;
             font: 14px/16px Arial, Helvetica, sans-serif;
             background: white;
-            background: rgba(255,255,255,0.8);
+            background: rgba(0, 0, 0, 0.6);
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             border-radius: 5px;
         }
-        .info h4 {
+
+        .infoComarcas h4 {
             margin: 0 0 5px;
-            color: #777;
+            color: rgba(255, 0, 0, 0.736);
+            text-align: center;
+            font-size: medium;
+            font-family: 'Prosto One', cursive;;
         }
 
         .legend {
