@@ -1,10 +1,20 @@
-var map = L.map('map').setView([44.87, 10],5);  
+var map = L.map('map',
+    {
+    timeDimension: true,
+    timeDimensionOptions: {
+        timeInterval: "2014-09-30/2014-10-30",
+        period: "PT1H"
+    },
+    timeDimensionControl: true,}
+    ).setView([44.87, 10],5);  
+    
+L.control.scale().addTo(map);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
     
-L.control.scale().addTo(map);
+
 
 //L.marker([41.66, -4.71],{draggable: true}).addTo(map);
 
@@ -28,6 +38,7 @@ L.easyButton( '<img src="img/ruta.svg" style="width:16px" title="Rutas activadas
 
 L.easyButton( '<img src="img/migrations.svg" style="width:16px" title="Todas las rutas">', function(){
 alert('Todas las rutas');
+
 }).addTo(map);
 
 var riskButton = L.easyButton( '<img src="img/filter.png" style="width:16px" title="Nivel de riesgo">', function(){
@@ -39,6 +50,21 @@ var riskButton = L.easyButton( '<img src="img/filter.png" style="width:16px" tit
 
 
 }).addTo(map);
+
+
+//TIME LAYER
+// var wmsUrl = "https://thredds.socib.es/thredds/wms/observational/hf_radar/hf_radar_ibiza-scb_codarssproc001_aggregation/dep0001_hf-radar-ibiza_scb-codarssproc001_L1_agg.nc"
+// var wmsLayer = L.tileLayer.wms(wmsUrl, {
+//     layers: 'sea_water_velocity',
+//     format: 'image/png',
+//     transparent: true,
+//     attribution: 'SOCIB HF RADAR | sea_water_velocity'
+// });
+
+// // Create and add a TimeDimension Layer to the map
+// var tdWmsLayer = L.timeDimension.layer.wms(wmsLayer);
+// tdWmsLayer.addTo(map);
+// console.log(tdWmsLayer);
 
 
 //////////////////////////////////////////
@@ -68,178 +94,257 @@ function getColor(level) {
 
 
 
-/// DEFINICIÓN DEL LAS COMARCAS GANADERAS
-let layerViewComarcas;
 
-    const layerComarcas = $.ajax({
-    type: 'GET',
-    dataType:"json",
-    url: "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/comarcas.geojson",
-    style:{},
-    method: 'GET',
-    copyright: "CERBU",
-    outFields: ['*'],
-    renderer: {
-        type: "simple",
-        symbol: {
-            type: "simple-fill",
-            color: [92, 92, 92, 0.01],
-            outline: {
-                color: [155, 155, 155, 0.3],
-                width: 1.25
-            }
+
+var getJSON = function(url, callback) {
+
+    var xmlhttprequest = new XMLHttpRequest();
+    xmlhttprequest.open('GET', url, true);
+    xmlhttprequest.responseType = 'json';
+
+    xmlhttprequest.onload = function() {
+
+        var status = xmlhttprequest.status;
+
+        if (status == 200) {
+            callback(null, xmlhttprequest.response);
+        } else {
+            callback(status, xmlhttprequest.response);
         }
-    },
-    visible: true,
-    supportsQuery: true,
-    popupTemplate: {
-        title: "Comarca: {comarca}," +
-            "<br>Provincia: {provincia}" +
-            "<br>Comunidad Autónoma: {comAutonoma}</br>",
-        content: getInfoComarcas,
-        visible: false,
-        returnGeometry: true,
-    },
-    success: function(response) {
-        visualizer.sendDataToMap(response, styleComarcas);
-    },
-    error:function(error) {
-    }
-          
-    });
-    
-    var visualizer = {};
+    };
 
-
-    var styleComarcas = {
-        fillColor: '#FF0000',
-        weight: 0.6,
-        opacity: 1,
-        color: '#737373',
-        dashArray: '2',
-        fillOpacity: 0.4
-    }
-    
-//Annadir comarcas al mapa
-visualizer.sendDataToMap = function(jsonData, style) {
-    L.geoJson(jsonData, {style: style}).addTo(map);
+    xmlhttprequest.send();
 };
 
+var comarcasJSON;
+var comarcasLayer;
+getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/comarcas.geojson',  function(err, data) {
 
-function getInfoComarcas(feature) {
+    if (err != null) {
+        console.error(err);
+    } else {
+        comarcasJSON = data;
+        comarcasLayer = L.geoJson(comarcasJSON,{style:styleComarcas,onEachFeature: onEachFeature}).addTo(map);
 
-/* view.graphics.removeAll() */
+    }
+    console.log("************************************************************");
+  
+});
 
-    var features, attributes;
-    features = feature.features;
-    attributes = graphic.attributes;
+var styleComarcas = {
+    fillColor: '#ffffff',
+    fillOpacity: 0.2,
+    weight: 0.4,
+    opacity: 1,
+    color: '#000000',
+    dashArray: '1'    
+}
 
-    var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson';
-// Se inicia la peticion ajax a la url ruta
-    var request = new XMLHttpRequest();
-    request.open("GET", urlRutas, false); // false for synchronous request
-    request.send(null);
-    let rutas = JSON.parse(request.responseText)
-    console.log('obj ruta', rutas)
+function highlightFeature(e) {
+    var layer = e.target;
 
-    for (let index = 0; index < rutas.features.length; index++) {
-        const element = rutas.features[index];
-        console.log('element', element)
-        if (element.properties.idComarca == feature.comarca_sg) {
+    layer.setStyle({
+        weight: 1.5,
+        color: '#000',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+}
+function resetHighlight(e) {
+    comarcasLayer.resetStyle(e.target);
+}
+function zoomToFeature(e) {
+    map.fitBounds(e.target.getBounds());
+}
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+}
+
+
+
+
+
+
+
+/// DEFINICIÓN DEL LAS COMARCAS GANADERAS
+// let layerViewComarcas;
+
+//     const layerComarcas = $.ajax({
+//     type: 'GET',
+//     dataType:"json",
+//     url: "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/comarcas.geojson",
+//     style:{},
+//     method: 'GET',
+//     copyright: "CERBU",
+//     outFields: ['*'],
+//     renderer: {
+//         type: "simple",
+//         symbol: {
+//             type: "simple-fill",
+//             color: [92, 92, 92, 0.01],
+//             outline: {
+//                 color: [155, 155, 155, 0.3],
+//                 width: 1.25
+//             }
+//         }
+//     },
+//     visible: true,
+//     supportsQuery: true,
+//     popupTemplate: {
+//         title: "Comarca: {comarca}," +
+//             "<br>Provincia: {provincia}" +
+//             "<br>Comunidad Autónoma: {comAutonoma}</br>",
+//         content: getInfoComarcas,
+//         visible: false,
+//         returnGeometry: true,
+//     },
+//     success: function(response) {
+//         visualizer.sendDataToMap(response, styleComarcas);
+//     },
+//     error:function(error) {
+//     }
+          
+//     });
+    
+//     var visualizer = {};
+
+
+//     var styleComarcas = {
+//         fillColor: '#FF0000',
+//         weight: 0.6,
+//         opacity: 1,
+//         color: '#737373',
+//         dashArray: '2',
+//         fillOpacity: 0.4
+//     }
+    
+// //Annadir comarcas al mapa
+// visualizer.sendDataToMap = function(jsonData, style) {
+//     L.geoJson(jsonData, {style: style}).addTo(map);
+// };
+
+// function getInfoComarcas(feature) {
+
+// /* view.graphics.removeAll() */
+
+//     var features, attributes;
+//     features = feature.features;
+//     attributes = graphic.attributes;
+
+//     var urlRutas = 'https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson';
+// // Se inicia la peticion ajax a la url ruta
+//     var request = new XMLHttpRequest();
+//     request.open("GET", urlRutas, false); // false for synchronous request
+//     request.send(null);
+//     let rutas = JSON.parse(request.responseText)
+//     console.log('obj ruta', rutas)
+
+//     for (let index = 0; index < rutas.features.length; index++) {
+//         const element = rutas.features[index];
+//         console.log('element', element)
+//         if (element.properties.idComarca == feature.comarca_sg) {
             
-            var polyline = {
-                type: "polyline", // new Polyline()
-                paths: element.geometry.coordinates
-            };
-            var lineSymbol = {
-                type: "simple-line", // new SimpleLineSymbol()
-                color: [51, 200, 200/* , 0.9 */], // RGB color values as an array
-                width: 1
-            };
-             var polylineGraphic = new Graphic({
-                geometry: polyline, // Add the geometry created in step 4
-                symbol: lineSymbol, // Add the symbol created in step 5
-            });
-            view.graphics.add(polylineGraphic);
-            view.on("hold", function (e) {
-                view.graphics.removeAll(polylineGraphic);
-                console.log("Remove");
-            });
-        }
-    }
+//             var polyline = {
+//                 type: "polyline", // new Polyline()
+//                 paths: element.geometry.coordinates
+//             };
+//             var lineSymbol = {
+//                 type: "simple-line", // new SimpleLineSymbol()
+//                 color: [51, 200, 200/* , 0.9 */], // RGB color values as an array
+//                 width: 1
+//             };
+//              var polylineGraphic = new Graphic({
+//                 geometry: polyline, // Add the geometry created in step 4
+//                 symbol: lineSymbol, // Add the symbol created in step 5
+//             });
+//             view.graphics.add(polylineGraphic);
+//             view.on("hold", function (e) {
+//                 view.graphics.removeAll(polylineGraphic);
+//                 console.log("Remove");
+//             });
+//         }
+//     }
 
     
-}
+// }
 
 
 
 
 
 
-//DEFINICIÓN RUTAS
-$(document).ready(function () {
-    $(function () {
-        document.getElementById("migrations").addEventListener("click", activarRutas);
+// //DEFINICIÓN RUTAS
+// $(document).ready(function () {
+//     $(function () {
+//         document.getElementById("migrations").addEventListener("click", activarRutas);
 
-        //view.ui.add(ruta, "top-right");
-    })
-})
-let layerRutas;
-let visibleRutas = false;
+//         //view.ui.add(ruta, "top-right");
+//     })
+// })
+// let layerRutas;
+// let visibleRutas = false;
 
-function activarRutas(feature) {
+// function activarRutas(feature) {
 
-    if(!visibleRutas){
-        map.removeLayer(layerRutas);
-        visibleRutas=true;
-    }
-    else{ 
-        layerRutas = $.ajax({
-            type: 'GET',
-            dataType:"json",
-            url: "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson",
-            style:{},
-            method: 'GET',
-            copyright: "CERBU",
-            outFields: ['*'],
-            renderer: {
-                type: "simple",
-                symbol: {
-                    type: "simple-fill",
-                    color: [92, 92, 92, 0.01],
-                    outline: {
-                        color: [155, 155, 155, 0.3],
-                        width: 1.25
-                    }
-                }
-            },
-            visible: visibleRutas,
-            supportsQuery: false,
-            popupTemplate: {
-                title:"",
-                content: getInfoComarcas,
-                visible: false,
-                returnGeometry: true,
-            },
-            success: function(response) {
-                visualizer.sendDataToMap(response, styleRutas);
-            },
-            error:function(error) {
-            }    
-            });
+//     if(visibleRutas){
+//         map.removeLayer(layerRutas);
+//         visibleRutas=true;
+//     }
+//     else{ 
+//         layerRutas = $.ajax({
+//             type: 'GET',
+//             dataType:"json",
+//             url: "https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson",
+//             style:{},
+//             method: 'GET',
+//             copyright: "CERBU",
+//             outFields: ['*'],
+//             renderer: {
+//                 type: "simple",
+//                 symbol: {
+//                     type: "simple-fill",
+//                     color: [92, 92, 92, 0.01],
+//                     outline: {
+//                         color: [155, 155, 155, 0.3],
+//                         width: 1.25
+//                     }
+//                 }
+//             },
+//             visible: visibleRutas,
+//             supportsQuery: false,
+//             popupTemplate: {
+//                 title:"",
+//                 content: getInfoComarcas,
+//                 visible: false,
+//                 returnGeometry: true,
+//             },
+//             success: function(response) {
+//                 visualizer.sendDataToMap(response, styleRutas);
+//             },
+//             error:function(error) {
+//             }    
+//             });
 
-            var styleRutas = {
-                fillColor: '#95FF90',
-                weight: 0.6,
-                opacity: 0.05,
-                color: '#FFFFFF',
-                dashArray: '1',
-                fillOpacity: 0.05
-        }
-        visibleRutas=false;
-    }
+//             var styleRutas = {
+//                 fillColor: '#95FF90',
+//                 weight: 0.6,
+//                 opacity: 0.05,
+//                 color: '#FFFFFF',
+//                 dashArray: '1',
+//                 fillOpacity: 0.05
+//         }
+//         visibleRutas=false;
+//     }
     
-}
+// }
 
 
 

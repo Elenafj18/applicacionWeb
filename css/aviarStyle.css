@@ -284,23 +284,6 @@ html,
             color: #ededed;
         }
 
-        /* SCALE BAR */
-
-        .influenza-scale-bar__label {
-            font-size: inherit;
-            color: #ff0000;
-            white-space: nowrap;
-            font-weight: 600;
-        }
-
-        .influenza-scale-bar__line--top {
-            bottom: -8px;
-            border-bottom: 2px solid #d1d1d1;
-        }
-
-        .influenza-scale-bar__label-container--top {
-            bottom: -6px;
-        }
 
         /* ACTIVAR RUTAS */
         .icon-rutas {
@@ -574,4 +557,33 @@ html,
             color:rgb(162, 162, 162);
             background: rgba(0, 0, 0, 0.70) !important;
             transition: all 0.5s ease;
+        }
+
+        .leaflet-bar-timecontrol{
+            background: rgba(0, 0, 0, 0.30) !important;
+            position: relative;
+            right: -200px;
+        }
+
+        .leaflet-control-timecontrol{
+            background: rgba(0, 0, 0, 0.6) !important;
+            color:white !important;
+            border: solid 1px #000 !important;
+        }
+
+
+        .leaflet-bar-timecontrol .leaflet-control-timecontrol:before {
+            font-family: "Glyphicons Halflings";
+            color: white !important;
+            display: block;
+        }
+
+        .leaflet-container .leaflet-control-scale {
+            
+            margin-bottom: -30px !important;
+        }
+       
+        .leaflet-control-scale-line{
+            background: rgba(0, 0, 0, 0.4) !important;
+            color: white !important;            
         }
