@@ -493,9 +493,8 @@ html,
 
         .infoComarcas{
             color: white;
-            padding: 6px 8px;
+            padding: 10px 10px 0px 10px;
             font: 14px/16px Arial, Helvetica, sans-serif;
-            background: white;
             background: rgba(0, 0, 0, 0.8);
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             border-radius: 5px;
@@ -506,7 +505,7 @@ html,
             color: rgba(255, 0, 0, 0.736);
             text-align: center;
             font-size: medium;
-            font-family: 'Prosto One', cursive;;
+            font-family: 'Prosto One' cursive;
         }
 
         .legend {
