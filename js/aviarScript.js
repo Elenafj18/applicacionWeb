@@ -1,15 +1,20 @@
+var today = new Date();
+var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+console.log(date);
+var timeInterval = today.getFullYear()+'-'+(today.getMonth()-3)+'-'+today.getDate() + '/' + today;
 var map = L.map('map',
     {
     timeDimension: true,
     timeDimensionOptions: {
-        timeInterval: "2021-09-30/2022-10-30",
-        period: "PT1H"
+        timeInterval: timeInterval,
+        // period: "PT1H"
+        period: "P1W",
+        currentTime : date
     },
     timeDimensionControl: true,}
     ).setView([44.87, 10],5);  
     
 L.control.scale().addTo(map);
-
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -46,24 +51,7 @@ var riskButton = L.easyButton( '<img src="img/filter.png" style="width:16px" tit
     var risk3 =L.easyButton('<a style="width:4rem;>Riesgo 3</a>',function(){alert('Riesgo 3');}).addTo(map);
     var risk4 =L.easyButton('<a style="width:4rem;>Riesgo 4</a>',function(){alert('Riesgo 4');}).addTo(map);
     var risk5 =L.easyButton('<a style="width:4rem;">Riesgo 5</a>',function(){alert('Riesgo 5');}).addTo(map);
-
-
 }).addTo(map);
-
-
-//TIME LAYER
-// var wmsUrl = "https://thredds.socib.es/thredds/wms/observational/hf_radar/hf_radar_ibiza-scb_codarssproc001_aggregation/dep0001_hf-radar-ibiza_scb-codarssproc001_L1_agg.nc"
-// var wmsLayer = L.tileLayer.wms(wmsUrl, {
-//     layers: 'sea_water_velocity',
-//     format: 'image/png',
-//     transparent: true,
-//     attribution: 'SOCIB HF RADAR | sea_water_velocity'
-// });
-
-// // Create and add a TimeDimension Layer to the map
-// var tdWmsLayer = L.timeDimension.layer.wms(wmsLayer);
-// tdWmsLayer.addTo(map);
-// console.log(tdWmsLayer);
 
 
 //////////////////////////////////////////
@@ -83,11 +71,10 @@ legend.onAdd = function (map) {
 
 legend.addTo(map);
 
-function getColor(alerta) {
-    var riesgo = alerta[map.timeDimension._currentTimeIndex];
+function getColor(riesgo) {
     return riesgo > 4  ? '#000000' :
            riesgo > 3  ? '#ff0000' :
-           riesgo > 2  ? '#ff6000' :
+           riesgo > 2  ? '#ff6600' :
            riesgo > 1  ? '#ffb400' :
            riesgo > 0  ? '#fff555' :
                          '#ffffff';
@@ -95,6 +82,7 @@ function getColor(alerta) {
 
 
 
+//FUNCIÓN GET JSON
 var getJSON = function(url, callback) {
 
     var xmlhttprequest = new XMLHttpRequest();
@@ -117,7 +105,7 @@ var getJSON = function(url, callback) {
 
 
 //////////////////////////////////////////
-//                COMARCAS              //
+//               COMARCAS               //
 //////////////////////////////////////////
 var comarcasJSON;
 var comarcasLayer;
@@ -129,48 +117,7 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
         console.error(err);
     } else {
         comarcasJSON = data;
-        getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson',  function(err, data) {
-
-            if (err != null) {
-                console.error(err);
-            } else {
-                alertasJSON = data;
-                alertasLayer = L.geoJson(alertasJSON);
-
-                // for(var i = 0; i < alertasJSON.features.length; i++){
-                //     const alerta = alertasJSON.features[i].properties;
-                //     for(var j = 0; j < comarcasJSON.features.length; j++){
-                //         var comarca = comarcasJSON.features[j].properties;
-                //         comarca.alertas = [];
-                //         if(alerta.comarca === comarca.comarca){ 
-                //             var riesgo = alerta.Riesgo;
-                //             var reportDate = alerta.reportDate;
-                //             console.log(riesgo + ' ' + reportDate);
-                //             comarca.alertas.push([{'ReportDate': reportDate,'Riesgo' : riesgo}]);
-                //         }
-                //     }
-                // }
-
-                for(var j = 0; j < comarcasJSON.features.length; j++){
-                    var comarca = comarcasJSON.features[j].properties;
-                    comarca.alertas = {};
-                    for(var i = 0; i < alertasJSON.features.length; i++){
-                        const alerta = alertasJSON.features[i].properties;
-                        if(alerta.comarca === comarca.comarca){ 
-                            var riesgo = alerta.Riesgo;
-                            var reportDate = alerta.reportDate;
-                            comarca.alertas[reportDate] = riesgo;
-                            var d = new Date(reportDate);
-                            console.log(d);
-                        }
-                    }
-                
-                }
-
-                
-                comarcasLayer = L.geoJson(comarcasJSON,{style:styleAlertas,onEachFeature: onEachFeature}).addTo(map);
-            }
-        });
+        comarcasLayer = L.geoJson(comarcasJSON,{style:styleComarcas,onEachFeature: onEachFeature}).addTo(map);
     }
     console.log("************************************************************");
   
@@ -178,7 +125,7 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
 
 var styleComarcas = {
     fillColor: '#ffffff',
-    // fillOpacity: 0.9,
+    fillOpacity: 0.3,
     weight: 0.5,
     opacity: 1,
     color: '#000000',
@@ -234,7 +181,7 @@ info.update = function (props) {
     '<br/>' +
     (props.Riesgo ? 'Riesgo: ' + props.alertas[map.timeDimension._currentTimeIndex] : 'Sin riesgo' +
     '<br/>' +
-    'Fecha: ' + map.timeDimension._currentTimeIndex
+    'Fecha: ' + new Date(map.timeDimensionControl._currentTimeIndex)
     ) +
     '</p>';
        
@@ -250,9 +197,26 @@ info.addTo(map);
 //                ALERTAS               //
 //////////////////////////////////////////
 
+var alertasJSON2 = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-5.77235268948, 43.5350333797]}, "properties": {"idAlerta": "SP33024_1623020400000.0", "Riesgo": 2, "reportDate": 1623020400000.0, "comarca": "GIJON", "informe": "https://drive.google.com/file/d/1Jz5kXOwiRxsr6Gww1lEcpZPdjdB3HUdD/view?usp=drivesdk"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-5.7870971929, 37.1010126053]}, "properties": {"idAlerta": "SP41095_1623020400000.0", "Riesgo": 4, "reportDate": 1623020400000.0, "comarca": "UTRERA (BAJO GUADALQUIVIR)", "informe": "https://drive.google.com/file/d/1Jz5kXOwiRxsr6Gww1lEcpZPdjdB3HUdD/view?usp=drivesdk"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-5.79556384981, 38.9607991582]}, "properties": {"idAlerta": "SP06044_1623020400000.0", "Riesgo": 2, "reportDate": 1623020400000.0, "comarca": "DON BENITO", "informe": "https://drive.google.com/file/d/1Jz5kXOwiRxsr6Gww1lEcpZPdjdB3HUdD/view?usp=drivesdk"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-6.57022157408, 37.1574501172]}, "properties": {"idAlerta": "SP21005_1623020400000.0", "Riesgo": 4, "reportDate": 1623020400000.0, "comarca": "ALMONTE (ENTORNO DE DOÑANA)", "informe": "https://drive.google.com/file/d/1Jz5kXOwiRxsr6Gww1lEcpZPdjdB3HUdD/view?usp=drivesdk"}}]};
+alertasLayer = L.geoJson(alertasJSON2);
+L.timeDimension.layer.geoJson(alertasLayer, {style:styleAlertas}).addTo(map);
+
+// getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson',  function(err, data) {
+
+//     if (err != null) {
+//         console.error(err);
+//     } else {
+//         alertasJSON = data;
+//         alertasLayer = L.geoJson(alertasJSON);
+
+//         L.timeDimension.layer.geoJson(alertasLayer).addTo(map);
+//     }
+// });
+
+
 function styleAlertas(feature) {
     return{
-        fillColor: getColor(feature.properties.alertas),
+        fillColor: getColor(feature.properties.Riesgo),
         fillOpacity: 0.4,
         weight: 0.4,
         opacity: 1,
@@ -260,4 +224,3 @@ function styleAlertas(feature) {
         dashArray: '1'    
     }
 }
-
