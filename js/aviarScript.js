@@ -201,7 +201,6 @@ var alertasJSON2 = {"type": "FeatureCollection",
                     "properties": {"idAlerta": "SP21005_1623020400000.0", "Riesgo": 4, "time": "2021/06/01", "comarca": "ALMONTE (ENTORNO DE DOÑANA)", "informe": "https://drive.google.com/file/d/1Jz5kXOwiRxsr6Gww1lEcpZPdjdB3HUdD/view?usp=drivesdk"}}
     ]};
 
-
 var timeDimension = new L.TimeDimension({
         timeInterval: '2020-08-11/2022-08-11',
         period: "P1W"
@@ -223,41 +222,36 @@ var timeDimensionControlOptions = {
     minSpeed:      1,
     speedStep:     1,
     maxSpeed:      15,
-    timeSliderDragUpdate: true
+    timeSliderDragUpdate: true,
+    limitSliders: true
 };
 
 var timeDimensionControl = new L.Control.TimeDimension(timeDimensionControlOptions);
 
 map.addControl(timeDimensionControl);
 
-var timeSeriesLayer = L.geoJSON(alertasJSON2);
+var alertasLayer = L.geoJSON(alertasJSON2);
 
-var geojson = L.timeDimension.layer.geoJson(timeSeriesLayer);
+var geojson = L.timeDimension.layer.geoJson(alertasLayer,{duration:"P1W"});
 
 geojson.addTo(map);
 
+getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson',  function(err, data) {
 
-// getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson',  function(err, data) {
-
-//     if (err != null) {
-//         console.error(err);
-//     } else {
-//         alertasJSON = data;
-//         // for(var i = 0; i < alertasJSON2.length; i++)
-//             // alertasJSON2.features[i].properties.reportDate = new Date(alertasJSON2.features[i].properties.reportDate);
-//         alertasLayer = L.geoJson(alertasJSON2);
-//         L.map.timeDimension.layer.geoJson(alertasLayer, {
-//             duration:'P1W',
-//             waitForReady: true,
-//             // updateTimeDimension: true
-//         }).addTo(map);
-
+    if (err != null) {
+        console.error(err);
+    } else {
+        alertasJSON = data;
+        for(var i = 0; i < alertasJSON2.length; i++){
+            var d = new Date(alertasJSON2.features[i].properties.reportDate);
+            d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
+            alertasJSON2.features[i].properties.time = new Date(alertasJSON2.features[i].properties.reportDate);
+        }
         
-//     }
+        
+    }
   
-// });
-
-
+});
 
 function addGeoJSONLayer(map, data) {
     var icon = L.icon({
@@ -267,47 +261,31 @@ function addGeoJSONLayer(map, data) {
     });
 
     var geoJSONLayer = L.geoJSON(data, {
-        pointToLayer: function (feature, latLng) {
-            if (feature.properties.hasOwnProperty('last')) {
-                return new L.Marker(latLng, {
-                    icon: icon
-                });
-            }
-            return L.circleMarker(latLng);
+        pointToLayer: function (feature) {
+            return new L.Marker({
+                icon: icon
+            });
         }
     });
-
-    var geoJSONTDLayer = L.timeDimension.layer.geoJson(geoJSONLayer, {
-        updateTimeDimension: true,
-        duration: 'P3W',
-        updateTimeDimensionMode: 'replace',
-        addlastPoint: true
-    }).addTo(map);
 }
+
 addGeoJSONLayer(L.geoJSON(alertasJSON2));
 
 // alertasLayer = L.geoJson(alertasJSON2,{
 //     onEachFeature: function (feature) {
 
-//         // create a marker style
-//             var logoMarkerStyle = L.Icon.extend({
-//                                             options: {
-//                                             iconSize: [50, 55],
-//                                             shadowSize:   [50, 64],
-//                                             iconAnchor: [25, 50],
-//                                             popupAnchor: [0, -80]
-//                                         }
-//                                     });
+//         create a marker style
+//         var logoMarkerStyle = L.Icon.extend({ options: { iconSize: [50, 55], shadowSize:   [50, 64], iconAnchor: [25, 50], popupAnchor: [0, -80]}});
 
-//             var logoMarker = new logoMarkerStyle({iconUrl: 'img/riesgo' + feature.properties.Riesgo + '.png'});
+//         var logoMarker = new logoMarkerStyle({iconUrl: 'img/riesgo' + feature.properties.Riesgo + '.png'});
 
-//             // read the coordinates from your marker
-//             var lat = feature.geometry.coordinates[1];
-//             var lon = feature.geometry.coordinates[0];
+//         // read the coordinates from your marker
+//         var lat = feature.geometry.coordinates[1];
+//         var lon = feature.geometry.coordinates[0];
 
-//             // L.marker([lat,lon],{icon: logoMarker}).bindPopup('<p>'+feature.properties.Name+'</p>').addTo(map);
-//             L.marker([lat,lon],{icon: logoMarker}).addTo(map);
-//             console.log(feature);
+//         // L.marker([lat,lon],{icon: logoMarker}).bindPopup('<p>'+feature.properties.Name+'</p>').addTo(map);
+//         L.marker([lat,lon],{icon: logoMarker}).addTo(map);
+//         console.log(feature);
 //     }
 // }
 // );
