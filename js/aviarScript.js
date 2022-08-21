@@ -1,23 +1,9 @@
 var today = new Date();
 var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-console.log(date);
 var timeInterval = today.getFullYear()+'-'+(today.getMonth()-3)+'-'+today.getDate() + '/' + today;
-var map = L.map('map', {
-    // timeDimension: true,
-    // timeDimensionOptions: {
-    //     // timeInterval: timeInterval,
-    //     timeInterval: '2020-08-11/2021-08-11',
-    //     // period: "PT1H"
-    //     period: "P1W",
-    //     currentTime : date,
-    // }
-}).setView([44.87, 10],5);  
 
-// L.control.timeDimension({
-//     title: 'alertas',
-//     // timeSliderDragUpdate: true,
-//     limitSliders: true
-// }).addTo(map);
+var map = L.map('map').setView([44.87, 10],5);  
+
 L.control.scale().addTo(map);
 
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -219,9 +205,10 @@ var timeDimensionControlOptions = {
     timeDimension: timeDimension,
     position:      'bottomleft',
     autoPlay:      true,
+    speedSlider:   true,
     minSpeed:      1,
-    speedStep:     1,
-    maxSpeed:      15,
+    speedStep:     200,
+    maxSpeed:      20,
     timeSliderDragUpdate: true,
     limitSliders: true
 };
@@ -230,46 +217,25 @@ var timeDimensionControl = new L.Control.TimeDimension(timeDimensionControlOptio
 
 map.addControl(timeDimensionControl);
 
-var alertasLayer = L.geoJSON(alertasJSON2);
-
-var geojson = L.timeDimension.layer.geoJson(alertasLayer,{duration:"P1W"});
-
-geojson.addTo(map);
-
 getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson',  function(err, data) {
 
     if (err != null) {
         console.error(err);
     } else {
         alertasJSON = data;
-        for(var i = 0; i < alertasJSON2.length; i++){
-            var d = new Date(alertasJSON2.features[i].properties.reportDate);
-            d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
-            alertasJSON2.features[i].properties.time = new Date(alertasJSON2.features[i].properties.reportDate);
-        }
-        
-        
+        for(var i = 0; i < alertasJSON.features.length; i++){
+            var d = new Date(alertasJSON.features[i].properties.reportDate);
+            alertasJSON.features[i].properties.time = d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
+        }      
+
+        var alertasLayer = L.geoJSON(alertasJSON);
+
+        var geojson = L.timeDimension.layer.geoJson(alertasLayer,{duration:"P1W"});
+
+        geojson.addTo(map);
     }
-  
 });
 
-function addGeoJSONLayer(map, data) {
-    var icon = L.icon({
-        iconUrl: 'img/riesgo1.png',
-        iconSize: [22, 22],
-        iconAnchor: [11, 11]
-    });
-
-    var geoJSONLayer = L.geoJSON(data, {
-        pointToLayer: function (feature) {
-            return new L.Marker({
-                icon: icon
-            });
-        }
-    });
-}
-
-addGeoJSONLayer(L.geoJSON(alertasJSON2));
 
 // alertasLayer = L.geoJson(alertasJSON2,{
 //     onEachFeature: function (feature) {
@@ -289,8 +255,6 @@ addGeoJSONLayer(L.geoJSON(alertasJSON2));
 //     }
 // }
 // );
-
-// L.timeDimension.layer.geoJson(alertasLayer, {duration:'P1W'}).addTo(map);
 
 
 // var rutasJSON, rutasLayer;
