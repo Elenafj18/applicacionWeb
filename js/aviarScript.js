@@ -24,9 +24,16 @@ L.easyButton( '<img src="img/ruta.svg" style="width:16px" title="Rutas activadas
     alert('Rutas activadas por riesgo');
   }).addTo(map);
 
+var rutasOn = false;
 L.easyButton( '<img src="img/migrations.svg" style="width:16px" title="Todas las rutas">', function(){
-alert('Todas las rutas');
-
+    if(!rutasOn){
+        map.removeLayer(rutasLayer);
+        rutasOn = true;
+    }
+    else{
+        map.addLayer(rutasLayer);
+        rutasOn = false;
+    }
 }).addTo(map);
 
 var riskButton = L.easyButton( '<img src="img/filter.png" style="width:16px" title="Nivel de riesgo">', function(){
@@ -57,9 +64,9 @@ legend.addTo(map);
 
 function getColor(riesgo) {
     return riesgo > 4  ? '#000000' :
-           riesgo > 3  ? '#ff0000' :
-           riesgo > 2  ? '#ff6600' :
-           riesgo > 1  ? '#ffb400' :
+           riesgo > 3  ? '#700000' :
+           riesgo > 2  ? '#ff0000' :
+           riesgo > 1  ? '#ff9400' :
            riesgo > 0  ? '#fff555' :
                          '#ffffff';
 }
@@ -103,7 +110,6 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
         comarcasJSON = data;
         comarcasLayer = L.geoJson(comarcasJSON,{style:styleComarcas,onEachFeature: onEachFeature}).addTo(map);
     }
-    console.log("************************************************************");
   
 });
 
@@ -176,17 +182,6 @@ info.addTo(map);
 //                ALERTAS               //
 //////////////////////////////////////////
 
-var alertasJSON2 = {"type": "FeatureCollection", 
-    "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-5.77235268948, 43.5350333797]},
-                    "properties": {"idAlerta": "SP33024_1623020400000.0", "Riesgo": 2, "time": "2021/03/11", "comarca": "GIJON", "informe": "https://drive.google.com/file/d/1Jz5kXOwiRxsr6Gww1lEcpZPdjdB3HUdD/view?usp=drivesdk"}},
-                {"type": "Feature","geometry": {"type": "Point", "coordinates": [-5.7870971929, 37.1010126053]},
-                    "properties": {"idAlerta": "SP41095_1623020400000.0", "Riesgo": 4, "time": "2021/04/20", "comarca": "UTRERA (BAJO GUADALQUIVIR)", "informe": "https://drive.google.com/file/d/1Jz5kXOwiRxsr6Gww1lEcpZPdjdB3HUdD/view?usp=drivesdk"}},
-                {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-5.79556384981, 38.9607991582]},
-                    "properties": {"idAlerta": "SP06044_1623020400000.0", "Riesgo": 2, "time": "2021/05/21", "comarca": "DON BENITO", "informe": "https://drive.google.com/file/d/1Jz5kXOwiRxsr6Gww1lEcpZPdjdB3HUdD/view?usp=drivesdk"}},
-                {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-6.57022157408, 37.1574501172]},
-                    "properties": {"idAlerta": "SP21005_1623020400000.0", "Riesgo": 4, "time": "2021/06/01", "comarca": "ALMONTE (ENTORNO DE DOÑANA)", "informe": "https://drive.google.com/file/d/1Jz5kXOwiRxsr6Gww1lEcpZPdjdB3HUdD/view?usp=drivesdk"}}
-    ]};
-
 var timeDimension = new L.TimeDimension({
         timeInterval: '2020-08-11/2022-08-11',
         period: "P1W"
@@ -228,7 +223,10 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
             alertasJSON.features[i].properties.time = d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
         }      
 
-        var alertasLayer = L.geoJSON(alertasJSON);
+        var alertasLayer = L.geoJSON(alertasJSON, {
+            pointToLayer: function(feature,latlng){
+                return L.marker(latlng,{icon: logoMarker(feature)});
+        }});
 
         var geojson = L.timeDimension.layer.geoJson(alertasLayer,{duration:"P1W"});
 
@@ -236,6 +234,21 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
     }
 });
 
+
+var logoMarkerStyle = L.Icon.extend({ options: { iconSize: [50, 55], shadowSize:   [50, 64], iconAnchor: [25, 50], popupAnchor: [0, -80]}});
+
+function logoMarker(feature){ 
+    console.log(feature);
+    return new logoMarkerStyle({iconUrl: 'img/riesgo' + feature.properties.Riesgo + '.png'})};
+
+// var alertaIcon = L.icon({
+//     iconUrl: 'img/brote.png',
+//     iconSize:     [15,15], // size of the icon
+//     shadowSize:   [15,15], // size of the shadow
+//     iconAnchor:   [15,15], // point of the icon which will correspond to marker's location
+//     shadowAnchor: [15,15],  // the same for the shadow
+//     popupAnchor:  [15,15] // point from which the popup should open relative to the iconAnchor
+// });
 
 // alertasLayer = L.geoJson(alertasJSON2,{
 //     onEachFeature: function (feature) {
@@ -257,19 +270,65 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
 // );
 
 
-// var rutasJSON, rutasLayer;
+var rutasJSON, rutasLayer;
+getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson',  function(err, data) {
+    if (err != null) {
+        console.error(err);
+    } else {
 
-// getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson',  function(err, data) {
+        rutasJSON = data;
 
-//     if (err != null) {
-//         console.error(err);
-//     } else {
-//         rutasJSON = data;
-//         rutasLayer = L.geoJson(rutasJSON);
-//         L.timeDimension.layer.geoJson(rutasLayer, {duration:'P1W'}).addTo(map);
-//     }
+        rutasLayer = L.geoJSON(rutasJSON, {style:styleMigrations});
+
+    }
+});
+
+var styleMigrations = {
+    weight: 0.2,
+    opacity: 0.2,
+    color: '#fff' 
+}
+
+
+
+
+var brotesJSON, brotesLayer;
+
+getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/brotes.geojson',  function(err, data) {
+
+    if (err != null) {
+        console.error(err);
+    } else {
+        // getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson',  function(err, data2) {
+            
+            // if(err !=  null) console.error(err);
+            // else{
+                brotesJSON = data;
+                // migrationsJSON = data2;
+                for(var i = 0; i < brotesJSON.features.length; i++){
+                    // console.log(brotesJSON.features[i].properties.observationDate);
+                    var d = new Date(brotesJSON.features[i].properties.observationDate);
+                    brotesJSON.features[i].properties.time = d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
+                    
+                }      
+
+                var brotesLayer = L.geoJSON(brotesJSON, {
+                    pointToLayer: function(feature,latlng){
+                        return L.marker(latlng,{icon: broteIcon}).bindPopup('<p> Especie: '+feature.properties.species+' <br> País: '+feature.properties.country + ' <br> Ciudad: '+feature.properties.city + ' </p>');
+                    }});
+                L.timeDimension.layer.geoJson(brotesLayer,{duration:"P1W"}).addTo(map);
+            // }
+        // }
+    }
   
-// });
+});
 
-
+var broteIcon = L.icon({
+    iconUrl: 'img/brote.png',
+    iconSize:     [15,15], // size of the icon
+    shadowSize:   [15,15], // size of the shadow
+    iconAnchor:   [0,0], // point of the icon which will correspond to marker's location
+    shadowAnchor: [15,15],  // the same for the shadow
+    popupAnchor:  [8,0] // point from which the popup should open relative to the iconAnchor
+});
 
