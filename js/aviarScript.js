@@ -24,25 +24,25 @@ L.easyButton( '<img src="img/ruta.svg" style="width:16px" title="Rutas activadas
     alert('Rutas activadas por riesgo');
   }).addTo(map);
 
-var rutasOn = false;
+var migrationsOn = false;
 L.easyButton( '<img src="img/migrations.svg" style="width:16px" title="Todas las rutas">', function(){
-    if(!rutasOn){
-        map.removeLayer(rutasLayer);
-        rutasOn = true;
+    if(!migrationsOn){
+        map.removeLayer(migrationsLayer);
+        migrationsOn = true;
     }
     else{
-        map.addLayer(rutasLayer);
-        rutasOn = false;
+        map.addLayer(migrationsLayer);
+        migrationsOn = false;
     }
 }).addTo(map);
 
-var riskButton = L.easyButton( '<img src="img/filter.png" style="width:16px" title="Nivel de riesgo">', function(){
-    var risk1 = L.easyButton('<a style="width:4rem;>Riesgo 1</a>',function(){alert('Riesgo 1');}).addTo(map);
-    var risk2 = L.easyButton('<a style="width:4rem;>Riesgo 2</a>',function(){alert('Riesgo 2');}).addTo(map);
-    var risk3 = L.easyButton('<a style="width:4rem;>Riesgo 3</a>',function(){alert('Riesgo 3');}).addTo(map);
-    var risk4 = L.easyButton('<a style="width:4rem;>Riesgo 4</a>',function(){alert('Riesgo 4');}).addTo(map);
-    var risk5 = L.easyButton('<a style="width:4rem;">Riesgo 5</a>',function(){alert('Riesgo 5');}).addTo(map);
-}).addTo(map);
+var riesgo1 = L.marker([50.5, 30.5], { tags: ['riesgo1'] }).addTo(map); 
+var riesgo2 = L.marker([50.5, 30.5], { tags: ['riesgo2'] }).addTo(map);
+var riesgo3 = L.marker([50.5, 30.5], { tags: ['riesgo3', 'slow'] }).addTo(map);
+
+L.control.tagFilterButton({
+	data: ['riesgo1', 'riesgo2', 'riesgo3', 'riesgo4', 'riesgo5']
+}).addTo( map );
 
 
 //////////////////////////////////////////
@@ -179,7 +179,7 @@ info.addTo(map);
 
 
 //////////////////////////////////////////
-//                ALERTAS               //
+//            TIME DIMENSION            //
 //////////////////////////////////////////
 
 var timeDimension = new L.TimeDimension({
@@ -212,6 +212,12 @@ var timeDimensionControl = new L.Control.TimeDimension(timeDimensionControlOptio
 
 map.addControl(timeDimensionControl);
 
+
+
+//////////////////////////////////////////
+//                ALERTAS               //
+//////////////////////////////////////////
+
 getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson',  function(err, data) {
 
     if (err != null) {
@@ -225,7 +231,7 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
 
         var alertasLayer = L.geoJSON(alertasJSON, {
             pointToLayer: function(feature,latlng){
-                return L.marker(latlng,{icon: logoMarker(feature)});
+                return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p> Especie: '+feature.properties.species+' <br> País: '+feature.properties.country + ' <br> Ciudad: '+feature.properties.city + ' </p>');
         }});
 
         var geojson = L.timeDimension.layer.geoJson(alertasLayer,{duration:"P1W"});
@@ -234,52 +240,32 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
     }
 });
 
-
-var logoMarkerStyle = L.Icon.extend({ options: { iconSize: [50, 55], shadowSize:   [50, 64], iconAnchor: [25, 50], popupAnchor: [0, -80]}});
+var logoMarkerStyle = L.Icon.extend({
+    options: {
+        iconSize:    [20, 20],
+        shadowSize:  [20, 20],
+        popupAnchor: [0, -80]
+    }
+});
 
 function logoMarker(feature){ 
     console.log(feature);
-    return new logoMarkerStyle({iconUrl: 'img/riesgo' + feature.properties.Riesgo + '.png'})};
-
-// var alertaIcon = L.icon({
-//     iconUrl: 'img/brote.png',
-//     iconSize:     [15,15], // size of the icon
-//     shadowSize:   [15,15], // size of the shadow
-//     iconAnchor:   [15,15], // point of the icon which will correspond to marker's location
-//     shadowAnchor: [15,15],  // the same for the shadow
-//     popupAnchor:  [15,15] // point from which the popup should open relative to the iconAnchor
-// });
-
-// alertasLayer = L.geoJson(alertasJSON2,{
-//     onEachFeature: function (feature) {
-
-//         create a marker style
-//         var logoMarkerStyle = L.Icon.extend({ options: { iconSize: [50, 55], shadowSize:   [50, 64], iconAnchor: [25, 50], popupAnchor: [0, -80]}});
-
-//         var logoMarker = new logoMarkerStyle({iconUrl: 'img/riesgo' + feature.properties.Riesgo + '.png'});
-
-//         // read the coordinates from your marker
-//         var lat = feature.geometry.coordinates[1];
-//         var lon = feature.geometry.coordinates[0];
-
-//         // L.marker([lat,lon],{icon: logoMarker}).bindPopup('<p>'+feature.properties.Name+'</p>').addTo(map);
-//         L.marker([lat,lon],{icon: logoMarker}).addTo(map);
-//         console.log(feature);
-//     }
-// }
-// );
+    return new logoMarkerStyle({iconUrl: 'img/riesgo' + feature.properties.Riesgo + '.png'})
+};
 
 
-var rutasJSON, rutasLayer;
+    
+//////////////////////////////////////////
+//              MIGRACIONES             //
+//////////////////////////////////////////
+
+var migrationsJSON, migrationsLayer;
 getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson',  function(err, data) {
     if (err != null) {
         console.error(err);
     } else {
-
-        rutasJSON = data;
-
-        rutasLayer = L.geoJSON(rutasJSON, {style:styleMigrations});
-
+        migrationsJSON = data;
+        migrationsLayer = L.geoJSON(migrationsJSON, {style:styleMigrations});
     }
 });
 
@@ -291,6 +277,9 @@ var styleMigrations = {
 
 
 
+//////////////////////////////////////////
+//                BROTES                //
+//////////////////////////////////////////
 
 var brotesJSON, brotesLayer;
 
