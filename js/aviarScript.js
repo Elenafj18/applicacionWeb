@@ -1,6 +1,7 @@
 var today = new Date();
 var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-var timeInterval = today.getFullYear()+'-'+(today.getMonth()-3)+'-'+today.getDate() + '/' + today;
+var timeInterval = (today.getFullYear()-1)+'-'+(today.getMonth()+1)+'-'+today.getDate() + '/' + date;
+console.log(timeInterval);
 
 var map = L.map('map').setView([44.87, 10],5);  
 
@@ -186,7 +187,7 @@ info.addTo(map);
 //////////////////////////////////////////
 
 var timeDimension = new L.TimeDimension({
-        timeInterval: '2020-08-11/2022-08-11',
+        timeInterval: timeInterval,
         period: "P1W"
     });
 
@@ -202,13 +203,11 @@ var timeDimensionControlOptions = {
     player:        player,
     timeDimension: timeDimension,
     position:      'bottomleft',
-    autoPlay:      true,
     speedSlider:   true,
     minSpeed:      1,
-    speedStep:     200,
+    speedStep:     10,
     maxSpeed:      20,
-    timeSliderDragUpdate: true,
-    limitSliders: true
+    timeSliderDragUpdate: true
 };
 
 var timeDimensionControl = new L.Control.TimeDimension(timeDimensionControlOptions);

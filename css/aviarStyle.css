@@ -589,7 +589,7 @@ html,
         }
        
         .leaflet-control-scale-line{
-            background: rgba(0, 0, 0, 0.4) !important;
+            background: rgba(0, 0, 0, 0.7) !important;
             color: white !important;            
         }
 
