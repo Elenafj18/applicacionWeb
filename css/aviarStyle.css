@@ -484,6 +484,7 @@ html,
             background: rgba(0, 0, 0, 0.618);
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             border-radius: 5px;
+            color:white;
         }
         .info h4 {
             margin: 0 0 5px;
@@ -578,13 +579,11 @@ html,
 
 
         .leaflet-bar-timecontrol .leaflet-control-timecontrol:before {
-            font-family: "Glyphicons Halflings";
             color: white !important;
             display: block;
         }
 
         .leaflet-container .leaflet-control-scale {
-            
             position: inherit;
         }
        
@@ -609,5 +608,16 @@ html,
 
         .leaflet-bar .tag-filter-tags-container ul{
             border: solid 1px  rgba(255, 0, 0, 0.504) !important;
+        }
+
+        .infoAlerta{
+            background: rgba(255, 0, 0, 0.504);
+            color:white !important;
+        }
+
+        .infoAlerta:hover{
+            background-color: black;
+            color: red !important;
+            text-decoration: none;
         }
 
