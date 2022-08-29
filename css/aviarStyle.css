@@ -585,7 +585,7 @@ html,
 
         .leaflet-container .leaflet-control-scale {
             
-            margin-bottom: -30px !important;
+            position: inherit;
         }
        
         .leaflet-control-scale-line{
