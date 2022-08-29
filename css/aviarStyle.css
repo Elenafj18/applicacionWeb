@@ -592,3 +592,22 @@ html,
             background: rgba(0, 0, 0, 0.4) !important;
             color: white !important;            
         }
+
+        .ripple{
+            background: rgba(0, 0, 0, 0.7) !important;
+            border-bottom: solid 1px  rgba(255, 0, 0, 0.504) !important;
+
+        }
+
+        .leaflet-bar .tag-filter-tags-container ul li a{
+            color: white !important;
+            width: auto !important;
+            /* border-bottom: 1px solid hsl(180, 40%, 60%); */
+            /* border-bottom: solid 1px  rgba(255, 0, 0, 0.504) !important; */
+
+        }
+
+        .leaflet-bar .tag-filter-tags-container ul{
+            border: solid 1px  rgba(255, 0, 0, 0.504) !important;
+        }
+
