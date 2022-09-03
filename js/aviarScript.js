@@ -43,7 +43,7 @@ L.easyButton( '<img src="img/migrations.svg" style="width:16px" title="Todas las
     }
 }).addTo(map);
 
-L.control.tagFilterButton({
+var filterButton = L.control.tagFilterButton({
 	data: ['Nivel 1', 'Nivel 2', 'Nivel 3', 'Nivel 4', 'Nivel 5'],
     filterOnEveryClick: true
 }).addTo( map );
@@ -358,22 +358,19 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
                 brotesJSON = data;
                 // migrationsJSON = data2;
                 for(var i = 0; i < brotesJSON.features.length; i++){
-                    // console.log(brotesJSON.features[i].properties.observationDate);
                     var d = new Date(brotesJSON.features[i].properties.observationDate);
                     brotesJSON.features[i].properties.time = d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
-                    
                 }
 
                 var brotesLayer = L.geoJSON(brotesJSON, {
                     pointToLayer: function(feature,latlng){
+                        
                         var especie = feature.properties.species.charAt(0).toUpperCase() + feature.properties.species.substring(1).toLowerCase();
                         var pais = feature.properties.country.charAt(0).toUpperCase()  + feature.properties.country.substring(1).toLowerCase();
                         var ciudad = feature.properties.city.charAt(0).toUpperCase()  + feature.properties.city.substring(1).toLowerCase();
                         var nCasos = feature.properties.cases;
                         var serotipo = feature.properties.serotipo.charAt(0).toUpperCase()  + feature.properties.serotipo.substring(1).toLowerCase();
 
-
-                        
                         return L.marker(latlng,{icon: broteIcon}).bindPopup('<p> Especie: '+ especie + ' <br> Nº Casos: '+ nCasos + ' <br> Serotipo: '+ serotipo + ' <br> País: '+ pais + ' <br> Ciudad: '+ ciudad +' </p>');
                     }});
                 L.timeDimension.layer.geoJson(brotesLayer,{duration:"P3M"}).addTo(map);
