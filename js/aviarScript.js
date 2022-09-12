@@ -398,4 +398,3 @@ var broteIcon = L.icon({
     shadowAnchor: [15,15],  // the same for the shadow
     popupAnchor:  [8,0] // point from which the popup should open relative to the iconAnchor
 });
-
