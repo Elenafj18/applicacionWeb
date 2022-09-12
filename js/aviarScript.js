@@ -220,7 +220,86 @@ function styleAlertas(feature) {
         fillOpacity: 0.4,
         weight: 0.4,
         opacity: 1,
-        color: '#000000',
-        dashArray: '1'    
+        color: '#666' 
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
     }
+    info.update(layer.feature.properties);
 }
+function resetHighlightMigration(e) {
+    migrationsLayer.resetStyle(e.target);
+    info.update();
+}
+function onEachFeatureMigration(feature, layer) {
+    layer.on({
+        mouseover: highlightFeatureMigration,
+        mouseout: resetHighlightMigration
+    });
+}
+
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'infoComarcas'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+
+//INFORMACIÓN DE ESPECIE POR RUTA
+info.update = function (props) {
+    if(props)
+    this._div.innerHTML = '<h4><b> Información migratoria: </b></h4> <p> Especie: '+ props.species + '</p>';       
+    else
+        this._div.innerHTML = '';
+};
+
+
+
+//////////////////////////////////////////
+//                BROTES                //
+//////////////////////////////////////////
+
+var brotesJSON, brotesLayer;
+
+getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/brotes.geojson',  function(err, data) {
+
+    if (err != null) {
+        console.error(err);
+    } else {
+        // getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/rutas.geojson',  function(err, data2) {
+            
+            // if(err !=  null) console.error(err);
+            // else{
+                brotesJSON = data;
+                // migrationsJSON = data2;
+                for(var i = 0; i < brotesJSON.features.length; i++){
+                    var d = new Date(brotesJSON.features[i].properties.observationDate);
+                    brotesJSON.features[i].properties.time = d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
+                }
+
+                var brotesLayer = L.geoJSON(brotesJSON, {
+                    pointToLayer: function(feature,latlng){
+                        
+                        var especie = feature.properties.species.charAt(0).toUpperCase() + feature.properties.species.substring(1).toLowerCase();
+                        var pais = feature.properties.country.charAt(0).toUpperCase()  + feature.properties.country.substring(1).toLowerCase();
+                        var ciudad = feature.properties.city.charAt(0).toUpperCase()  + feature.properties.city.substring(1).toLowerCase();
+                        var nCasos = feature.properties.cases;
+                        var serotipo = feature.properties.serotipo.charAt(0).toUpperCase()  + feature.properties.serotipo.substring(1).toLowerCase();
+
+                        return L.marker(latlng,{icon: broteIcon}).bindPopup('<p> Especie: '+ especie + ' <br> Nº Casos: '+ nCasos + ' <br> Serotipo: '+ serotipo + ' <br> País: '+ pais + ' <br> Ciudad: '+ ciudad +' </p>');
+                    }});
+                L.timeDimension.layer.geoJson(brotesLayer,{duration:"P3M"}).addTo(map);
+            // }
+        // }
+    }
+  
+});
+
+var broteIcon = L.icon({
+    iconUrl: 'img/brote.png',
+    iconSize:     [15,15], // size of the icon
+    shadowSize:   [15,15], // size of the shadow
+    iconAnchor:   [0,0], // point of the icon which will correspond to marker's location
+    shadowAnchor: [15,15],  // the same for the shadow
+    popupAnchor:  [8,0] // point from which the popup should open relative to the iconAnchor
+});
