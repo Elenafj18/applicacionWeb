@@ -1,26 +1,11 @@
 var today = new Date();
 var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-console.log(date);
-var timeInterval = today.getFullYear()+'-'+(today.getMonth()-3)+'-'+today.getDate() + '/' + today;
-var map = L.map('map',
-    {
-    timeDimension: true,
-    timeDimensionOptions: {
-        timeInterval: timeInterval,
-        // period: "PT1H"
-        period: "P1W",
-        currentTime : date
-    },
-    timeDimensionControl: true,}
-    ).setView([44.87, 10],5);  
-    
+var timeInterval = (today.getFullYear()-1)+'-'+(today.getMonth()+1)+'-'+today.getDate() + '/' + date;
+console.log(timeInterval);
+
+var map = L.map('map').setView([44.87, 10],5);  
+
 L.control.scale().addTo(map);
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-//L.marker([41.66, -4.71],{draggable: true}).addTo(map);
 
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
@@ -36,22 +21,32 @@ L.easyButton( '<img src="img/alerta.svg" style="width:16px" title="Zoom a alerta
     map.setView([40, -2.72],5.5);
 }).addTo(map);
 
+var rutasOn = false;
 L.easyButton( '<img src="img/ruta.svg" style="width:16px" title="Rutas activadas por riesgo">', function(){
-    alert('Rutas activadas por riesgo');
+    if(!rutasOn){
+        rutasOn = true;
+    }
+    else{
+        rutasOn = false;
+    }
   }).addTo(map);
 
+var migrationsOn = false;
 L.easyButton( '<img src="img/migrations.svg" style="width:16px" title="Todas las rutas">', function(){
-alert('Todas las rutas');
-
+    if(migrationsOn){
+        map.removeLayer(migrationsLayer);
+        migrationsOn = false;
+    }
+    else{
+        map.addLayer(migrationsLayer);
+        migrationsOn = true;
+    }
 }).addTo(map);
 
-var riskButton = L.easyButton( '<img src="img/filter.png" style="width:16px" title="Nivel de riesgo">', function(){
-    var risk1 = L.easyButton('<a style="width:4rem;>Riesgo 1</a>',function(){alert('Riesgo 1');}).addTo(map);
-    var risk2 = L.easyButton('<a style="width:4rem;>Riesgo 2</a>',function(){alert('Riesgo 2');}).addTo(map);
-    var risk3 =L.easyButton('<a style="width:4rem;>Riesgo 3</a>',function(){alert('Riesgo 3');}).addTo(map);
-    var risk4 =L.easyButton('<a style="width:4rem;>Riesgo 4</a>',function(){alert('Riesgo 4');}).addTo(map);
-    var risk5 =L.easyButton('<a style="width:4rem;">Riesgo 5</a>',function(){alert('Riesgo 5');}).addTo(map);
-}).addTo(map);
+var filterButton = L.control.tagFilterButton({
+	data: ['Nivel 1', 'Nivel 2', 'Nivel 3', 'Nivel 4', 'Nivel 5'],
+    filterOnEveryClick: true
+}).addTo( map );
 
 
 //////////////////////////////////////////
@@ -73,9 +68,9 @@ legend.addTo(map);
 
 function getColor(riesgo) {
     return riesgo > 4  ? '#000000' :
-           riesgo > 3  ? '#ff0000' :
-           riesgo > 2  ? '#ff6600' :
-           riesgo > 1  ? '#ffb400' :
+           riesgo > 3  ? '#700000' :
+           riesgo > 2  ? '#ff0000' :
+           riesgo > 1  ? '#ff9400' :
            riesgo > 0  ? '#fff555' :
                          '#ffffff';
 }
@@ -119,7 +114,6 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
         comarcasJSON = data;
         comarcasLayer = L.geoJson(comarcasJSON,{style:styleComarcas,onEachFeature: onEachFeature}).addTo(map);
     }
-    console.log("************************************************************");
   
 });
 
@@ -178,11 +172,6 @@ info.update = function (props) {
     'Provincia: '+ props.provincia +
     '<br/>' +
     'C.A.: ' + props.comAutonoma +
-    '<br/>' +
-    (props.Riesgo ? 'Riesgo: ' + props.alertas[map.timeDimension._currentTimeIndex] : 'Sin riesgo' +
-    '<br/>' +
-    'Fecha: ' + new Date(map.timeDimensionControl._currentTimeIndex)
-    ) +
     '</p>';
        
     else
@@ -194,31 +183,137 @@ info.addTo(map);
 
 
 //////////////////////////////////////////
+//            TIME DIMENSION            //
+//////////////////////////////////////////
+
+var timeDimension = new L.TimeDimension({
+        timeInterval: timeInterval,
+        period: "P1W"
+    });
+
+map.timeDimension = timeDimension; 
+
+var player = new L.TimeDimension.Player({
+    transitionTime: 100, 
+    loop: false,
+    startOver:true
+}, timeDimension);
+
+var timeDimensionControlOptions = {
+    player:        player,
+    timeDimension: timeDimension,
+    position:      'bottomleft',
+    speedSlider:   true,
+    minSpeed:      1,
+    speedStep:     10,
+    maxSpeed:      20,
+    timeSliderDragUpdate: true
+};
+
+var timeDimensionControl = new L.Control.TimeDimension(timeDimensionControlOptions);
+
+map.addControl(timeDimensionControl);
+
+
+
+//////////////////////////////////////////
 //                ALERTAS               //
 //////////////////////////////////////////
 
-var alertasJSON2 = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-5.77235268948, 43.5350333797]}, "properties": {"idAlerta": "SP33024_1623020400000.0", "Riesgo": 2, "reportDate": 1623020400000.0, "comarca": "GIJON", "informe": "https://drive.google.com/file/d/1Jz5kXOwiRxsr6Gww1lEcpZPdjdB3HUdD/view?usp=drivesdk"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-5.7870971929, 37.1010126053]}, "properties": {"idAlerta": "SP41095_1623020400000.0", "Riesgo": 4, "reportDate": 1623020400000.0, "comarca": "UTRERA (BAJO GUADALQUIVIR)", "informe": "https://drive.google.com/file/d/1Jz5kXOwiRxsr6Gww1lEcpZPdjdB3HUdD/view?usp=drivesdk"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-5.79556384981, 38.9607991582]}, "properties": {"idAlerta": "SP06044_1623020400000.0", "Riesgo": 2, "reportDate": 1623020400000.0, "comarca": "DON BENITO", "informe": "https://drive.google.com/file/d/1Jz5kXOwiRxsr6Gww1lEcpZPdjdB3HUdD/view?usp=drivesdk"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-6.57022157408, 37.1574501172]}, "properties": {"idAlerta": "SP21005_1623020400000.0", "Riesgo": 4, "reportDate": 1623020400000.0, "comarca": "ALMONTE (ENTORNO DE DOÑANA)", "informe": "https://drive.google.com/file/d/1Jz5kXOwiRxsr6Gww1lEcpZPdjdB3HUdD/view?usp=drivesdk"}}]};
-alertasLayer = L.geoJson(alertasJSON2);
-L.timeDimension.layer.geoJson(alertasLayer, {style:styleAlertas}).addTo(map);
+var riesgo1layer, riesgo2layer, riesgo3layer, riesgo4layer, riesgo5layer;
 
-// getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson',  function(err, data) {
+getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson',  function(err, data) {
 
-//     if (err != null) {
-//         console.error(err);
-//     } else {
-//         alertasJSON = data;
-//         alertasLayer = L.geoJson(alertasJSON);
+    if (err != null) {
+        console.error(err);
+    } else {
+        alertasJSON = data;
+        for(var i = 0; i < alertasJSON.features.length; i++){
+            var d = new Date(alertasJSON.features[i].properties.reportDate);
+            alertasJSON.features[i].properties.time = d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
+        }      
 
-//         L.timeDimension.layer.geoJson(alertasLayer).addTo(map);
-//     }
-// });
+        //Layer con alertas de nivel 1
+        var riesgo1filter = L.geoJson(alertasJSON, {tags: ['Nivel 1'], filter: riesgo1fun,
+            pointToLayer: function(feature,latlng){
+                return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p style="bottom:-75px">Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+        }});
+        function riesgo1fun(feature) { if (feature.properties.Riesgo === 1) return true; }
+        riesgo1 = L.timeDimension.layer.geoJson(riesgo1filter,{duration:"P1W"}).addTo(map);
+
+        //Layer con alertas de nivel 2
+        var riesgo2filter = L.geoJson(alertasJSON, {tags: ['Nivel 2'], filter: riesgo2fun,
+            pointToLayer: function(feature,latlng){
+                return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+        }});
+        function riesgo2fun(feature) { if (feature.properties.Riesgo === 2) return true; }
+        riesgo2 = L.timeDimension.layer.geoJson(riesgo2filter,{duration:"P1W", tags: ['riesgo2'] }).addTo(map);
+
+        //Layer con alertas de nivel 3
+        var riesgo3filter = L.geoJson(alertasJSON, {tags: ['Nivel 3'], filter: riesgo3fun,
+            pointToLayer: function(feature,latlng){
+                return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+        }});
+        function riesgo3fun(feature) { if (feature.properties.Riesgo === 3) return true; }
+        riesgo3 = L.timeDimension.layer.geoJson(riesgo3filter,{duration:"P1W", tags: ['riesgo3'] }).addTo(map);
+
+        //Layer con alertas de nivel 4
+        var riesgo4filter = L.geoJson(alertasJSON, {tags: ['Nivel 4'], filter: riesgo4fun,
+            pointToLayer: function(feature,latlng){
+                return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+        }});
+        function riesgo4fun(feature) { if (feature.properties.Riesgo === 4) return true; }
+        riesgo4 = L.timeDimension.layer.geoJson(riesgo4filter,{duration:"P1W", tags: ['riesgo4'] }).addTo(map);
+
+        //Layer con alertas de nivel 5
+        var riesgo5filter = L.geoJson(alertasJSON, {tags: ['Nivel 5'], filter: riesgo5fun,
+            pointToLayer: function(feature,latlng){
+                return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+        }});
+        function riesgo5fun(feature) { if (feature.properties.Riesgo === 5) return true; }
+        riesgo5 = L.timeDimension.layer.geoJson(riesgo5filter,{duration:"P1W", tags: ['riesgo5'] }).addTo(map);
+    }
+});
+
+var logoMarkerStyle = L.Icon.extend({
+    options: {
+        iconSize:    [20, 20],
+        shadowSize:  [20, 20],
+        popupAnchor: [0, -80]
+    }
+});
+
+function logoMarker(feature){
+    return new logoMarkerStyle({iconUrl: 'img/riesgo' + feature.properties.Riesgo + '.png'})
+};
 
 
-function styleAlertas(feature) {
-    return{
-        fillColor: getColor(feature.properties.Riesgo),
-        fillOpacity: 0.4,
-        weight: 0.4,
+    
+//////////////////////////////////////////
+//              MIGRACIONES             //
+//////////////////////////////////////////
+
+var migrationsJSON, migrationsLayer;
+getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson',  function(err, data) {
+    if (err != null) {
+        console.error(err);
+    } else {
+        migrationsJSON = data;
+        migrationsLayer = L.geoJSON(migrationsJSON, {style:styleMigrations, onEachFeature:onEachFeatureMigration });
+    }
+});
+
+var styleMigrations = {
+    weight: 1,
+    opacity: 0.3,
+    color: '#fff' 
+}
+
+function highlightFeatureMigration(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 1,
         opacity: 1,
         color: '#666' 
     });
