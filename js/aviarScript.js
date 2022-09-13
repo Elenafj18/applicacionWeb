@@ -33,13 +33,13 @@ L.easyButton( '<img src="img/ruta.svg" style="width:16px" title="Rutas activadas
 
 var migrationsOn = false;
 L.easyButton( '<img src="img/migrations.svg" style="width:16px" title="Todas las rutas">', function(){
-    if(!migrationsOn){
+    if(migrationsOn){
         map.removeLayer(migrationsLayer);
-        migrationsOn = true;
+        migrationsOn = false;
     }
     else{
         map.addLayer(migrationsLayer);
-        migrationsOn = false;
+        migrationsOn = true;
     }
 }).addTo(map);
 
@@ -233,38 +233,13 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
             alertasJSON.features[i].properties.time = d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
         }      
 
-        // Layer con todas las alertas
-        // var alertasLayer = L.geoJSON(alertasJSON, {
-        //     tags: function(feature){
-        //         switch(feature.properties.Riesgo){
-        //             case 1:
-        //                 return ["Nivel 1"];
-        //             case 2:
-        //                 return ["Nivel 2"];
-        //             case 3:
-        //                 return ["Nivel 3"];
-        //             case 4:
-        //                 return ["Nivel 4"];
-        //             case 5:
-        //                 return ["Nivel 5"];
-        //             default:
-        //                 break;
-        //         }
-        //         return feature.properties.Riesgo;},
-        //     pointToLayer: function(feature,latlng){
-        //         return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p> Especie: '+feature.properties.species+' <br> País: '+feature.properties.country + ' <br> Ciudad: '+feature.properties.city + ' </p>');
-        // }});
-        // var geojson = L.timeDimension.layer.geoJson(alertasLayer,{duration:"P1W"});
-        // geojson.addTo(map);
-
         //Layer con alertas de nivel 1
         var riesgo1filter = L.geoJson(alertasJSON, {tags: ['Nivel 1'], filter: riesgo1fun,
             pointToLayer: function(feature,latlng){
-                return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+                return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p style="bottom:-75px">Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
         }});
         function riesgo1fun(feature) { if (feature.properties.Riesgo === 1) return true; }
         riesgo1 = L.timeDimension.layer.geoJson(riesgo1filter,{duration:"P1W"}).addTo(map);
-        // riesgo1.addTo(map);
 
         //Layer con alertas de nivel 2
         var riesgo2filter = L.geoJson(alertasJSON, {tags: ['Nivel 2'], filter: riesgo2fun,
@@ -273,7 +248,6 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
         }});
         function riesgo2fun(feature) { if (feature.properties.Riesgo === 2) return true; }
         riesgo2 = L.timeDimension.layer.geoJson(riesgo2filter,{duration:"P1W", tags: ['riesgo2'] }).addTo(map);
-        // riesgo2.addTo(map);
 
         //Layer con alertas de nivel 3
         var riesgo3filter = L.geoJson(alertasJSON, {tags: ['Nivel 3'], filter: riesgo3fun,
@@ -282,7 +256,6 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
         }});
         function riesgo3fun(feature) { if (feature.properties.Riesgo === 3) return true; }
         riesgo3 = L.timeDimension.layer.geoJson(riesgo3filter,{duration:"P1W", tags: ['riesgo3'] }).addTo(map);
-        // riesgo3.addTo(map);
 
         //Layer con alertas de nivel 4
         var riesgo4filter = L.geoJson(alertasJSON, {tags: ['Nivel 4'], filter: riesgo4fun,
@@ -291,7 +264,6 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
         }});
         function riesgo4fun(feature) { if (feature.properties.Riesgo === 4) return true; }
         riesgo4 = L.timeDimension.layer.geoJson(riesgo4filter,{duration:"P1W", tags: ['riesgo4'] }).addTo(map);
-        // riesgo4.addTo(map);
 
         //Layer con alertas de nivel 5
         var riesgo5filter = L.geoJson(alertasJSON, {tags: ['Nivel 5'], filter: riesgo5fun,
@@ -300,7 +272,6 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
         }});
         function riesgo5fun(feature) { if (feature.properties.Riesgo === 5) return true; }
         riesgo5 = L.timeDimension.layer.geoJson(riesgo5filter,{duration:"P1W", tags: ['riesgo5'] }).addTo(map);
-        // riesgo5.addTo(map);
     }
 });
 
@@ -328,15 +299,54 @@ getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/Ge
         console.error(err);
     } else {
         migrationsJSON = data;
-        migrationsLayer = L.geoJSON(migrationsJSON, {style:styleMigrations});
+        migrationsLayer = L.geoJSON(migrationsJSON, {style:styleMigrations, onEachFeature:onEachFeatureMigration });
     }
 });
 
 var styleMigrations = {
-    weight: 0.2,
-    opacity: 0.2,
+    weight: 1,
+    opacity: 0.3,
     color: '#fff' 
 }
+
+function highlightFeatureMigration(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 1,
+        opacity: 1,
+        color: '#666' 
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+    info.update(layer.feature.properties);
+}
+function resetHighlightMigration(e) {
+    migrationsLayer.resetStyle(e.target);
+    info.update();
+}
+function onEachFeatureMigration(feature, layer) {
+    layer.on({
+        mouseover: highlightFeatureMigration,
+        mouseout: resetHighlightMigration
+    });
+}
+
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'infoComarcas'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+
+//INFORMACIÓN DE ESPECIE POR RUTA
+info.update = function (props) {
+    if(props)
+    this._div.innerHTML = '<h4><b> Información migratoria: </b></h4> <p> Especie: '+ props.species + '</p>';       
+    else
+        this._div.innerHTML = '';
+};
 
 
 
