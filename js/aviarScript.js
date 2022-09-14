@@ -321,11 +321,11 @@ function highlightFeatureMigration(e) {
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront();
     }
-    info.update(layer.feature.properties);
+    info.updateM(layer.feature.properties);
 }
 function resetHighlightMigration(e) {
     migrationsLayer.resetStyle(e.target);
-    info.update();
+    info.updateM();
 }
 function onEachFeatureMigration(feature, layer) {
     layer.on({
@@ -341,7 +341,7 @@ info.onAdd = function (map) {
 };
 
 //INFORMACIÓN DE ESPECIE POR RUTA
-info.update = function (props) {
+info.updateM = function (props) {
     if(props)
     this._div.innerHTML = '<h4><b> Información migratoria: </b></h4> <p> Especie: '+ props.species + '</p>';       
     else
