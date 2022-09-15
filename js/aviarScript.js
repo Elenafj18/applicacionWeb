@@ -106,7 +106,7 @@ var comarcasJSON;
 var comarcasLayer;
 var alertasJSON;
 var alertasLayer;
-getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/comarcas.geojson',  function(err, data) {
+getJSON('../GeoJSON/comarcas.geojson',  function(err, data) {
 
     if (err != null) {
         console.error(err);
@@ -222,7 +222,7 @@ map.addControl(timeDimensionControl);
 
 var riesgo1layer, riesgo2layer, riesgo3layer, riesgo4layer, riesgo5layer;
 
-getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/alertas.geojson',  function(err, data) {
+getJSON('../GeoJSON/alertas.geojson',  function(err, data) {
 
     if (err != null) {
         console.error(err);
@@ -294,7 +294,7 @@ function logoMarker(feature){
 //////////////////////////////////////////
 
 var migrationsJSON, migrationsLayer;
-getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/migrations.geojson',  function(err, data) {
+getJSON('../GeoJSON/migrations.geojson',  function(err, data) {
     if (err != null) {
         console.error(err);
     } else {
@@ -356,7 +356,7 @@ info.updateM = function (props) {
 
 var brotesJSON, brotesLayer;
 
-getJSON('https://raw.githubusercontent.com/influenzaAviar/applicacionWeb/main/GeoJSON/brotes.geojson',  function(err, data) {
+getJSON('../GeoJSON/brotes.geojson',  function(err, data) {
 
     if (err != null) {
         console.error(err);
