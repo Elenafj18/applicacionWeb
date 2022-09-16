@@ -23,11 +23,13 @@ L.easyButton( '<img src="img/alerta.svg" style="width:16px" title="Zoom a alerta
 
 var rutasOn = false;
 L.easyButton( '<img src="img/ruta.svg" style="width:16px" title="Rutas activadas por riesgo">', function(){
-    if(!rutasOn){
-        rutasOn = true;
+    if(rutasOn){
+        map.removeLayer(rutasLayer);
+        rutasOn = false;
     }
     else{
-        rutasOn = false;
+        map.addLayer(rutasLayer);
+        rutasOn = true;
     }
   }).addTo(map);
 
@@ -219,80 +221,48 @@ map.addControl(timeDimensionControl);
 //            RUTAS DE RIESGO           //
 //////////////////////////////////////////
 
-var rutasJSON, rutasLayer;
+var rutasJSON;
+getJSON('../GeoJSON/rutas.geojson',  function(err, data) {
+    if (err != null) {
+        console.error(err);
+    } else {
+        rutasJSON = data;
+        // rutasLayer = L.geoJSON(rutasJSON, {style:styleRutas, onEachFeature:onEachFeatureRutas });
+    }
+});
 
-
-function clickOnAlert(alert) {
-    getJSON('../GeoJSON/rutas.geojson',  function(err, data) {
-        if (err != null) {
-            console.error(err);
-        } else {
-            rutasJSON = data;
-            // rutasLayer = L.geoJSON(rutasJSON, {style:styleRutas, onEachFeature:onEachFeatureRutas });
-        }
-    
-        for(var i = 0; i < rutasJSON.length; i++){
-            if(alert.properties.idAlerta == rutasJSON.features[i].properties.idAlerta){
-                map.addLayer(rutasJSON.features[i].geometry,{
-                    color: 'red',
-                    weight: 3,
-                    opacity: 0.5
-                });
-            }
-        }
-    });
+var styleRutas = {
+    weight: 1,
+    opacity: 0.3,
+    color: '#f00'
 }
 
-// var styleRutas = {
-//     weight: 1,
-//     opacity: 0.3,
-//     color: '#f00'
-// }
-
-// rutasJSON = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[-7.59068071879, 43.0030673359], [-1.4961, 48.7125]]}, "properties": {"idBrote": 291844, "idAlerta": "SP27028_1623020400000.0", "idComarca": "SP27028"}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[-7.59068071879, 43.0030673359], [7.61, 53.66]]}, "properties": {"idBrote": 294652, "idAlerta": "SP27028_1623020400000.0", "idComarca": "SP27028"}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[-5.77235268948, 43.5350333797], [-1.4961, 48.7125]]}, "properties": {"idBrote": 291844, "idAlerta": "SP33024_1623020400000.0", "idComarca": "SP33024"}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[-5.77235268948, 43.5350333797], [23.787127, 58.345489]]}, "properties": {"idBrote": 292121, "idAlerta": "SP33024_1623020400000.0", "idComarca": "SP33024"}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[-5.77235268948, 43.5350333797], [11.396389, 55.31166]]}, "properties": {"idBrote": 291312, "idAlerta": "SP33024_1623020400000.0", "idComarca": "SP33024"}}]};
-// rutasLayer = L.geoJSON(rutasJSON,{style:styleRutas, onEachFeature:onEachFeatureRutas });
-// L.timeDimension.layer.geoJson(rutasLayer,{duration:"P3M"}).addTo(map);
+var rutasLayer = L.geoJSON(rutasJSON,{style:styleRutas});
 
 
 
-// function highlightFeatureRutas(e) {
-//     var layer = e.target;
+function clickOnAlert(e) {    
+    
+    var alerta = e.target;
+    console.log(alerta.feature.properties.idAlerta);
+    if(!alerta.feature.showrutasOn){
+        alerta.feature.rutas = [];
+        for(var i = 0; i < rutasJSON.features.length; i++){
+            if(alerta.feature.properties.idAlerta === rutasJSON.features[i].properties.idAlerta){
+                var ruta = rutasJSON.features[i];
+                alerta.feature.rutas.push(L.geoJSON(ruta, {style:styleRutas}).addTo(map));
+                alerta.feature.showrutasOn = true;
+            }
+        }
+    }else{
+        for(var i = 0; i < alerta.feature.rutas.length; i++)
+            map.removeLayer(alerta.feature.rutas[i]);
+        alerta.feature.showrutasOn = false;
+    }
+    
+}
 
-//     layer.setStyle({
-//         weight: 1,
-//         opacity: 1,
-//         color: '#000' 
-//     });
 
-//     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-//         layer.bringToFront();
-//     }
-//     info.updateM(layer.feature.properties);
-// }
-// function resetHighlightRutas(e) {
-//     rutasLayer.resetStyle(e.target);
-//     info.updateM();
-// }
-// function onEachFeatureRutas(feature, layer) {
-//     layer.on({
-//         mouseover: highlightFeatureRutas,
-//         mouseout: resetHighlightRutas
-//     });
-// }
-
-// info.onAdd = function (map) {
-//     this._div = L.DomUtil.create('div', 'infoComarcas');
-//     this.update();
-//     return this._div;
-// };
-
-// //INFORMACIÓN DE ESPECIE POR RUTA
-// info.updateM = function (props) {
-//     if(props)
-//     this._div.innerHTML = '<h4><b> Información ruta de riesgo: </b></h4> <p> Especie: '+ props.species + '</p>';       
-//     else
-//         this._div.innerHTML = '';
-// };
 
 
 
@@ -318,7 +288,7 @@ getJSON('../GeoJSON/alertas.geojson',  function(err, data) {
         var riesgo1filter = L.geoJson(alertasJSON, {tags: ['Nivel 1'], filter: riesgo1fun,
             pointToLayer: function(feature,latlng){
                 // return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p style="bottom:-75px">Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
-                return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p style="bottom:-75px">Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+                return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>').on('click', clickOnAlert);
 
         }});
         function riesgo1fun(feature) { if (feature.properties.Riesgo === 1) return true; }
@@ -327,7 +297,7 @@ getJSON('../GeoJSON/alertas.geojson',  function(err, data) {
         //Layer con alertas de nivel 2
         var riesgo2filter = L.geoJson(alertasJSON, {tags: ['Nivel 2'], filter: riesgo2fun,
             pointToLayer: function(feature,latlng){
-                return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+                return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>').on('click', clickOnAlert);
         }});
         function riesgo2fun(feature) { if (feature.properties.Riesgo === 2) return true; }
         riesgo2 = L.timeDimension.layer.geoJson(riesgo2filter,{duration:"P1W", tags: ['riesgo2'] }).addTo(map);
@@ -335,7 +305,7 @@ getJSON('../GeoJSON/alertas.geojson',  function(err, data) {
         //Layer con alertas de nivel 3
         var riesgo3filter = L.geoJson(alertasJSON, {tags: ['Nivel 3'], filter: riesgo3fun,
             pointToLayer: function(feature,latlng){
-                return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+                return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>').on('click', clickOnAlert);
         }});
         function riesgo3fun(feature) { if (feature.properties.Riesgo === 3) return true; }
         riesgo3 = L.timeDimension.layer.geoJson(riesgo3filter,{duration:"P1W", tags: ['riesgo3'] }).addTo(map);
@@ -343,7 +313,7 @@ getJSON('../GeoJSON/alertas.geojson',  function(err, data) {
         //Layer con alertas de nivel 4
         var riesgo4filter = L.geoJson(alertasJSON, {tags: ['Nivel 4'], filter: riesgo4fun,
             pointToLayer: function(feature,latlng){
-                return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+                return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>').on('click', clickOnAlert);
         }});
         function riesgo4fun(feature) { if (feature.properties.Riesgo === 4) return true; }
         riesgo4 = L.timeDimension.layer.geoJson(riesgo4filter,{duration:"P1W", tags: ['riesgo4'] }).addTo(map);
@@ -351,7 +321,7 @@ getJSON('../GeoJSON/alertas.geojson',  function(err, data) {
         //Layer con alertas de nivel 5
         var riesgo5filter = L.geoJson(alertasJSON, {tags: ['Nivel 5'], filter: riesgo5fun,
             pointToLayer: function(feature,latlng){
-                return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+                return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>').on('click', clickOnAlert);
         }});
         function riesgo5fun(feature) { if (feature.properties.Riesgo === 5) return true; }
         riesgo5 = L.timeDimension.layer.geoJson(riesgo5filter,{duration:"P1W", tags: ['riesgo5'] }).addTo(map);
@@ -439,6 +409,27 @@ info.updateM = function (props) {
 
 var brotesJSON, brotesLayer;
 
+function clickOnOutbreak(e) {    
+    
+    var brote = e.target;
+    console.log(brote.feature.properties.id);
+    if(!brote.feature.showrutasOn){
+        brote.feature.rutas = [];
+        for(var i = 0; i < rutasJSON.features.length; i++){
+            if(brote.feature.properties.id === rutasJSON.features[i].properties.idBrote){
+                var ruta = rutasJSON.features[i];
+                brote.feature.rutas.push(L.geoJSON(ruta, {style:styleRutas}).addTo(map));
+                brote.feature.showrutasOn = true;
+            }
+        }
+    }else{
+        for(var i = 0; i < brote.feature.rutas.length; i++)
+            map.removeLayer(brote.feature.rutas[i]);
+        brote.feature.showrutasOn = false;
+    }
+    
+}
+
 getJSON('../GeoJSON/brotes.geojson',  function(err, data) {
 
     if (err != null) {
@@ -459,7 +450,7 @@ getJSON('../GeoJSON/brotes.geojson',  function(err, data) {
                 var nCasos = feature.properties.cases;
                 var serotipo = feature.properties.serotipo.charAt(0).toUpperCase()  + feature.properties.serotipo.substring(1).toLowerCase();
 
-                return L.marker(latlng,{icon: broteIcon}).bindPopup('<p> Especie: '+ especie + ' <br> Nº Casos: '+ nCasos + ' <br> Serotipo: '+ serotipo + ' <br> País: '+ pais + ' <br> Ciudad: '+ ciudad +' </p>');
+                return L.marker(latlng,{icon: broteIcon}).bindPopup('<p> Especie: '+ especie + ' <br> Nº Casos: '+ nCasos + ' <br> Serotipo: '+ serotipo + ' <br> País: '+ pais + ' <br> Ciudad: '+ ciudad +' </p>').on('click', clickOnOutbreak);
             }});
         L.timeDimension.layer.geoJson(brotesLayer,{duration:"P3M"}).addTo(map);
     }
