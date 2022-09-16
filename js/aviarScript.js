@@ -226,6 +226,61 @@ getJSON('../GeoJSON/rutas.geojson',  function(err, data) {
     } else {
         rutasJSON = data;
         // rutasLayer = L.geoJSON(rutasJSON, {style:styleRutas, onEachFeature:onEachFeatureRutas });
+        getJSON('../GeoJSON/alertas.geojson',  function(err, data) {
+
+            if (err != null) {
+                console.error(err);
+            } else {
+        
+                alertasJSON = data;
+                for(var i = 0; i < alertasJSON.features.length; i++){
+                    var d = new Date(alertasJSON.features[i].properties.reportDate);
+                    alertasJSON.features[i].properties.time = d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
+                }      
+        
+                //Layer con alertas de nivel 1
+                var riesgo1filter = L.geoJson(alertasJSON, {tags: ['Nivel 1'], filter: riesgo1fun,
+                    pointToLayer: function(feature,latlng){
+                        // return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p style="bottom:-75px">Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+                        return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p style="bottom:-75px">Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+        
+                }});
+                function riesgo1fun(feature) { if (feature.properties.Riesgo === 1) return true; }
+                riesgo1 = L.timeDimension.layer.geoJson(riesgo1filter,{duration:"P1W"}).addTo(map);
+        
+                //Layer con alertas de nivel 2
+                var riesgo2filter = L.geoJson(alertasJSON, {tags: ['Nivel 2'], filter: riesgo2fun,
+                    pointToLayer: function(feature,latlng){
+                        return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+                }});
+                function riesgo2fun(feature) { if (feature.properties.Riesgo === 2) return true; }
+                riesgo2 = L.timeDimension.layer.geoJson(riesgo2filter,{duration:"P1W", tags: ['riesgo2'] }).addTo(map);
+        
+                //Layer con alertas de nivel 3
+                var riesgo3filter = L.geoJson(alertasJSON, {tags: ['Nivel 3'], filter: riesgo3fun,
+                    pointToLayer: function(feature,latlng){
+                        return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+                }});
+                function riesgo3fun(feature) { if (feature.properties.Riesgo === 3) return true; }
+                riesgo3 = L.timeDimension.layer.geoJson(riesgo3filter,{duration:"P1W", tags: ['riesgo3'] }).addTo(map);
+        
+                //Layer con alertas de nivel 4
+                var riesgo4filter = L.geoJson(alertasJSON, {tags: ['Nivel 4'], filter: riesgo4fun,
+                    pointToLayer: function(feature,latlng){
+                        return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+                }});
+                function riesgo4fun(feature) { if (feature.properties.Riesgo === 4) return true; }
+                riesgo4 = L.timeDimension.layer.geoJson(riesgo4filter,{duration:"P1W", tags: ['riesgo4'] }).addTo(map);
+        
+                //Layer con alertas de nivel 5
+                var riesgo5filter = L.geoJson(alertasJSON, {tags: ['Nivel 5'], filter: riesgo5fun,
+                    pointToLayer: function(feature,latlng){
+                        return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
+                }});
+                function riesgo5fun(feature) { if (feature.properties.Riesgo === 5) return true; }
+                riesgo5 = L.timeDimension.layer.geoJson(riesgo5filter,{duration:"P1W", tags: ['riesgo5'] }).addTo(map);
+            }
+        });
     }
 });
 
@@ -300,61 +355,7 @@ function clickOnAlert(alert) {
 
 var riesgo1layer, riesgo2layer, riesgo3layer, riesgo4layer, riesgo5layer;
 
-getJSON('../GeoJSON/alertas.geojson',  function(err, data) {
 
-    if (err != null) {
-        console.error(err);
-    } else {
-
-        alertasJSON = data;
-        for(var i = 0; i < alertasJSON.features.length; i++){
-            var d = new Date(alertasJSON.features[i].properties.reportDate);
-            alertasJSON.features[i].properties.time = d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
-        }      
-
-        //Layer con alertas de nivel 1
-        var riesgo1filter = L.geoJson(alertasJSON, {tags: ['Nivel 1'], filter: riesgo1fun,
-            pointToLayer: function(feature,latlng){
-                // return L.marker(latlng,{icon: logoMarker(feature)}).bindPopup('<p style="bottom:-75px">Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
-                return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p style="bottom:-75px">Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
-
-        }});
-        function riesgo1fun(feature) { if (feature.properties.Riesgo === 1) return true; }
-        riesgo1 = L.timeDimension.layer.geoJson(riesgo1filter,{duration:"P1W"}).addTo(map);
-
-        //Layer con alertas de nivel 2
-        var riesgo2filter = L.geoJson(alertasJSON, {tags: ['Nivel 2'], filter: riesgo2fun,
-            pointToLayer: function(feature,latlng){
-                return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
-        }});
-        function riesgo2fun(feature) { if (feature.properties.Riesgo === 2) return true; }
-        riesgo2 = L.timeDimension.layer.geoJson(riesgo2filter,{duration:"P1W", tags: ['riesgo2'] }).addTo(map);
-
-        //Layer con alertas de nivel 3
-        var riesgo3filter = L.geoJson(alertasJSON, {tags: ['Nivel 3'], filter: riesgo3fun,
-            pointToLayer: function(feature,latlng){
-                return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
-        }});
-        function riesgo3fun(feature) { if (feature.properties.Riesgo === 3) return true; }
-        riesgo3 = L.timeDimension.layer.geoJson(riesgo3filter,{duration:"P1W", tags: ['riesgo3'] }).addTo(map);
-
-        //Layer con alertas de nivel 4
-        var riesgo4filter = L.geoJson(alertasJSON, {tags: ['Nivel 4'], filter: riesgo4fun,
-            pointToLayer: function(feature,latlng){
-                return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
-        }});
-        function riesgo4fun(feature) { if (feature.properties.Riesgo === 4) return true; }
-        riesgo4 = L.timeDimension.layer.geoJson(riesgo4filter,{duration:"P1W", tags: ['riesgo4'] }).addTo(map);
-
-        //Layer con alertas de nivel 5
-        var riesgo5filter = L.geoJson(alertasJSON, {tags: ['Nivel 5'], filter: riesgo5fun,
-            pointToLayer: function(feature,latlng){
-                return L.marker(latlng,{icon: logoMarker(feature)}).on('click', clickOnAlert ).bindPopup('<p>Nivel de alerta: '+ feature.properties.Riesgo +'</p><a class="infoAlerta info" href='+ feature.properties.informe+'> Más información </a>');
-        }});
-        function riesgo5fun(feature) { if (feature.properties.Riesgo === 5) return true; }
-        riesgo5 = L.timeDimension.layer.geoJson(riesgo5filter,{duration:"P1W", tags: ['riesgo5'] }).addTo(map);
-    }
-});
 
 var logoMarkerStyle = L.Icon.extend({
     options: {
